@@ -22,7 +22,7 @@
   "runtime_image_id": "sha256:1d1eceb6941c9d510d24c72c9f3b5718958b56980b69b843a567b1378b2c5f82",
   "tests_pass": true,
   "official_candidate_score": null,
-  "publication_state": "Not pushed: failed both prospective practice-score gates.",
+  "publication_state": "User explicitly authorized publication despite failed score gate; exact frozen finalist materialized in production source. See publication.json.",
   "tests_passed": 52,
   "conformance_pass": true,
   "conformance_observations": 300,

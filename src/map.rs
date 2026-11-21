@@ -18,8 +18,6 @@ struct RawWorld {
     terrain: RawTerrain,
     #[serde(default)]
     prisms: Vec<RawPrism>,
-    #[serde(default)]
-    trees: RawTrees,
 }
 
 #[derive(Deserialize)]
@@ -59,14 +57,6 @@ struct RawPrism {
     ring: Vec<f32>,
     #[serde(default)]
     holes: Vec<Vec<f32>>,
-}
-
-#[derive(Deserialize, Default)]
-struct RawTrees {
-    #[serde(default)]
-    fields: Vec<String>,
-    #[serde(default)]
-    data: Vec<f32>,
 }
 
 #[derive(Debug, Clone)]
@@ -296,7 +286,6 @@ pub struct ArenaMap {
     // Fast 2 m height-field for O(1) per-step 3D LoS & wall checks
     los_nx: usize,
     los_ny: usize,
-    terrain_grid: Vec<f32>,
     solid_top: Vec<f32>,
     building_top: Vec<f32>,
     elevated_prisms: Vec<u16>,
@@ -307,7 +296,6 @@ pub struct ArenaMap {
     pub wall_dist: Vec<u8>,
     pub nav_z: Vec<f32>,
     pub roof_top: Vec<f32>,
-    pub nav_canopy: Vec<u8>,
     pub roof_anchors: Vec<RoofAnchor>,
 }
 
@@ -331,7 +319,6 @@ impl ArenaMap {
             prism_cells: vec![Vec::new()],
             los_nx: 1,
             los_ny: 1,
-            terrain_grid: vec![0.0],
             solid_top: vec![0.0],
             building_top: vec![f32::NEG_INFINITY],
             elevated_prisms: Vec::new(),
@@ -341,7 +328,6 @@ impl ArenaMap {
             wall_dist: vec![10],
             nav_z: vec![0.0],
             roof_top: vec![f32::NAN],
-            nav_canopy: vec![0],
             roof_anchors: Vec::new(),
         }
     }
@@ -443,7 +429,6 @@ impl ArenaMap {
             prism_cells,
             los_nx,
             los_ny,
-            terrain_grid: vec![0.0; los_nx * los_ny],
             solid_top: vec![0.0; los_nx * los_ny],
             building_top: vec![f32::NEG_INFINITY; los_nx * los_ny],
             elevated_prisms: Vec::new(),
@@ -453,26 +438,22 @@ impl ArenaMap {
             wall_dist: vec![0; nav_nx * nav_ny],
             nav_z: vec![0.0; nav_nx * nav_ny],
             roof_top: vec![f32::NAN; nav_nx * nav_ny],
-            nav_canopy: vec![0; nav_nx * nav_ny],
             roof_anchors: Vec::new(),
         };
         map.build_los_grid();
         map.build_nav_grid();
-        map.build_canopy_grid(&raw.trees);
         map.build_roof_anchors();
         map
     }
 
     fn build_los_grid(&mut self) {
-        // 1. Seed terrain_grid and solid_top with terrain elevation
+        // 1. Seed solid_top with terrain elevation
         for iy in 0..self.los_ny {
             let wy = self.min_y + (iy as f32 + 0.5) * LOS_STEP;
             let row = iy * self.los_nx;
             for ix in 0..self.los_nx {
                 let wx = self.min_x + (ix as f32 + 0.5) * LOS_STEP;
-                let tz = self.terrain_z(wx, wy);
-                self.terrain_grid[row + ix] = tz;
-                self.solid_top[row + ix] = tz;
+                self.solid_top[row + ix] = self.terrain_z(wx, wy);
             }
         }
 
@@ -494,7 +475,7 @@ impl ArenaMap {
                 for ix in ix0..=ix1 {
                     let wx = self.min_x + (ix as f32 + 0.5) * LOS_STEP;
                     if p.contains_2d(wx, wy) {
-                        let tz = self.terrain_grid[row + ix];
+                        let tz = self.terrain_z(wx, wy);
                         if p.base <= tz + 2.5 {
                             if p.top > self.solid_top[row + ix] {
                                 self.solid_top[row + ix] = p.top;
@@ -629,160 +610,6 @@ impl ArenaMap {
         }
     }
 
-    fn build_canopy_grid(&mut self, raw_trees: &RawTrees) {
-        let stride = raw_trees.fields.len();
-        if stride == 0 || raw_trees.data.is_empty() {
-            return;
-        }
-        let col = |name: &str| raw_trees.fields.iter().position(|f| f == name);
-        let (
-            Some(ix_x),
-            Some(ix_y),
-            Some(ix_z),
-            Some(ix_h),
-            Some(ix_cr),
-            Some(ix_cb),
-            Some(ix_tr),
-        ) = (
-            col("x"),
-            col("y"),
-            col("z"),
-            col("height"),
-            col("crownR"),
-            col("crownBase"),
-            col("trunkR"),
-        ) else {
-            return;
-        };
-        let ix_cx = col("crownX");
-        let ix_cy = col("crownY");
-
-        let mut accum = vec![0.0_f32; self.nav_nx * self.nav_ny];
-
-        for row in raw_trees.data.chunks_exact(stride) {
-            let tx = row[ix_x];
-            let ty = row[ix_y];
-            let tz_tree = row[ix_z];
-            let height = row[ix_h];
-            let crown_r = row[ix_cr];
-            let crown_base = row[ix_cb];
-            let trunk_r = row[ix_tr];
-            if !tx.is_finite()
-                || !ty.is_finite()
-                || !tz_tree.is_finite()
-                || !height.is_finite()
-                || height <= 0.5
-            {
-                continue;
-            }
-
-            let crown_x = ix_cx.map_or(tx, |i| row[i]);
-            let crown_y = ix_cy.map_or(ty, |i| row[i]);
-            let tree_top = tz_tree + height;
-            let crown_lo = tz_tree + crown_base;
-
-            // 1. Crown concealment over mech torso/eye span (tz + 2.0 .. tz + 8.5)
-            if crown_r.is_finite() && crown_r > 0.25 && crown_x.is_finite() && crown_y.is_finite()
-            {
-                let r_eff = crown_r + 0.75;
-                if crown_x + r_eff >= self.min_x
-                    && crown_x - r_eff <= self.max_x
-                    && crown_y + r_eff >= self.min_y
-                    && crown_y - r_eff <= self.max_y
-                {
-                    let gx0 = (((crown_x - r_eff - self.min_x) / NAV_STEP).floor() as isize)
-                        .clamp(0, self.nav_nx as isize - 1) as usize;
-                    let gx1 = (((crown_x + r_eff - self.min_x) / NAV_STEP).ceil() as isize)
-                        .clamp(0, self.nav_nx as isize - 1) as usize;
-                    let gy0 = (((crown_y - r_eff - self.min_y) / NAV_STEP).floor() as isize)
-                        .clamp(0, self.nav_ny as isize - 1) as usize;
-                    let gy1 = (((crown_y + r_eff - self.min_y) / NAV_STEP).ceil() as isize)
-                        .clamp(0, self.nav_ny as isize - 1) as usize;
-
-                    let size_factor = (crown_r / 4.0).clamp(0.4, 1.5);
-                    for gy in gy0..=gy1 {
-                        let wy = self.min_y + (gy as f32 + 0.5) * NAV_STEP;
-                        let dy = wy - crown_y;
-                        let row_off = gy * self.nav_nx;
-                        for gx in gx0..=gx1 {
-                            let wx = self.min_x + (gx as f32 + 0.5) * NAV_STEP;
-                            let dx = wx - crown_x;
-                            let d2 = dx * dx + dy * dy;
-                            if d2 > r_eff * r_eff {
-                                continue;
-                            }
-                            let idx = row_off + gx;
-                            let ground_z = if self.walkable[idx] {
-                                self.nav_z[idx]
-                            } else {
-                                self.terrain_z_fast(wx, wy)
-                            };
-                            let overlap =
-                                tree_top.min(ground_z + 8.5) - crown_lo.max(ground_z + 2.0);
-                            if overlap <= 0.0 {
-                                continue;
-                            }
-                            let v_frac = (overlap / 6.5).clamp(0.0, 1.0);
-                            let chord = (1.0 - d2 / (r_eff * r_eff)).max(0.0).sqrt();
-                            accum[idx] += 6.0 * v_frac * size_factor * chord;
-                        }
-                    }
-                }
-            }
-
-            // 2. Trunk concealment (solid LoS block at torso/eye span)
-            if trunk_r.is_finite() && trunk_r > 0.05 {
-                let tr_eff = trunk_r + 1.8;
-                if tx + tr_eff >= self.min_x
-                    && tx - tr_eff <= self.max_x
-                    && ty + tr_eff >= self.min_y
-                    && ty - tr_eff <= self.max_y
-                {
-                    let gx0 = (((tx - tr_eff - self.min_x) / NAV_STEP).floor() as isize)
-                        .clamp(0, self.nav_nx as isize - 1) as usize;
-                    let gx1 = (((tx + tr_eff - self.min_x) / NAV_STEP).ceil() as isize)
-                        .clamp(0, self.nav_nx as isize - 1) as usize;
-                    let gy0 = (((ty - tr_eff - self.min_y) / NAV_STEP).floor() as isize)
-                        .clamp(0, self.nav_ny as isize - 1) as usize;
-                    let gy1 = (((ty + tr_eff - self.min_y) / NAV_STEP).ceil() as isize)
-                        .clamp(0, self.nav_ny as isize - 1) as usize;
-
-                    for gy in gy0..=gy1 {
-                        let wy = self.min_y + (gy as f32 + 0.5) * NAV_STEP;
-                        let dy = wy - ty;
-                        let row_off = gy * self.nav_nx;
-                        for gx in gx0..=gx1 {
-                            let wx = self.min_x + (gx as f32 + 0.5) * NAV_STEP;
-                            let dx = wx - tx;
-                            let d = (dx * dx + dy * dy).sqrt();
-                            if d > tr_eff {
-                                continue;
-                            }
-                            let idx = row_off + gx;
-                            let ground_z = if self.walkable[idx] {
-                                self.nav_z[idx]
-                            } else {
-                                self.terrain_z_fast(wx, wy)
-                            };
-                            let overlap =
-                                tree_top.min(ground_z + 8.5) - tz_tree.max(ground_z + 2.0);
-                            if overlap > 1.5 {
-                                let prox = (1.0 - d / (tr_eff + 0.4)).clamp(0.0, 1.0);
-                                accum[idx] += 3.0 * prox;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        for (i, &val) in accum.iter().enumerate() {
-            if val > 0.25 {
-                self.nav_canopy[i] = (val.round() as u8).clamp(1, 10);
-            }
-        }
-    }
-
     fn build_roof_anchors(&mut self) {
         // Identify climbable roof edge cells (6..26 m above ground) that have flat interior roof space
         // and an immediately adjacent walkable ground launch cell.
@@ -870,18 +697,6 @@ impl ArenaMap {
         let h0 = h00 + (h10 - h00) * tx;
         let h1 = h01 + (h11 - h01) * tx;
         h0 + (h1 - h0) * ty
-    }
-
-    #[inline]
-    pub fn terrain_z_fast(&self, x: f32, y: f32) -> f32 {
-        if !self.loaded {
-            return 0.0;
-        }
-        let ix = (((x - self.min_x) / LOS_STEP).floor() as isize)
-            .clamp(0, self.los_nx as isize - 1) as usize;
-        let iy = (((y - self.min_y) / LOS_STEP).floor() as isize)
-            .clamp(0, self.los_ny as isize - 1) as usize;
-        self.terrain_grid[iy * self.los_nx + ix]
     }
 
     #[inline]
@@ -985,7 +800,7 @@ impl ArenaMap {
         {
             return true;
         }
-        let tz_center = self.terrain_z_fast(xf, yf);
+        let tz_center = self.terrain_z(xf, yf);
         let max_slope_dz = rf.max(1.5) * 1.11 + 0.35; // ~48 deg max walkable slope
         let offsets = [[0.0, 0.0], [rf, 0.0], [-rf, 0.0], [0.0, rf], [0.0, -rf]];
         for [ox, oy] in offsets {
@@ -995,7 +810,7 @@ impl ArenaMap {
             if bt.is_finite() && bt > zf + MECH_STEP_UP {
                 return true;
             }
-            let tz = self.terrain_z_fast(sx, sy);
+            let tz = self.terrain_z(sx, sy);
             if tz > zf + MECH_STEP_UP && (tz - tz_center) > max_slope_dz {
                 return true;
             }
@@ -1153,21 +968,16 @@ impl ArenaMap {
                     }
                 }
 
-                let same_roof = on_roof && (cz - from[2]).abs() < 1.8;
-
-                // Soft tree-canopy concealment tie-breaker outside 45 m proximity sensors
-                let canopy_bonus = if !on_roof && min_threat_dist > 46.0 {
-                    (self.nav_canopy[idx] as f64) * 0.35
-                } else {
-                    0.0
-                };
-
                 let stay_bonus = if exposed == 0 && dist_me < 5.0 {
                     10.0
                 } else {
                     0.0
                 };
-                let roof_bonus = if same_roof { 14.0 } else { 0.0 };
+                let roof_bonus = if on_roof && (cz - from[2]).abs() < 1.8 {
+                    14.0
+                } else {
+                    0.0
+                };
                 let dist_w = if prefer_far { 1.45 } else { 2.4 };
                 let sep_w = if prefer_far { 0.45 } else { 0.15 };
 
@@ -1177,8 +987,7 @@ impl ArenaMap {
                     - (dist_zone / zone_radius.max(10.0)) * 10.0
                     + if is_cover_edge { 4.0 } else { 0.0 }
                     + stay_bonus
-                    + roof_bonus
-                    + canopy_bonus;
+                    + roof_bonus;
 
                 if best.as_ref().is_none_or(|(bs, _)| score > *bs) {
                     best = Some((score, [w[0], w[1], cz]));
@@ -1651,7 +1460,6 @@ mod navigation_tests {
         map.max_y = 32.0;
         map.los_nx = 16;
         map.los_ny = 16;
-        map.terrain_grid = vec![0.0; 256];
         map.solid_top = vec![0.0; 256];
         map.building_top = vec![f32::NEG_INFINITY; 256];
         map.roof_top = vec![f32::NAN; 64];
@@ -1762,7 +1570,6 @@ mod navigation_tests {
             map.t_nx = 33;
             map.t_ny = 33;
             map.terrain = (0..1089).map(|i| (i % 33) as f32 * gradient).collect();
-            map.terrain_grid = (0..256).map(|i| ((i % 16) * 2 + 1) as f32 * gradient).collect();
             map.nav_z = (0..64).map(|i| ((i % 8) * 4 + 2) as f32 * gradient).collect();
             map.walkable[17] = false;
             map.wall_dist[17] = 0;
@@ -1829,5 +1636,37 @@ mod navigation_tests {
                 assert!(map.line_walkable(a, b), "{a:?} -> {b:?}");
             }
         }
+    }
+}
+
+
+#[cfg(test)]
+mod experiment_terrain_precision_tests {
+    use super::*;
+
+    fn ramp(gradient: f32) -> ArenaMap {
+        let mut m = ArenaMap::empty();
+        m.loaded = true;
+        m.min_x = 0.; m.min_y = 0.; m.max_x = 32.; m.max_y = 32.;
+        m.t_min_x = 0.; m.t_min_y = 0.; m.t_step = 1.;
+        m.t_nx = 33; m.t_ny = 33;
+        m.terrain = (0..1089).map(|i| (i % 33) as f32 * gradient).collect();
+        m.los_nx = 16; m.los_ny = 16;
+        m.building_top = vec![f32::NEG_INFINITY; 256];
+        m.solid_top = vec![0.; 256];
+        m
+    }
+
+    #[test]
+    fn interpolated_collision_accepts_uniform_45_degree_ramp() {
+        let m = ramp(1.0);
+        assert!((m.terrain_z(9.9, 10.0) - 9.9).abs() < 1e-4);
+        assert!(!m.is_blocked_at(9.9, 10.0, 9.9, 2.5));
+    }
+
+    #[test]
+    fn interpolated_collision_rejects_steeper_uniform_ramp() {
+        let m = ramp(1.4);
+        assert!(m.is_blocked_at(10.5, 10.0, 14.7, 2.5));
     }
 }

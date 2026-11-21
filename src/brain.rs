@@ -41,7 +41,7 @@ impl BotBrain {
         let initial_mechs = hello.config.r#match.get("mechs").copied().unwrap_or(16.0) as u64;
         let world = WorldState::new(initial_mechs);
         eprintln!(
-            "vanguard-v4 initialized (slot={}, map_loaded={}, prisms={}, roofs={}, nav={}x{}) in {:.1}ms",
+            "vanguard-v3 initialized (slot={}, map_loaded={}, prisms={}, roofs={}, nav={}x{}) in {:.1}ms",
             hello.slot,
             map.loaded,
             map.prisms.len(),
@@ -241,7 +241,11 @@ impl BotBrain {
             if e.laser_cd_until > obs.t + 0.3 {
                 enemy_laser_on_cd = true;
             }
-            if e.charging && has_los_to_e && ed < 275.0 {
+            // Reuse the existing threat evidence: an aim cone toward us,
+            // or recent damage by this actor. Charge alone can be aimed elsewhere.
+            if e.charging && has_los_to_e && ed < 275.0
+                && (e.aiming_at_me || obs.t - e.last_damaged_me_t < 3.0)
+            {
                 let can_short =
                     lightning_range > 0.0 && ed <= lightning_range + 2.0 && me.energy >= 6.0;
                 if !can_short {
@@ -272,8 +276,8 @@ impl BotBrain {
         }
 
         // EMERGENCY LASER-DUCK: enemy charging a 315-dmg hitscan laser at us!
-        // An own charging laser is not proof of an imminent kill: the target,
-        // actual damage, alignment and incoming shot timing would all need proof.
+        // Own charge and an unrelated low-HP enemy do not prove a kill.
+        // Keep defensive fire; select emergency cover only for a credible charger.
         let laser_duck_cover =
             if !urgent_zone && !charging_los_snipers.is_empty() {
                 self.map
@@ -381,8 +385,6 @@ impl BotBrain {
             &self.map,
             &self.world,
             target.as_ref(),
-            // Regen mode can still be exposed or stationary: do not turn it
-            // into a blanket laser firing ban. Actual zone/duck escapes remain urgent.
             urgent_zone || doing_laser_duck,
             hold_fire_for_regen,
             allow_precharge_behind_cover,
@@ -1219,7 +1221,7 @@ impl BotBrain {
                     let (gx, gy) = self.map.world_to_nav(nx, ny);
                     let wd = self.map.wall_dist_cell(gx, gy);
                     if wd == 0
-                        && pos[2] <= self.map.terrain_z_fast(pos[0] as f32, pos[1] as f32) as f64 + 1.5
+                        && pos[2] <= self.map.terrain_z(pos[0] as f32, pos[1] as f32) as f64 + 1.5
                     {
                         score -= 14.0;
                     }
@@ -1427,7 +1429,7 @@ impl BotBrain {
 }
 
 #[cfg(test)]
-mod tests {
+mod experiment_drop_tests {
     use super::*;
     use crate::protocol::{HelloMap, RawObservation};
     use serde_json::json;
@@ -1628,6 +1630,48 @@ mod tests {
         assert!(brain.is_blacklisted([0.0,0.0],obs.t));
     }
 
+}
+
+#[cfg(test)]
+mod experiment_threat_tests {
+    use super::*;
+    use crate::protocol::{HelloMap, RawObservation};
+    use serde_json::json;
+
+    fn fixture() -> (BotBrain, Observation) {
+        let cfg: Config = serde_json::from_value(json!({
+            "vision":{"range":200,"fov_deg":120,"near_range":45},
+            "sound":{"bearing_noise_deg":7,"near":60,"mid":160,
+                "step_speed":5,"step_every":0.6},
+            "weapons":{},"loot":{"pickup_radius":4,"equip_s":1},
+            "zone":{"start_center":[0,0],"start_radius":500,"phases":[]}
+        })).unwrap();
+        let map = ArenaMap::empty();
+        let nav = Navigator::new(&map);
+        let brain = BotBrain {
+            cfg,map,nav,world:WorldState::new(16),prev_wanted_move:false,
+            regen_mode:false,cached_cover:None,climb_target:None,
+            roam_anchor:None,roam_tick:0,goal_track:None,drop_hold:None,
+            blacklist:Vec::new(),
+        };
+        let raw: RawObservation = serde_json::from_value(json!({
+            "tick":1740,"t":87,"alive":16,
+            "self":{"id":0,"pos":[0,0,0],"vel":[0,0,0],"aim":[0,0],
+                "hp":1400,"max_hp":1400,"energy":100,"max_energy":100,
+                "grounded":true,"cubes":0,"in_zone":true,
+                "weapons":[{"kind":"gun","cooldown":0,"ammo":12,"reload":0},null]},
+            "zone":{"center":[0,0],"radius":500,"next_center":[0,0],
+                "next_radius":380,"shrink_start":200,"shrink_end":240,"dps":20},
+            "drops":[{"id":9000,"pos":[0,0,0],"radius":8,
+                "lands_in":8,"capture_s":4,"progress":0,"holder":null}]
+        })).unwrap();
+        (brain,raw.into())
+    }
+
+    fn label(action: &Action) -> &str {
+        action.debug.as_ref().and_then(|d| d.label.as_deref()).unwrap_or("")
+    }
+
     fn corner_map() -> ArenaMap {
         let unique = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH)
             .unwrap().as_nanos();
@@ -1652,44 +1696,87 @@ mod tests {
         map
     }
 
-    #[test]
-    fn nonlethal_own_laser_does_not_disable_emergency_duck() {
-        let (mut brain,mut obs) = fixture();
+    fn charger_fixture(gun_only: bool) -> (BotBrain, Observation) {
+        let (mut brain, mut obs) = fixture();
         brain.map = corner_map();
         brain.nav = Navigator::new(&brain.map);
         obs.drops.clear();
-        obs.self_obs.pos = [0.0,12.0,0.0];
-        obs.self_obs.weapons[1] = Some(serde_json::from_value(json!({
-            "kind":"laser","cooldown":0,"charge":0.5,
-            "stats":{"damage":315,"charge":0.75,"min_frac":0.35}
-        })).unwrap());
+        obs.self_obs.pos = [0.0, 12.0, 0.0];
+        obs.self_obs.aim = [0.0, -0.05];
+        if !gun_only {
+            obs.self_obs.weapons[1] = Some(serde_json::from_value(json!({
+                "kind":"laser","cooldown":0,"charge":0.5,
+                "stats":{"damage":315,"charge":0.75,"min_frac":0.35}
+            })).unwrap());
+        }
         obs.mechs = serde_json::from_value(json!([{
             "id":1,"kind":"mech","pos":[50,12,0],"vel":[0,0,0],
-            "aim":[3.141592653589793,0],"hp":350,"max_hp":1400,
+            "aim":[std::f64::consts::PI,0],"hp":350,"max_hp":1400,
             "cubes":0,"weapons":["laser"],"charging":true
         }])).unwrap();
-        let action = brain.act(&obs);
-        assert!(label(&action).starts_with("LASER_DUCK"),"{}",label(&action));
+        (brain, obs)
     }
 
     #[test]
-    fn exposed_regen_retreat_preserves_defensive_gun_and_laser_fire() {
-        for charge in [0.0,0.3] {
-            let (mut brain,mut obs) = fixture();
+    fn aimed_charger_is_not_ignored_for_an_unproven_own_kill() {
+        let (mut brain, obs) = charger_fixture(false);
+        // At zero cubes the own 0.5 s charge cannot kill this 350 HP target.
+        let action = brain.act(&obs);
+        assert!(label(&action).starts_with("LASER_DUCK"), "{}", label(&action));
+        assert_eq!(action.fire.unwrap()[0], true, "retain useful return fire");
+    }
+
+    #[test]
+    fn charger_facing_elsewhere_does_not_abort_our_charge() {
+        let (mut brain, mut obs) = charger_fixture(false);
+        obs.mechs[0].aim = [0.0, 0.0];
+        // Stay below the old 0.5 s exemption, so the legacy broad threat
+        // trigger really would abort this charge merely on seeing a charger.
+        obs.self_obs.weapons[1].as_mut().unwrap().charge = Some(0.3);
+        let action = brain.act(&obs);
+        assert!(!label(&action).starts_with("LASER_DUCK"), "{}", label(&action));
+        assert_eq!(action.fire, Some([true, true]), "preserve gun fire and laser charge");
+    }
+
+    #[test]
+    fn recently_damaging_charger_remains_a_threat_while_turning() {
+        let (mut brain, mut obs) = charger_fixture(false);
+        obs.mechs[0].aim = [0.0, 0.0];
+        brain.act(&obs); // Establish the tracked actor before the damage event.
+        obs.t += 0.1;
+        obs.tick += 2;
+        obs.events = vec![json!({"type":"damaged","by":1,"weapon":"laser","amount":1})];
+        let action = brain.act(&obs);
+        assert!(label(&action).starts_with("LASER_DUCK"), "{}", label(&action));
+        assert!(action.fire.unwrap()[0]);
+    }
+
+    #[test]
+    fn gun_only_keeps_defensive_fire_while_ducking_a_charger() {
+        let (mut brain, obs) = charger_fixture(true);
+        let action = brain.act(&obs);
+        assert!(label(&action).starts_with("LASER_DUCK"), "{}", label(&action));
+        assert_eq!(action.fire, Some([true, false]));
+    }
+
+    #[test]
+    fn exposed_regen_does_not_become_a_blanket_firing_ban() {
+        for charge in [0.0, 0.3] {
+            let (mut brain, mut obs) = fixture();
             obs.drops.clear();
             obs.self_obs.hp = 600.0;
-            obs.self_obs.aim = [0.0,-0.05];
+            obs.self_obs.aim = [0.0, -0.05];
             obs.self_obs.weapons[1] = Some(serde_json::from_value(json!({
                 "kind":"laser","cooldown":0,"charge":charge
             })).unwrap());
             obs.mechs = serde_json::from_value(json!([{
                 "id":1,"kind":"mech","pos":[50,0,0],"vel":[0,0,0],
-                "aim":[3.141592653589793,0],"hp":1400,"max_hp":1400,
+                "aim":[std::f64::consts::PI,0],"hp":1400,"max_hp":1400,
                 "cubes":0,"weapons":["gun"],"charging":false
             }])).unwrap();
             let action = brain.act(&obs);
-            assert!(label(&action).starts_with("REGEN"),"{}",label(&action));
-            assert_eq!(action.fire,Some([true,true]));
+            assert!(label(&action).starts_with("REGEN"), "{}", label(&action));
+            assert_eq!(action.fire, Some([true, true]));
         }
     }
 }

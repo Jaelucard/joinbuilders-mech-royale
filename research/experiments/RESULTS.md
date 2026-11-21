@@ -1,6 +1,8 @@
-# Completed experiment campaign: no candidate qualified for a push
+# Completed experiment campaign: performance gate failed
 
-The 64-configuration screen and both prospective validation runs are complete. The selected candidate passes regression tests and Docker conformance, but **fails the predeclared performance gate in both validation runs**. Nothing was pushed. Production source in this checkout remains the previously recorded local R2 candidate; the new finalist exists as reproducible source transformations and preserved Docker images, not as a promoted source revision.
+**Subsequent publication authorization:** after reviewing this result, the user explicitly requested "push it for now". The exact frozen finalist has been materialized in production source for publication to `master`. [Publication record](publication.json) binds this override to the tested source and runtime. The failed gate and all results below remain unchanged; the no-push decision below records the original campaign outcome.
+
+The 64-configuration screen and both prospective validation runs are complete. The selected candidate passes regression tests and Docker conformance, but **fails the predeclared performance gate in both validation runs**. At the campaign conclusion, nothing was pushed and production source still contained the earlier local R2 candidate. The subsequent explicit publication authorization above supersedes that publication decision, while preserving the failed performance gate.
 
 The official comparison baseline remains **4.81 at `411af5f530934aa21d8cb5dfff35259219595159`**, as confirmed by the user. The user associated **4.65 / BB-488640B1** with `5b783d19f138239033be32b527318f9247a9f9b8`. No new official score was obtained. Local simulator points below must not be added to 4.81 or interpreted as an official score prediction.
 
@@ -88,4 +90,4 @@ python research/experiments/run_suite.py repeat --workers 2
 
 These commands validate and reuse matching existing records. To collect genuinely new evidence, create a separate campaign with a new plan and output namespace rather than deleting this campaign's records. `validate_selected.py` builds/tests the exact finalist and `validate_selected.py --conformance` checks the manifest's immutable runtime image; rerunning them overwrites their logs/manifest. `assess.py gate` recomputes the score gate and overwrites `gate.json`; its output is the scoring decision only, so the separately recorded test/conformance fields must be retained when preparing a new combined report.
 
-**Publication decision: no push.** The conditional authorization requires a significant improvement; this campaign did not establish one.
+**Original campaign decision: no automatic push.** This campaign did not establish a significant improvement. The user subsequently authorized publication explicitly; see the dated publication record above.
