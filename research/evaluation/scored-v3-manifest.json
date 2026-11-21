@@ -1,0 +1,30 @@
+{
+  "user_reported_official_score": 4.81,
+  "user_confirmed_score_commit": true,
+  "official_record_independently_retrieved": false,
+  "official_scorer_version": null,
+  "source_commit": "411af5f530934aa21d8cb5dfff35259219595159",
+  "preserved_git_branch": "baseline/scoring-411af5f",
+  "runtime_image_tag": "mechbot:scored-v3",
+  "runtime_image_id": "sha256:2b03f75e516272065af3f7af50983b2fb70139e190b41ff00ae17442e7a47bcb",
+  "builder_image_tag": "mechbot:scored-v3-builder",
+  "builder_image_id": "sha256:d567974e1e11d572aa1558cfafdd74cfee2432d7125386f149da50d3ffc898ab",
+  "source_sha256": {
+    "src/brain.rs": "a6876968b6e94403d8ae441980502b90ed46b6e9f3a219bba1b5447bed1a61f8",
+    "src/combat.rs": "aefd1d02f791725a8ea21139e515774851167a430c7187df6d227b2580514226",
+    "src/lib.rs": "61fab161ee764afb80c693d26c50d1986cd204ddbc8bd22011be8a5529317fd5",
+    "src/main.rs": "cdb411357207fe8d01f7ee631d614b40172a82ecbc1b68e6a0e0951b4cbb15ec",
+    "src/map.rs": "4664e24d1caa611acf97c0083f7a99d477514bafbda65274c251b8555e0a4c2b",
+    "src/nav.rs": "969de229eb95e5429769bbcfd2c90947f8844ff1195a763f87f762dddd35169e",
+    "src/protocol.rs": "9f26d08e3e6ad7b3e9ac7f6a3068af56be551dbc78ba5f48bc9ec6887c309130",
+    "src/world.rs": "e7b5df853ea48573fe1d988246ed571a5affc4c01e4b4b9b155efdd0730b467f"
+  },
+  "note": "Built from exact Git source snapshot, not the current candidate; user-confirmed4.81 baseline.",
+  "tests_passed": 4,
+  "conformance_observations": 300,
+  "conformance_late": 0,
+  "conformance_wrong_tick": 0,
+  "conformance_bad_lines": 0,
+  "conformance_p99_ms": 1.6,
+  "conformance_max_ms": 1.8
+}

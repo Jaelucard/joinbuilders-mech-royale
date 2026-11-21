@@ -1,5 +1,7 @@
 # BB-488640B1 regression investigation
 
+**Provenance resolved:** the user identified 4.81 as v3 `411af5f` and 4.65 as v4 `5b783d1`. The [scored-revision investigation](scored-revision-investigation.md) supersedes the earlier missing-baseline uncertainty below and examines the actual scored code delta. The historical candidate witnesses remain valid but did not cause either submitted run.
+
 Follow-up: both executable candidate defects have been repaired and reviewed; [repair validation](repair-validation.md) records the changes and mixed held-out results. The original evidence and preserved candidate below remain historical records.
 
 Investigated 21 November 2026. User-reported results: previous official best **4.81**, BB-488640B1 **4.65**. Follow-up: the user explicitly confirmed that `5b783d19f138239033be32b527318f9247a9f9b8` belongs to **4.65 - BB-488640B1**. The source revision for 4.81 and the submission scorer versions remain unknown.

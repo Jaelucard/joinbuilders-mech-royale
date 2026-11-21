@@ -15,7 +15,11 @@
   "builder_image_id": "sha256:8a59ac7675617eb381f444484ecd0d8aaa14b930b450afa438147786db369de3",
   "builder_image_tag": "mechbot:research-builder-5b783d1",
   "notes": [
-    "Local baseline is current source at start of work; not verified as the exact official4.81 submission.",
+    "This original local reference is v4, now user-confirmed as4.65. The4.81 baseline is v3; preserved separately in scored-v3-manifest.json.",
     "Proxy outcomes are approximate simulations, separate from official scoring."
-  ]
+  ],
+  "user_reported_official_score_commit": "411af5f530934aa21d8cb5dfff35259219595159",
+  "score_commit_user_confirmed": true,
+  "local_baseline_user_confirmed_official_score": 4.65,
+  "official_best_preserved_manifest": "research/evaluation/scored-v3-manifest.json"
 }

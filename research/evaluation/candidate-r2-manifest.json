@@ -47,5 +47,7 @@
     "src/brain.rs",
     "src/combat.rs"
   ],
-  "proxy_source_note": "Selected Rust files are normalized from CRLF to LF by the temporary harness; the differing byte hashes were verified to reflect only that normalization."
+  "proxy_source_note": "Selected Rust files are normalized from CRLF to LF by the temporary harness; the differing byte hashes were verified to reflect only that normalization.",
+  "user_confirmed_official_best_commit": "411af5f530934aa21d8cb5dfff35259219595159",
+  "official_best_manifest": "research/evaluation/scored-v3-manifest.json"
 }

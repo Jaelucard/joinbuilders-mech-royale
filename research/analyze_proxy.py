@@ -27,6 +27,9 @@ def main():
                              "Intervals describe paired proxy outcomes, not official score uncertainty."]}
     for path in args.candidates:
         cand = json.loads(Path(path).read_text())
+        for shared in ["environment_map_sha256", "simulator_harness_sha256",
+                       "simulator_manifest_sha256", "simulator_lock_sha256"]:
+            assert base.get(shared) == cand.get(shared), shared
         for shared in ["sim/src/main.rs","sim/hello_config.json","kit/arena/v2/world.json","kit/arena/v2/terrain.i16"]:
             assert base["input_sha256"][shared] == cand["input_sha256"][shared], shared
         for mode in ["practice","ffa"]:

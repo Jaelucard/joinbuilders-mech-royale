@@ -1,6 +1,6 @@
 # Mech Royale scoring improvement plan
 
-Research date: 21 November 2026. Bot reviewed: `5b783d1`, matching fetched `origin/master`. Reported official baseline: **4.81**. Three native research agents worked concurrently, then reviewed the combined findings in a second pass. No sharing-capability error occurred.
+Research date: 21 November 2026. Bot reviewed: `5b783d1`, matching fetched `origin/master`. The user later confirmed that the **4.81** baseline is v3 `411af5f`, while the reviewed v4 scored **4.65**. See [scored-revision investigation](scored-revision-investigation.md) for corrected provenance and the actual scored delta. Three native research agents worked concurrently, then reviewed the combined findings in a second pass. No sharing-capability error occurred.
 
 Supporting artifacts: [executable diagnostic source](C:/Users/lowja/.t3/projects/joinbuilders-mech-royale/research/behavior_probes.rs), [public standings snapshot](C:/Users/lowja/.t3/projects/joinbuilders-mech-royale/research/standings-snapshot.json), and [score comparison chart](C:/Users/lowja/.t3/projects/joinbuilders-mech-royale/research/score-context.html).
 

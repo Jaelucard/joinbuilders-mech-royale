@@ -1,0 +1,68 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 551B 0.0s done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for docker.io/library/rust:1.85-slim-bookworm
+#2 DONE 0.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.1s
+
+#4 [internal] load build context
+#4 DONE 0.0s
+
+#5 [builder 1/6] FROM docker.io/library/rust:1.85-slim-bookworm@sha256:9f841bbe9e7d8e37ceb96ed907265a3a0df7f44e3737d0b100e7907a679acb36
+#5 resolve docker.io/library/rust:1.85-slim-bookworm@sha256:9f841bbe9e7d8e37ceb96ed907265a3a0df7f44e3737d0b100e7907a679acb36 0.0s done
+#5 DONE 0.0s
+
+#4 [internal] load build context
+#4 transferring context: 187.34kB 0.0s done
+#4 DONE 0.1s
+
+#6 [builder 2/6] WORKDIR /build
+#6 CACHED
+
+#7 [builder 3/6] COPY Cargo.toml Cargo.lock ./
+#7 CACHED
+
+#8 [builder 4/6] RUN mkdir src && echo "fn main() {}" > src/main.rs &&     cargo build --release --locked &&     rm -rf src
+#8 0.127     Updating crates.io index
+#8 0.129 warning: spurious network error (3 tries remaining): [6] Could not resolve hostname (Could not resolve host: index.crates.io)
+#8 1.574 warning: spurious network error (2 tries remaining): [6] Could not resolve hostname (Could not resolve host: index.crates.io)
+#8 5.074 warning: spurious network error (1 tries remaining): [6] Could not resolve hostname (Could not resolve host: index.crates.io)
+#8 11.58 error: failed to get `serde` as a dependency of package `mechbot v0.1.0 (/build)`
+#8 11.58
+#8 11.58 Caused by:
+#8 11.58   download of config.json failed
+#8 11.58
+#8 11.58 Caused by:
+#8 11.58   failed to download from `https://index.crates.io/config.json`
+#8 11.58
+#8 11.58 Caused by:
+#8 11.58   [6] Could not resolve hostname (Could not resolve host: index.crates.io)
+#8 ERROR: process "/bin/sh -c mkdir src && echo \"fn main() {}\" > src/main.rs &&     cargo build --release --locked &&     rm -rf src" did not complete successfully: exit code: 101
+------
+ > [builder 4/6] RUN mkdir src && echo "fn main() {}" > src/main.rs &&     cargo build --release --locked &&     rm -rf src:
+11.58 error: failed to get `serde` as a dependency of package `mechbot v0.1.0 (/build)`
+11.58
+11.58 Caused by:
+11.58   download of config.json failed
+11.58
+11.58 Caused by:
+11.58   failed to download from `https://index.crates.io/config.json`
+11.58
+11.58 Caused by:
+11.58   [6] Could not resolve hostname (Could not resolve host: index.crates.io)
+------
+Dockerfile:7
+--------------------
+   6 |     COPY Cargo.toml Cargo.lock ./
+   7 | >>> RUN mkdir src && echo "fn main() {}" > src/main.rs && \
+   8 | >>>     cargo build --release --locked && \
+   9 | >>>     rm -rf src
+  10 |
+--------------------
+ERROR: failed to build: failed to solve: process "/bin/sh -c mkdir src && echo \"fn main() {}\" > src/main.rs &&     cargo build --release --locked &&     rm -rf src" did not complete successfully: exit code: 101

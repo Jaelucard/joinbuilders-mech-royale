@@ -1,5 +1,7 @@
 # Scoring control candidate results
 
+**Scored baseline resolved:** the user identified v3 `411af5f` as the 4.81 build. V4 `5b783d1` scored 4.65. See the [scored-revision investigation](scored-revision-investigation.md); the later candidate results below are separate experiments and did not cause that official difference.
+
 **Latest:** two additional candidate defects were repaired in `3fbca8b` and `e356975`. See [repair validation](repair-validation.md) for 47 passing tests, Docker conformance and fresh/isolated comparisons. The user confirmed BB-488640B1 used v4 `5b783d1`; the repaired candidate remains unsubmitted and has mixed proxy evidence. The results below describe the preserved earlier candidate.
 
 **Follow-up investigation:** the user reported BB-488640B1 at 4.65 and said it used the latest GitHub push. A fresh remote check found only `master` at `5b783d1`; the candidate below was still local. The actual submission row has not been independently inspected, so 4.65 must not be recorded as a candidate result. See [regression investigation](regression-investigation.md) for provenance, additional candidate risks, and simulator limitations. Those findings supersede the earlier readiness recommendation below pending targeted follow-up.

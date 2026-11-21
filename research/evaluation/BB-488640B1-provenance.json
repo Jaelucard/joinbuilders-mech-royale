@@ -26,5 +26,7 @@
   "local_candidate_production_commit": "7b2f1547e2e2a827fa3bbfb6085068ff73cf3b45",
   "local_candidate_present_on_remote": false,
   "official_candidate_score": null,
-  "conclusion": "User confirms BB-488640B1 used published v4, not the local candidate. The previous 4.81 run revision and both scorer-version records remain unavailable; the numerical score difference remains unexplained."
+  "conclusion": "User confirms4.81 is v3 and BB-488640B1/4.65 is v4. Scored code delta is terrain sampling plus canopy preference; exact official causal attribution and scorer versions remain unavailable.",
+  "previous_official_baseline_user_confirmed_commit": "411af5f530934aa21d8cb5dfff35259219595159",
+  "previous_official_baseline_commit_user_confirmed": true
 }

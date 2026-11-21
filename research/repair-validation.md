@@ -1,5 +1,7 @@
 # Candidate repair validation
 
+**Baseline now identified:** the user confirmed the 4.81 run used v3 `411af5f`. See the [scored-revision investigation](scored-revision-investigation.md) for the actual v3-to-v4 changes and controlled component diagnostics. The results below are historical candidate validation; they did not evaluate v3 as the player baseline.
+
 The user explicitly confirmed **BB-488640B1 = 4.65 at `5b783d19f138239033be32b527318f9247a9f9b8`**. This is published v4, not the local candidate. The reported best remains **4.81**, with its revision and scorer version still unknown. These facts do not establish why the two official scores differ.
 
 Two independently reviewable repairs are implemented in local source revision **`e3569754142f1cd8a9373226dc6ccd0a754d32a8`**:

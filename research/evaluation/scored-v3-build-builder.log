@@ -1,0 +1,50 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 551B done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for docker.io/library/rust:1.85-slim-bookworm
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.1s
+
+#4 [internal] load build context
+#4 DONE 0.0s
+
+#5 [builder 1/6] FROM docker.io/library/rust:1.85-slim-bookworm@sha256:9f841bbe9e7d8e37ceb96ed907265a3a0df7f44e3737d0b100e7907a679acb36
+#5 resolve docker.io/library/rust:1.85-slim-bookworm@sha256:9f841bbe9e7d8e37ceb96ed907265a3a0df7f44e3737d0b100e7907a679acb36 0.0s done
+#5 DONE 0.0s
+
+#4 [internal] load build context
+#4 transferring context: 187.34kB 0.0s done
+#4 DONE 0.1s
+
+#6 [builder 2/6] WORKDIR /build
+#6 CACHED
+
+#7 [builder 3/6] COPY Cargo.toml Cargo.lock ./
+#7 CACHED
+
+#8 [builder 4/6] RUN mkdir src && echo "fn main() {}" > src/main.rs &&     cargo build --release --locked &&     rm -rf src
+#8 CACHED
+
+#9 [builder 5/6] COPY src ./src
+#9 CACHED
+
+#10 [builder 6/6] RUN touch src/main.rs && cargo build --release --locked
+#10 CACHED
+
+#11 exporting to image
+#11 exporting layers
+#11 exporting layers 0.4s done
+#11 exporting manifest sha256:4a5dc18f9af417ab176bd2ff2d962ff1f3cc514434b767873760dc8d71a4bded 0.0s done
+#11 exporting config sha256:9c771eb299a22566d99138944bc7fb4efd4284895be86eee3543fe55dbede6f1 0.0s done
+#11 exporting attestation manifest sha256:7b2f7f30cd0907a4cba6459cf3f8ddbff46673ecfc6906105489ad5514c3e41d 0.0s done
+#11 exporting manifest list sha256:d567974e1e11d572aa1558cfafdd74cfee2432d7125386f149da50d3ffc898ab
+#11 exporting manifest list sha256:d567974e1e11d572aa1558cfafdd74cfee2432d7125386f149da50d3ffc898ab 0.0s done
+#11 naming to docker.io/library/mechbot:scored-v3-builder done
+#11 unpacking to docker.io/library/mechbot:scored-v3-builder 0.1s done
+#11 DONE 0.7s

@@ -1,0 +1,59 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 551B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/rust:1.85-slim-bookworm
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/debian:bookworm-slim
+#3 DONE 1.8s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B done
+#4 DONE 0.0s
+
+#5 [stage-1 1/3] FROM docker.io/library/debian:bookworm-slim@sha256:734a72b3d6142a71993b4bc580ca01d8ca687f77a2c422d96a961d3376b179bc
+#5 resolve docker.io/library/debian:bookworm-slim@sha256:734a72b3d6142a71993b4bc580ca01d8ca687f77a2c422d96a961d3376b179bc 0.1s done
+#5 DONE 0.1s
+
+#6 [builder 1/6] FROM docker.io/library/rust:1.85-slim-bookworm@sha256:9f841bbe9e7d8e37ceb96ed907265a3a0df7f44e3737d0b100e7907a679acb36
+#6 resolve docker.io/library/rust:1.85-slim-bookworm@sha256:9f841bbe9e7d8e37ceb96ed907265a3a0df7f44e3737d0b100e7907a679acb36 0.1s done
+#6 DONE 0.1s
+
+#7 [internal] load build context
+#7 transferring context: 341B done
+#7 DONE 0.0s
+
+#8 [builder 3/6] COPY Cargo.toml Cargo.lock ./
+#8 CACHED
+
+#9 [builder 5/6] COPY src ./src
+#9 CACHED
+
+#10 [builder 2/6] WORKDIR /build
+#10 CACHED
+
+#11 [builder 4/6] RUN mkdir src && echo "fn main() {}" > src/main.rs &&     cargo build --release --locked &&     rm -rf src
+#11 CACHED
+
+#12 [builder 6/6] RUN touch src/main.rs && cargo build --release --locked
+#12 CACHED
+
+#13 [stage-1 2/3] WORKDIR /bot
+#13 CACHED
+
+#14 [stage-1 3/3] COPY --from=builder /build/target/release/mechbot /bot/mechbot
+#14 CACHED
+
+#15 exporting to image
+#15 exporting layers done
+#15 exporting manifest sha256:d8f157edf4a8e19c3cf10462d026bfe20f6685a3544155d83769612d619b820a done
+#15 exporting config sha256:1128894e28dc94b3029caf513c2120347704dde5b89563e89beca0340fd5aab8 done
+#15 exporting attestation manifest sha256:6e6469bca3e8f301448a18907d7c12fcbecb364f8e262d646b406d22e9c2fcdb 0.0s done
+#15 exporting manifest list sha256:2b03f75e516272065af3f7af50983b2fb70139e190b41ff00ae17442e7a47bcb
+#15 exporting manifest list sha256:2b03f75e516272065af3f7af50983b2fb70139e190b41ff00ae17442e7a47bcb 0.0s done
+#15 naming to docker.io/library/mechbot:scored-v3 done
+#15 unpacking to docker.io/library/mechbot:scored-v3 0.0s done
+#15 DONE 0.2s

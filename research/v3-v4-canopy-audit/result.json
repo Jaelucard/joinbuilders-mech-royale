@@ -1,0 +1,359 @@
+{
+  "image": "mechbot:research-builder-5b783d1",
+  "image_id": "sha256:8a59ac7675617eb381f444484ecd0d8aaa14b930b450afa438147786db369de3",
+  "source_commit": "5b783d19f138239033be32b527318f9247a9f9b8",
+  "exit_code": 0,
+  "witnesses": [
+    {
+      "disabled": {
+        "canopy": 0,
+        "hard_los_exposed": true,
+        "pos": [
+          265.6199951171875,
+          -323.0899963378906,
+          3.414341449737549
+        ],
+        "threat_distance_m": 54.999999999999986,
+        "travel_m": 0.0
+      },
+      "enabled": {
+        "canopy": 6,
+        "hard_los_exposed": true,
+        "pos": [
+          269.6199951171875,
+          -327.0899963378906,
+          3.700441598892212
+        ],
+        "threat_distance_m": 60.481825184638325,
+        "travel_m": 5.656854249492381
+      },
+      "from": [
+        265.6199951171875,
+        -323.0899963378906,
+        3.414341449737549
+      ],
+      "prefer_far": true,
+      "search_radius": 44.0,
+      "threat": [
+        238.1199951171875,
+        -275.4585991297465,
+        5.529543519020081
+      ],
+      "zone_center": [
+        0.0,
+        0.0
+      ],
+      "zone_radius": 480
+    },
+    {
+      "disabled": {
+        "canopy": 0,
+        "hard_los_exposed": true,
+        "pos": [
+          265.6199951171875,
+          -323.0899963378906,
+          3.414341449737549
+        ],
+        "threat_distance_m": 55.00000000000001,
+        "travel_m": 0.0
+      },
+      "enabled": {
+        "canopy": 6,
+        "hard_los_exposed": true,
+        "pos": [
+          269.6199951171875,
+          -327.0899963378906,
+          3.700441598892212
+        ],
+        "threat_distance_m": 60.48182518463835,
+        "travel_m": 5.656854249492381
+      },
+      "from": [
+        265.6199951171875,
+        -323.0899963378906,
+        3.414341449737549
+      ],
+      "prefer_far": true,
+      "search_radius": 44.0,
+      "threat": [
+        217.98859790904336,
+        -295.5899963378906,
+        5.500483989715576
+      ],
+      "zone_center": [
+        0.0,
+        0.0
+      ],
+      "zone_radius": 480
+    },
+    {
+      "disabled": {
+        "canopy": 8,
+        "hard_los_exposed": true,
+        "pos": [
+          281.6199951171875,
+          -323.0899963378906,
+          0.06530243903398514
+        ],
+        "threat_distance_m": 54.999999999999986,
+        "travel_m": 0.0
+      },
+      "enabled": {
+        "canopy": 10,
+        "hard_los_exposed": true,
+        "pos": [
+          281.6199951171875,
+          -327.0899963378906,
+          0.42220214009284973
+        ],
+        "threat_distance_m": 58.49830063912243,
+        "travel_m": 4.0
+      },
+      "from": [
+        281.6199951171875,
+        -323.0899963378906,
+        0.06530243903398514
+      ],
+      "prefer_far": true,
+      "search_radius": 44.0,
+      "threat": [
+        309.1199951171875,
+        -275.4585991297465,
+        5.529889464378357
+      ],
+      "zone_center": [
+        0.0,
+        0.0
+      ],
+      "zone_radius": 480
+    },
+    {
+      "disabled": {
+        "canopy": 8,
+        "hard_los_exposed": true,
+        "pos": [
+          281.6199951171875,
+          -323.0899963378906,
+          0.06530243903398514
+        ],
+        "threat_distance_m": 55.0,
+        "travel_m": 0.0
+      },
+      "enabled": {
+        "canopy": 10,
+        "hard_los_exposed": true,
+        "pos": [
+          281.6199951171875,
+          -327.0899963378906,
+          0.42220214009284973
+        ],
+        "threat_distance_m": 59.0,
+        "travel_m": 4.0
+      },
+      "from": [
+        281.6199951171875,
+        -323.0899963378906,
+        0.06530243903398514
+      ],
+      "prefer_far": true,
+      "search_radius": 44.0,
+      "threat": [
+        281.6199951171875,
+        -268.0899963378906,
+        5.059099912643433
+      ],
+      "zone_center": [
+        0.0,
+        0.0
+      ],
+      "zone_radius": 480
+    },
+    {
+      "disabled": {
+        "canopy": 8,
+        "hard_los_exposed": true,
+        "pos": [
+          281.6199951171875,
+          -323.0899963378906,
+          0.06530243903398514
+        ],
+        "threat_distance_m": 54.999999999999986,
+        "travel_m": 0.0
+      },
+      "enabled": {
+        "canopy": 10,
+        "hard_los_exposed": true,
+        "pos": [
+          281.6199951171875,
+          -327.0899963378906,
+          0.42220214009284973
+        ],
+        "threat_distance_m": 58.49830063912243,
+        "travel_m": 4.0
+      },
+      "from": [
+        281.6199951171875,
+        -323.0899963378906,
+        0.06530243903398514
+      ],
+      "prefer_far": true,
+      "search_radius": 44.0,
+      "threat": [
+        254.1199951171875,
+        -275.4585991297465,
+        5.4797797203063965
+      ],
+      "zone_center": [
+        0.0,
+        0.0
+      ],
+      "zone_radius": 480
+    },
+    {
+      "disabled": {
+        "canopy": 1,
+        "hard_los_exposed": true,
+        "pos": [
+          297.6199951171875,
+          -323.0899963378906,
+          -2.2952001094818115
+        ],
+        "threat_distance_m": 54.999999999999986,
+        "travel_m": 0.0
+      },
+      "enabled": {
+        "canopy": 2,
+        "hard_los_exposed": true,
+        "pos": [
+          297.6199951171875,
+          -327.0899963378906,
+          -2.4398739337921143
+        ],
+        "threat_distance_m": 58.49830063912243,
+        "travel_m": 4.0
+      },
+      "from": [
+        297.6199951171875,
+        -323.0899963378906,
+        -2.2952001094818115
+      ],
+      "prefer_far": true,
+      "search_radius": 44.0,
+      "threat": [
+        325.1199951171875,
+        -275.4585991297465,
+        6.69347482919693
+      ],
+      "zone_center": [
+        0.0,
+        0.0
+      ],
+      "zone_radius": 480
+    },
+    {
+      "disabled": {
+        "canopy": 1,
+        "hard_los_exposed": true,
+        "pos": [
+          297.6199951171875,
+          -323.0899963378906,
+          -2.2952001094818115
+        ],
+        "threat_distance_m": 55.0,
+        "travel_m": 0.0
+      },
+      "enabled": {
+        "canopy": 2,
+        "hard_los_exposed": true,
+        "pos": [
+          297.6199951171875,
+          -327.0899963378906,
+          -2.4398739337921143
+        ],
+        "threat_distance_m": 59.0,
+        "travel_m": 4.0
+      },
+      "from": [
+        297.6199951171875,
+        -323.0899963378906,
+        -2.2952001094818115
+      ],
+      "prefer_far": true,
+      "search_radius": 44.0,
+      "threat": [
+        297.6199951171875,
+        -268.0899963378906,
+        6.081071853637695
+      ],
+      "zone_center": [
+        0.0,
+        0.0
+      ],
+      "zone_radius": 480
+    },
+    {
+      "disabled": {
+        "canopy": 1,
+        "hard_los_exposed": true,
+        "pos": [
+          297.6199951171875,
+          -323.0899963378906,
+          -2.2952001094818115
+        ],
+        "threat_distance_m": 54.999999999999986,
+        "travel_m": 0.0
+      },
+      "enabled": {
+        "canopy": 2,
+        "hard_los_exposed": true,
+        "pos": [
+          297.6199951171875,
+          -327.0899963378906,
+          -2.4398739337921143
+        ],
+        "threat_distance_m": 58.49830063912243,
+        "travel_m": 4.0
+      },
+      "from": [
+        297.6199951171875,
+        -323.0899963378906,
+        -2.2952001094818115
+      ],
+      "prefer_far": true,
+      "search_radius": 44.0,
+      "threat": [
+        270.1199951171875,
+        -275.4585991297465,
+        5.057778835296631
+      ],
+      "zone_center": [
+        0.0,
+        0.0
+      ],
+      "zone_radius": 480
+    }
+  ],
+  "grid_summary": {
+    "canopy_histogram": [
+      11500,
+      430,
+      471,
+      545,
+      503,
+      385,
+      251,
+      117,
+      66,
+      24,
+      12
+    ],
+    "eligible_ground_cells": 14304
+  },
+  "scan_summary": {
+    "changed": 8,
+    "checked": 638,
+    "maximum_checks": 12000,
+    "sampling_note": "bounded synthetic threat/origin scan on actual arena, not a gameplay frequency estimate",
+    "stop_after_changes": 8
+  }
+}
