@@ -1,5 +1,7 @@
 # Scoring control candidate results
 
+**Latest:** two additional candidate defects were repaired in `3fbca8b` and `e356975`. See [repair validation](repair-validation.md) for 47 passing tests, Docker conformance and fresh/isolated comparisons. The user confirmed BB-488640B1 used v4 `5b783d1`; the repaired candidate remains unsubmitted and has mixed proxy evidence. The results below describe the preserved earlier candidate.
+
 **Follow-up investigation:** the user reported BB-488640B1 at 4.65 and said it used the latest GitHub push. A fresh remote check found only `master` at `5b783d1`; the candidate below was still local. The actual submission row has not been independently inspected, so 4.65 must not be recorded as a candidate result. See [regression investigation](regression-investigation.md) for provenance, additional candidate risks, and simulator limitations. Those findings supersede the earlier readiness recommendation below pending targeted follow-up.
 
 The requested control fixes are implemented on `fix/scoring-control`. The user's corrected official baseline is **4.81**; its exact submission commit is still unverified. The local baseline is preserved at `5b783d19f138239033be32b527318f9247a9f9b8` on `baseline/scoring-5b783d1`, with its original runtime and builder images.

@@ -1,0 +1,8 @@
+vanguard-v4 initialized (slot=3, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 46.3ms
+vanguard-v4 finished: place=13 kills=0
+bot: docker run --rm -i --network none --cpus 1 --memory 512m --memory-swap 512m --pids-limit 128 --cap-drop ALL --read-only --tmpfs /tmp:rw,size=64m --user 65534:65534 --mount type=bind,source=C:\Users\lowja\.t3\projects\joinbuilders-mech-royale\kit\arena,target=/arena,readonly mechbot:candidate-r2
+ready in 366 ms: name 'vanguard-v4'
+observations: 300  answered in time: 300  missed the 50 ms budget: 0 (0 came late)
+answer time ms: p50 0.9  p90 1.1  p99 1.5  max 1.9  (this machine, not the 1-CPU match container)
+answers to older queued observations (dropped): 1  wrong tick: 0  bad lines: 0  debug drawings: 300 (0 over the caps)
+PASS

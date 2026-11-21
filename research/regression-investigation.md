@@ -1,6 +1,8 @@
 # BB-488640B1 regression investigation
 
-Investigated 21 November 2026. User-reported results: previous official best **4.81**, BB-488640B1 **4.65**. The user says BB-488640B1 used the latest GitHub push. These aggregate scores do not identify their source revisions.
+Follow-up: both executable candidate defects have been repaired and reviewed; [repair validation](repair-validation.md) records the changes and mixed held-out results. The original evidence and preserved candidate below remain historical records.
+
+Investigated 21 November 2026. User-reported results: previous official best **4.81**, BB-488640B1 **4.65**. Follow-up: the user explicitly confirmed that `5b783d19f138239033be32b527318f9247a9f9b8` belongs to **4.65 - BB-488640B1**. The source revision for 4.81 and the submission scorer versions remain unknown.
 
 ## Main finding: the candidate was not published
 
@@ -8,7 +10,7 @@ A fresh fetch, `git ls-remote --symref origin HEAD`, `git ls-remote --heads orig
 
 The local `fix/scoring-control` branch was at `9c1283c` when this investigation started. Its production-source revision is `7b2f154`, following navigation `b5c030e` and combat `4c3d13a`. None of those candidate commits appeared on the remote. The earlier implementation report explicitly recorded that no push or official submission had been made.
 
-If BB-488640B1 used the latest default-branch source as described, it evaluated v4, **not the local candidate**. The official submission row has not been accessed, so the inferred commit must remain distinct from a verified submitted SHA. The exact revision behind 4.81 is also unknown. Consequently, the reported difference cannot be attributed to the candidate fixes, and 4.65 must not populate `official_candidate_score`.
+The user's explicit SHA confirmation associates BB-488640B1 with v4, **not the local candidate**. The official submission row has not been accessed independently; this is user-confirmed provenance. The exact revision behind 4.81 is still unknown. Consequently, the reported difference cannot be attributed to the candidate fixes, and 4.65 must not populate `official_candidate_score`.
 
 This establishes a submission-provenance mismatch, not the cause of the numerical difference between the two official runs. No bot changes, pushes, or submissions were made during this investigation.
 

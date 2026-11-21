@@ -1,0 +1,126 @@
+{
+  "existing48": {
+    "practice": {
+      "mean_interaction": -0.2916666666666667,
+      "combined_losses": [
+        {
+          "seed": 64352,
+          "before": 12.0,
+          "navigation": 8.0,
+          "combat": 7.0,
+          "combined": 8.0,
+          "delta": -4.0,
+          "loadout": "gun+laser",
+          "killed_by": "gun"
+        },
+        {
+          "seed": 349436,
+          "before": 11.0,
+          "navigation": 15.0,
+          "combat": 15.0,
+          "combined": 9.0,
+          "delta": -2.0,
+          "loadout": "gun+lightning",
+          "killed_by": "npc"
+        },
+        {
+          "seed": 8919,
+          "before": 3.0,
+          "navigation": 2.0,
+          "combat": 3.0,
+          "combined": 2.0,
+          "delta": -1.0,
+          "loadout": "gun+lightning",
+          "killed_by": "laser"
+        },
+        {
+          "seed": 88109,
+          "before": 1.0,
+          "navigation": 1.0,
+          "combat": 0.0,
+          "combined": 0.0,
+          "delta": -1.0,
+          "loadout": "gun+lightning",
+          "killed_by": "gun"
+        },
+        {
+          "seed": 103947,
+          "before": 5.0,
+          "navigation": 4.0,
+          "combat": 5.0,
+          "combined": 4.0,
+          "delta": -1.0,
+          "loadout": "gun+lightning",
+          "killed_by": "gun"
+        }
+      ]
+    },
+    "ffa": {
+      "mean_interaction": -0.020833333333333332,
+      "combined_losses": [
+        {
+          "seed": 254408,
+          "before": 14.0,
+          "navigation": 13.0,
+          "combat": 14.0,
+          "combined": 13.0,
+          "delta": -1.0,
+          "loadout": "gun",
+          "killed_by": "zone"
+        },
+        {
+          "seed": 309841,
+          "before": 2.0,
+          "navigation": 2.0,
+          "combat": 2.0,
+          "combined": 1.0,
+          "delta": -1.0,
+          "loadout": "gun",
+          "killed_by": "gun"
+        }
+      ]
+    }
+  },
+  "fresh24": {
+    "practice": {
+      "mean_interaction": -0.125,
+      "combined_losses": [
+        {
+          "seed": 555330,
+          "before": 10.0,
+          "navigation": 13.0,
+          "combat": 6.0,
+          "combined": 6.0,
+          "delta": -4.0,
+          "loadout": "gun+mortar",
+          "killed_by": "gun"
+        },
+        {
+          "seed": 444464,
+          "before": 11.0,
+          "navigation": 10.0,
+          "combat": 11.0,
+          "combined": 10.0,
+          "delta": -1.0,
+          "loadout": "gun+laser",
+          "killed_by": "laser"
+        }
+      ]
+    },
+    "ffa": {
+      "mean_interaction": 0.041666666666666664,
+      "combined_losses": [
+        {
+          "seed": 491978,
+          "before": 15.0,
+          "navigation": 6.0,
+          "combat": 15.0,
+          "combined": 7.0,
+          "delta": -8.0,
+          "loadout": "gun+lightning",
+          "killed_by": "gun"
+        }
+      ]
+    }
+  }
+}

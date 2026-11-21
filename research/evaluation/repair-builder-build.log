@@ -1,0 +1,49 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 551B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/rust:1.85-slim-bookworm
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 97B done
+#3 DONE 0.0s
+
+#4 [builder 1/6] FROM docker.io/library/rust:1.85-slim-bookworm@sha256:9f841bbe9e7d8e37ceb96ed907265a3a0df7f44e3737d0b100e7907a679acb36
+#4 resolve docker.io/library/rust:1.85-slim-bookworm@sha256:9f841bbe9e7d8e37ceb96ed907265a3a0df7f44e3737d0b100e7907a679acb36 0.0s done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 342B done
+#5 DONE 0.0s
+
+#6 [builder 2/6] WORKDIR /build
+#6 CACHED
+
+#7 [builder 3/6] COPY Cargo.toml Cargo.lock ./
+#7 CACHED
+
+#8 [builder 4/6] RUN mkdir src && echo "fn main() {}" > src/main.rs &&     cargo build --release --locked &&     rm -rf src
+#8 CACHED
+
+#9 [builder 5/6] COPY src ./src
+#9 DONE 0.1s
+
+#10 [builder 6/6] RUN touch src/main.rs && cargo build --release --locked
+#10 0.329    Compiling mechbot v0.1.0 (/build)
+#10 9.914     Finished `release` profile [optimized] target(s) in 9.67s
+#10 DONE 9.9s
+
+#11 exporting to image
+#11 exporting layers
+#11 exporting layers 0.4s done
+#11 exporting manifest sha256:07e045f3f19ee6bef29ce30cec1a0da29dfa8fdbbc64b6ff906f2905f7a47a13 0.0s done
+#11 exporting config sha256:2f245887a9c1e7d18a55c99ba53847b464040304d06a03cc902cbbf0dc9f0c6c 0.0s done
+#11 exporting attestation manifest sha256:e6a49e769c2c652d9091b2f82a2ab3b3bab790bac5fded5ffdd1eb01bd90406b
+#11 exporting attestation manifest sha256:e6a49e769c2c652d9091b2f82a2ab3b3bab790bac5fded5ffdd1eb01bd90406b 0.0s done
+#11 exporting manifest list sha256:ae546e79813d7fbd72ae17968b845760b2ae1b869fcdfdcc3c6afab9d4658497 0.0s done
+#11 naming to docker.io/library/mechbot:candidate-r2-builder done
+#11 unpacking to docker.io/library/mechbot:candidate-r2-builder 0.1s done
+#11 DONE 0.7s

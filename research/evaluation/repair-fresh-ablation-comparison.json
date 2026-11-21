@@ -1,0 +1,128 @@
+{
+  "kind": "approximate local simulator; not official scoring",
+  "official_user_reported_baseline": 4.81,
+  "official_candidate_score": null,
+  "baseline_label": "repair-fresh-holdout-reference",
+  "comparisons": [
+    {
+      "label": "repair-fresh-holdout-nav",
+      "mode": "practice",
+      "n": 24,
+      "baseline_mean": 3.5416666666666665,
+      "candidate_mean": 4.375,
+      "mean_difference": 0.8333333333333334,
+      "paired_bootstrap_95": [
+        0.08333333333333333,
+        1.8333333333333333
+      ],
+      "better": 4,
+      "equal": 19,
+      "worse": 1,
+      "baseline_survival_s": 83.67291666666667,
+      "candidate_survival_s": 117.57916666666667,
+      "baseline_low_placement": 15,
+      "candidate_low_placement": 15
+    },
+    {
+      "label": "repair-fresh-holdout-nav",
+      "mode": "ffa",
+      "n": 24,
+      "baseline_mean": 14.458333333333334,
+      "candidate_mean": 14.083333333333334,
+      "mean_difference": -0.375,
+      "paired_bootstrap_95": [
+        -1.125,
+        0.0
+      ],
+      "better": 0,
+      "equal": 23,
+      "worse": 1,
+      "baseline_survival_s": 460.98125,
+      "candidate_survival_s": 442.2,
+      "baseline_low_placement": 1,
+      "candidate_low_placement": 1
+    },
+    {
+      "label": "repair-fresh-holdout-combat",
+      "mode": "practice",
+      "n": 24,
+      "baseline_mean": 3.5416666666666665,
+      "candidate_mean": 3.375,
+      "mean_difference": -0.16666666666666666,
+      "paired_bootstrap_95": [
+        -0.5,
+        0.0
+      ],
+      "better": 0,
+      "equal": 23,
+      "worse": 1,
+      "baseline_survival_s": 83.67291666666667,
+      "candidate_survival_s": 84.27083333333334,
+      "baseline_low_placement": 15,
+      "candidate_low_placement": 15
+    },
+    {
+      "label": "repair-fresh-holdout-combat",
+      "mode": "ffa",
+      "n": 24,
+      "baseline_mean": 14.458333333333334,
+      "candidate_mean": 14.458333333333334,
+      "mean_difference": 0.0,
+      "paired_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "better": 0,
+      "equal": 24,
+      "worse": 0,
+      "baseline_survival_s": 460.98125,
+      "candidate_survival_s": 460.98125,
+      "baseline_low_placement": 1,
+      "candidate_low_placement": 1
+    },
+    {
+      "label": "repair-fresh-holdout-candidate",
+      "mode": "practice",
+      "n": 24,
+      "baseline_mean": 3.5416666666666665,
+      "candidate_mean": 4.083333333333333,
+      "mean_difference": 0.5416666666666666,
+      "paired_bootstrap_95": [
+        -0.2916666666666667,
+        1.5833333333333333
+      ],
+      "better": 3,
+      "equal": 19,
+      "worse": 2,
+      "baseline_survival_s": 83.67291666666667,
+      "candidate_survival_s": 114.16666666666667,
+      "baseline_low_placement": 15,
+      "candidate_low_placement": 15
+    },
+    {
+      "label": "repair-fresh-holdout-candidate",
+      "mode": "ffa",
+      "n": 24,
+      "baseline_mean": 14.458333333333334,
+      "candidate_mean": 14.125,
+      "mean_difference": -0.3333333333333333,
+      "paired_bootstrap_95": [
+        -1.0,
+        0.0
+      ],
+      "better": 0,
+      "equal": 23,
+      "worse": 1,
+      "baseline_survival_s": 460.98125,
+      "candidate_survival_s": 442.18125,
+      "baseline_low_placement": 1,
+      "candidate_low_placement": 1
+    }
+  ],
+  "limitations": [
+    "Uncalibrated opponent/physics model; shared production geometry.",
+    "HashMap tie ordering can vary across repeats despite identical match seeds.",
+    "Archived proxy survival_s assigns 480 seconds to every survivor, including early wins; these means are not actual elapsed survival measurements.",
+    "Intervals describe paired proxy outcomes, not official score uncertainty."
+  ]
+}

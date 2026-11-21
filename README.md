@@ -18,7 +18,7 @@ A Rust bot for the **Mech Royale** (`mechfight/1`) 16-mech battle royale competi
 
 The `fix/scoring-control` candidate adds directed navigation checks, shared weapon-aim scheduling, explicit lost-target laser release, and capture-aware supply-drop waiting. The unsupported lethal-laser duck exception is removed. See [implementation results](research/implementation-results.md) for separate commits, regression tests, matched proxy comparisons, and remaining limitations. The reported official baseline is **4.81**; no candidate official score has been measured.
 
-The reported BB-488640B1 result of **4.65** is under [provenance and regression investigation](research/regression-investigation.md). At the investigation check, GitHub still published `5b783d1`; this candidate branch had not been pushed. New candidate risks must be addressed before promotion.
+The user confirmed BB-488640B1 scored **4.65** on published v4 `5b783d1`; the 4.81 run's revision remains unknown. The two reproduced candidate defects have now been repaired and pass 47 tests plus Docker conformance. [Repair validation](research/repair-validation.md) records mixed fresh-seed proxy results, so the repaired branch remains an experimental local candidate with no official score.
 
 ```sh
 docker build -t mechbot .

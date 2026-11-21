@@ -4,6 +4,8 @@
   "reported_score": 4.65,
   "score_source": "user report",
   "user_source_description": "latest push from the github repo",
+  "user_confirmed_submitted_commit": "5b783d19f138239033be32b527318f9247a9f9b8",
+  "commit_confirmation": "User explicitly associated this SHA with 4.65 - BB-488640B1; official submission row not independently retrieved.",
   "verified_submitted_commit": null,
   "verified_submission_scorer": null,
   "remote_repository": "https://github.com/Jaelucard/joinbuilders-mech-royale",
@@ -24,5 +26,5 @@
   "local_candidate_production_commit": "7b2f1547e2e2a827fa3bbfb6085068ff73cf3b45",
   "local_candidate_present_on_remote": false,
   "official_candidate_score": null,
-  "conclusion": "Latest-push description points to published v4, not the local candidate. Actual official run metadata is unavailable; the numerical score difference remains unexplained."
+  "conclusion": "User confirms BB-488640B1 used published v4, not the local candidate. The previous 4.81 run revision and both scorer-version records remain unavailable; the numerical score difference remains unexplained."
 }

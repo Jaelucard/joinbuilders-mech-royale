@@ -1,0 +1,63 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 551B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/rust:1.85-slim-bookworm
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/debian:bookworm-slim
+#3 DONE 1.8s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 97B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 DONE 0.0s
+
+#6 [builder 1/6] FROM docker.io/library/rust:1.85-slim-bookworm@sha256:9f841bbe9e7d8e37ceb96ed907265a3a0df7f44e3737d0b100e7907a679acb36
+#6 resolve docker.io/library/rust:1.85-slim-bookworm@sha256:9f841bbe9e7d8e37ceb96ed907265a3a0df7f44e3737d0b100e7907a679acb36 0.1s done
+#6 DONE 0.1s
+
+#7 [stage-1 1/3] FROM docker.io/library/debian:bookworm-slim@sha256:734a72b3d6142a71993b4bc580ca01d8ca687f77a2c422d96a961d3376b179bc
+#7 resolve docker.io/library/debian:bookworm-slim@sha256:734a72b3d6142a71993b4bc580ca01d8ca687f77a2c422d96a961d3376b179bc 0.1s done
+#7 DONE 0.1s
+
+#5 [internal] load build context
+#5 transferring context: 342B done
+#5 DONE 0.0s
+
+#8 [builder 2/6] WORKDIR /build
+#8 CACHED
+
+#9 [builder 3/6] COPY Cargo.toml Cargo.lock ./
+#9 CACHED
+
+#10 [builder 4/6] RUN mkdir src && echo "fn main() {}" > src/main.rs &&     cargo build --release --locked &&     rm -rf src
+#10 CACHED
+
+#11 [builder 5/6] COPY src ./src
+#11 CACHED
+
+#12 [builder 6/6] RUN touch src/main.rs && cargo build --release --locked
+#12 CACHED
+
+#13 [stage-1 2/3] WORKDIR /bot
+#13 CACHED
+
+#14 [stage-1 3/3] COPY --from=builder /build/target/release/mechbot /bot/mechbot
+#14 DONE 0.1s
+
+#15 exporting to image
+#15 exporting layers
+#15 exporting layers 0.2s done
+#15 exporting manifest sha256:912438d16621a7abb8cfdc054c20c6ec5a30cdf9957c0223b29c5fe0b042e357 0.0s done
+#15 exporting config sha256:a5fc419092f77422aae2508b470e0229f2a8bd5525eb0efcd61baf88b3bdaec0 0.0s done
+#15 exporting attestation manifest sha256:b635222c486b588b176647ba64945728cb5cee6c829c55c30c3549a07d236a9f
+#15 exporting attestation manifest sha256:b635222c486b588b176647ba64945728cb5cee6c829c55c30c3549a07d236a9f 0.0s done
+#15 exporting manifest list sha256:42ad82d6848318004c284e4541e121aa19e9ab20890df69c07e0451dc38ca57a 0.0s done
+#15 naming to docker.io/library/mechbot:candidate-r2 done
+#15 unpacking to docker.io/library/mechbot:candidate-r2 0.1s done
+#15 DONE 0.5s

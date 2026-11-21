@@ -1,6 +1,12 @@
 {
   "user_reported_official_score": 4.81,
   "score_submission_commit_verified": false,
+  "separate_user_confirmed_run": {
+    "receipt": "BB-488640B1",
+    "score": 4.65,
+    "commit": "5b783d19f138239033be32b527318f9247a9f9b8",
+    "source": "User explicitly confirmed score-to-commit association; official record not independently retrieved."
+  },
   "local_baseline_commit": "5b783d19f138239033be32b527318f9247a9f9b8",
   "preserved_git_branch": "baseline/scoring-5b783d1",
   "candidate_branch": "fix/scoring-control",

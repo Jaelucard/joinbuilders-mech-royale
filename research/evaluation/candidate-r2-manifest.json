@@ -1,0 +1,51 @@
+{
+  "source_commit": "e3569754142f1cd8a9373226dc6ccd0a754d32a8",
+  "branch": "fix/scoring-control",
+  "user_reported_official_best": 4.81,
+  "official_best_commit_verified": false,
+  "user_confirmed_v4_submission": {
+    "receipt": "BB-488640B1",
+    "score": 4.65,
+    "commit": "5b783d19f138239033be32b527318f9247a9f9b8"
+  },
+  "official_candidate_score": null,
+  "runtime_image_tag": "mechbot:candidate-r2",
+  "runtime_image_id": "sha256:42ad82d6848318004c284e4541e121aa19e9ab20890df69c07e0451dc38ca57a",
+  "builder_image_tag": "mechbot:candidate-r2-builder",
+  "builder_image_id": "sha256:ae546e79813d7fbd72ae17968b845760b2ae1b869fcdfdcc3c6afab9d4658497",
+  "source_sha256": {
+    "src/brain.rs": "ecc90ac429ae89cedd72e682fda391a189508ca2d064088ac53307421c84bf98",
+    "src/combat.rs": "a34b647a75ebb9e112d1687806cc4c8c6cae7dd0e535394bae7d2b102adf50d4",
+    "src/lib.rs": "61fab161ee764afb80c693d26c50d1986cd204ddbc8bd22011be8a5529317fd5",
+    "src/main.rs": "35fba295991370e7c0e5e4d96ed5e0c84ddbef8b5fb02614a8ccf6f6a8de41b7",
+    "src/map.rs": "b8dd1dab0e56b1b6ba75a64cb79e2f0134a2308547fc8abb5288b38e4db3293b",
+    "src/nav.rs": "0610ccaab8aac44fdd80c18fd0d877c7721c23e27ecd30e680592cf3dac92495",
+    "src/protocol.rs": "9f26d08e3e6ad7b3e9ac7f6a3068af56be551dbc78ba5f48bc9ec6887c309130",
+    "src/world.rs": "1d6967855b5b07bbabdff6122a15f1d9b30eb292f34ce3a36ad5aadf7d123d52"
+  },
+  "tests_passed": 47,
+  "conformance_observations": 300,
+  "conformance_late": 0,
+  "conformance_wrong_tick": 0,
+  "conformance_bad_lines": 0,
+  "conformance_older_queued_answers_dropped": 1,
+  "conformance_p99_ms": 1.5,
+  "conformance_max_ms": 1.9,
+  "submission_state": "Local tested experimental candidate, not pushed or submitted. Mixed fresh holdout evidence; no reliable official gain established.",
+  "previous_candidate_manifest": "research/evaluation/candidate-manifest.json",
+  "proxy_compiled_source_sha256": {
+    "src/brain.rs": "0b7c0b94d7d6c466616b016012dd7f64a105d05313347bc40d466352c8095257",
+    "src/combat.rs": "af17440e1f7d24c4a5b3c674434bbce0828115cc5704e8dc04fd356934769d9b",
+    "src/lib.rs": "61fab161ee764afb80c693d26c50d1986cd204ddbc8bd22011be8a5529317fd5",
+    "src/main.rs": "35fba295991370e7c0e5e4d96ed5e0c84ddbef8b5fb02614a8ccf6f6a8de41b7",
+    "src/map.rs": "b8dd1dab0e56b1b6ba75a64cb79e2f0134a2308547fc8abb5288b38e4db3293b",
+    "src/nav.rs": "0610ccaab8aac44fdd80c18fd0d877c7721c23e27ecd30e680592cf3dac92495",
+    "src/protocol.rs": "9f26d08e3e6ad7b3e9ac7f6a3068af56be551dbc78ba5f48bc9ec6887c309130",
+    "src/world.rs": "1d6967855b5b07bbabdff6122a15f1d9b30eb292f34ce3a36ad5aadf7d123d52"
+  },
+  "proxy_line_ending_normalization": [
+    "src/brain.rs",
+    "src/combat.rs"
+  ],
+  "proxy_source_note": "Selected Rust files are normalized from CRLF to LF by the temporary harness; the differing byte hashes were verified to reflect only that normalization."
+}

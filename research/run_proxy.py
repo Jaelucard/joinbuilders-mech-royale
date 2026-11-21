@@ -17,6 +17,7 @@ BASELINE = "5b783d19f138239033be32b527318f9247a9f9b8"
 VARIANTS = {
     "baseline": [],
     "navigation": ["src/map.rs", "src/nav.rs"],
+    "navigation-repair": ["src/map.rs", "src/nav.rs", "src/brain.rs"],
     "combat": ["src/combat.rs"],
     "brain": ["src/brain.rs"],
     "candidate": ["src/map.rs", "src/nav.rs", "src/combat.rs", "src/brain.rs"],
@@ -44,9 +45,17 @@ def main():
     parser.add_argument("--modes", nargs="+", choices=["practice", "ffa"], default=["practice", "ffa"])
     parser.add_argument("--label")
     parser.add_argument("--image", default="mechbot:research-builder-5b783d1")
+    parser.add_argument("--base-commit",
+                        help="Recorded source revision of the builder image (for isolated repairs on a preserved candidate)")
     parser.add_argument("--source-image", help="Read variant source from an available preserved builder image")
     parser.add_argument("--treatments", nargs="*", choices=TREATMENTS, default=[])
     args = parser.parse_args()
+    if args.base_commit is None:
+        if args.image != "mechbot:research-builder-5b783d1":
+            parser.error("--base-commit is required when selecting a different builder image")
+        args.base_commit = BASELINE
+    if not re.fullmatch(r"[0-9a-f]{40}", args.base_commit):
+        parser.error("--base-commit must be a full source commit SHA")
     if args.matches < 1 or args.start_index < 0:
         parser.error("matches must be positive and start-index nonnegative")
     label = args.label or args.variant
@@ -54,6 +63,13 @@ def main():
         parser.error("label must contain only letters, numbers, underscores, or hyphens")
     output = ROOT / "research/evaluation"
     output.mkdir(exist_ok=True)
+    image_id = subprocess.check_output(
+        ["docker", "image", "inspect", "--format", "{{.Id}}", args.image], text=True).strip()
+    image_hash_output = subprocess.check_output(
+        ["docker", "run", "--rm", "--network", "none", image_id, "sh", "-c",
+         "cd /build && sha256sum src/*.rs"], text=True)
+    image_source_hashes = dict((filename, checksum) for checksum, filename in
+                               (line.split() for line in image_hash_output.splitlines()))
     paths = ["sim/Cargo.toml", "sim/Cargo.lock", "sim/src/main.rs", "sim/hello_config.json",
              "kit/arena/v2/world.json", "kit/arena/v2/terrain.i16"] + VARIANTS[args.variant]
     hashes = {p: digest(ROOT / p) for p in paths}
@@ -109,7 +125,7 @@ for mode in $EVAL_MODES; do VERBOSE=1 /build/sim/target/release/mechsim "$mode" 
                "--mount", f"type=bind,source={harness.as_posix()},target=/harness,readonly",
                "-e", "PATCH_FILES=" + " ".join(VARIANTS[args.variant]),
                "-e", "EVAL_MODES=" + " ".join(args.modes), "-e", f"EVAL_MATCHES={args.matches}",
-               args.image, "sh", "-c", shell]
+               image_id, "sh", "-c", shell]
         print(f"Running {label}: {args.matches} matches per mode, index {args.start_index}", flush=True)
         with (output / f"{label}.log").open("w", encoding="utf-8") as log:
             result = subprocess.run(cmd, stdout=log, stderr=subprocess.STDOUT, text=True)
@@ -128,7 +144,10 @@ for mode in $EVAL_MODES; do VERBOSE=1 /build/sim/target/release/mechsim "$mode" 
         raise RuntimeError("Inputs changed during evaluation; results not accepted")
     record = {"kind":"approximate local simulator; not official scoring", "variant":args.variant,
               "label":label,"checked_at_utc":datetime.now(timezone.utc).isoformat(),
-              "baseline_commit":BASELINE,"builder_image":args.image,"input_sha256":hashes,
+              "baseline_commit":args.base_commit,"builder_image":args.image,"builder_image_id":image_id,"input_sha256":hashes,
+              "base_source_sha256":image_source_hashes,
+              "compiled_source_sha256":{**image_source_hashes,
+                  **{p:hashlib.sha256(s.encode("utf-8")).hexdigest() for p,s in patches.items()}},
               "treatments":args.treatments,
               "candidate_source_image":args.source_image,
               "compiled_variant_sha256":{p:hashlib.sha256(s.encode("utf-8")).hexdigest() for p,s in patches.items()},
@@ -138,8 +157,8 @@ for mode in $EVAL_MODES; do VERBOSE=1 /build/sim/target/release/mechsim "$mode" 
     (output / f"{label}.json").write_text(json.dumps(record,indent=2)+"\n",encoding="utf-8")
     for mode in args.modes:
         rows = [r for r in outcomes if r["mode"] == mode]
-        print(f"{label} {mode}: mean={sum(r['points'] for r in rows)/len(rows):.4f}, "
-              f"survival={sum(r['survival_s'] for r in rows)/len(rows):.1f}s, n={len(rows)}",flush=True)
+        print(f"{label} {mode}: mean={sum(r['points'] for r in rows)/len(rows):.4f}, n={len(rows)} "
+              "(survival_s is an uncorrected capped proxy; do not interpret as elapsed survival)",flush=True)
 
 
 if __name__ == "__main__":
