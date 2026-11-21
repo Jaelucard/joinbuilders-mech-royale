@@ -216,6 +216,29 @@ impl ShotAlignment {
     }
 }
 
+/// Borrow gun cooldown only for a mortar shot that fits the current action and
+/// leaves enough time to return to gun lead before its next ready tick.
+fn mortar_fits_gun_cooldown_window(
+    me: &SelfObs,
+    gun: ShotAlignment,
+    mortar: ShotAlignment,
+    gun_cooldown: f64,
+    mortar_cooldown: f64,
+) -> bool {
+    if !mortar.accepts(shot_aim(me, mortar.desired, mortar_cooldown)) {
+        return false;
+    }
+    // The command remains held after a first-tick mortar shot, so budget the
+    // return from the torso position after BOTH ticks, not from the firing aim.
+    let end_aim = shot_aim(me, mortar.desired, 0.10);
+    let return_ticks = ((gun_cooldown - 0.10) / 0.05).ceil().max(1.0);
+    let return_s = return_ticks * 0.05;
+    wrap_angle(gun.desired[0] - end_aim[0]).abs()
+        <= me.stat("turn_rate", 4.0) * return_s + gun.yaw_tolerance
+        && (gun.desired[1] - end_aim[1]).abs()
+            <= me.stat("pitch_rate", 3.0) * return_s + gun.pitch_tolerance
+}
+
 /// With no selected target, do not accidentally discharge toward a patrol yaw.
 /// Release at the current direction, preserving the previous discharge timing
 /// without retaining half-speed movement or steering a release toward patrol.
@@ -719,6 +742,23 @@ pub fn evaluate_combat(
         }
     }
 
+    if let (Some(gun_slot), Some(mortar_slot)) =
+        (me.weapon_slot(WeaponKind::Gun), me.weapon_slot(WeaponKind::Mortar))
+    {
+        if let (Some(gun), Some(mortar), Some(gun_plan), Some(mortar_plan)) = (
+            &me.weapons[gun_slot], &me.weapons[mortar_slot],
+            shot_alignment[gun_slot], shot_alignment[mortar_slot],
+        ) {
+            // A valid gun plan implies ammo, no reload, and line of sight. Keep
+            // reload/occluded mortar preparation and all other loadouts intact.
+            if gun.cooldown > 0.10 && !mortar_fits_gun_cooldown_window(
+                me, gun_plan, mortar_plan, gun.cooldown, mortar.cooldown,
+            ) {
+                best_aim = Some((65, gun_plan.desired));
+            }
+        }
+    }
+
     out.aim = best_aim.map(|(_, a)| a);
     if dual_loadout {
         if let Some(command) = out.aim {
@@ -1128,6 +1168,116 @@ mod tests {
         let reload = decide(&obs,Some(&target(0.0)),false);
         assert!(!reload.fire[0]);
         assert!(reload.fire[1]);
+    }
+
+    // Advance only torso slew and gun/mortar readiness for one two-tick action.
+    // This checks the policy across decisions without claiming full hit physics.
+    fn advance_gun_mortar_action(obs: &mut Observation, d: &CombatDecision) -> [bool; 2] {
+        let mut fired = [false; 2];
+        let command = d.aim.unwrap();
+        for _ in 0..2 {
+            obs.self_obs.aim = slew_one_tick(
+                obs.self_obs.aim, command,
+                obs.self_obs.stat("turn_rate", 4.0),
+                obs.self_obs.stat("pitch_rate", 3.0),
+            );
+            for (slot, w) in obs.self_obs.weapons.iter_mut().enumerate() {
+                let Some(w) = w else { continue };
+                w.cooldown = (w.cooldown - 0.05).max(0.0);
+                if d.fire[slot] && w.cooldown == 0.0 && w.reload.unwrap_or(0.0) == 0.0 {
+                    fired[slot] = true;
+                    w.cooldown = w.stat("cooldown", if w.kind == WeaponKind::Gun { 0.24 } else { 2.6 });
+                }
+            }
+            obs.tick += 1;
+            obs.t += 0.05;
+        }
+        fired
+    }
+
+    fn cooldown_window_fixture(distance: f64, gun_cd: f64, mortar_cd: f64, gun_slot: usize)
+        -> (Observation, CombatTarget)
+    {
+        let mut gun = weapon(WeaponKind::Gun);
+        gun.cooldown = gun_cd;
+        let mut mortar = weapon(WeaponKind::Mortar);
+        mortar.cooldown = mortar_cd;
+        let mut obs = observation([Some(gun), Some(mortar)]);
+        if gun_slot == 1 { obs.self_obs.weapons.swap(0, 1); }
+        let mut t = target(0.0);
+        t.pos[0] = distance;
+        obs.self_obs.aim = aim_angles(muzzle_pos(&obs.self_obs), t.pos);
+        (obs, t)
+    }
+
+    #[test]
+    fn cooldown_window_keeps_gun_when_mortar_cannot_fire_in_time() {
+        for distance in [130.0, 160.0] {
+            for gun_slot in 0..2 {
+                let (mut obs, t) = cooldown_window_fixture(distance, 0.14, 0.0, gun_slot);
+                let gun_aim = obs.self_obs.aim;
+                let first = decide(&obs, Some(&t), false);
+                assert_eq!(first.aim, Some(gun_aim), "distance={distance}, slot={gun_slot}");
+                assert!(!first.fire[1 - gun_slot]);
+                assert_eq!(advance_gun_mortar_action(&mut obs, &first), [false, false]);
+
+                let second = decide(&obs, Some(&t), false);
+                assert!(second.fire[gun_slot]);
+                let fired = advance_gun_mortar_action(&mut obs, &second);
+                assert!(fired[gun_slot], "ready gun must not lose its next firing window");
+                assert!(!fired[1 - gun_slot]);
+            }
+        }
+    }
+
+    #[test]
+    fn cooldown_window_preserves_a_mortar_shot_and_timely_gun_return() {
+        // At 100 m the ready mortar fits one tick. At 160 m a cooling mortar
+        // needs two ticks, and the gun's longer window allows the return slew.
+        for (distance, gun_cd, mortar_cd) in [(100.0, 0.14, 0.0), (160.0, 0.19, 0.08)] {
+            for gun_slot in 0..2 {
+                let (mut obs, t) = cooldown_window_fixture(distance, gun_cd, mortar_cd, gun_slot);
+                let first = decide(&obs, Some(&t), false);
+                assert!(first.fire[1 - gun_slot]);
+                let first_fired = advance_gun_mortar_action(&mut obs, &first);
+                assert!(first_fired[1 - gun_slot]);
+                assert!(!first_fired[gun_slot]);
+
+                let second = decide(&obs, Some(&t), false);
+                let second_fired = advance_gun_mortar_action(&mut obs, &second);
+                assert!(second_fired[gun_slot], "distance={distance}, slot={gun_slot}");
+                assert!(!second_fired[1 - gun_slot]);
+            }
+        }
+    }
+
+    #[test]
+    fn cooldown_window_rejects_a_mortar_shot_that_delays_ready_gun() {
+        for gun_slot in 0..2 {
+            let (mut obs, t) = cooldown_window_fixture(160.0, 0.14, 0.08, gun_slot);
+            let first = decide(&obs, Some(&t), false);
+            assert!(!first.fire[1 - gun_slot]);
+            assert_eq!(advance_gun_mortar_action(&mut obs, &first), [false, false]);
+            let second = decide(&obs, Some(&t), false);
+            let fired = advance_gun_mortar_action(&mut obs, &second);
+            assert!(fired[gun_slot]);
+            assert!(!fired[1 - gun_slot]);
+        }
+    }
+
+    #[test]
+    fn reloading_gun_still_allows_multi_decision_mortar_preparation() {
+        for gun_slot in 0..2 {
+            let (mut obs, t) = cooldown_window_fixture(160.0, 0.14, 0.0, gun_slot);
+            obs.self_obs.weapons[gun_slot].as_mut().unwrap().reload = Some(1.0);
+            let first = decide(&obs, Some(&t), false);
+            assert!(first.aim.unwrap()[1] > 0.3);
+            assert_eq!(advance_gun_mortar_action(&mut obs, &first), [false, false]);
+            let second = decide(&obs, Some(&t), false);
+            let fired = advance_gun_mortar_action(&mut obs, &second);
+            assert!(!fired[gun_slot]);
+            assert!(fired[1 - gun_slot]);
+        }
     }
 
     #[test]
