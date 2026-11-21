@@ -9,6 +9,13 @@ use crate::protocol::{
 };
 use crate::world::WorldState;
 
+struct DropHold {
+    id: u64,
+    lands_at: f64,
+    previous_progress: f64,
+    last_progress_t: f64,
+}
+
 pub struct BotBrain {
     pub cfg: Config,
     pub map: ArenaMap,
@@ -22,6 +29,7 @@ pub struct BotBrain {
     roam_tick: u64,
     // Unreachable target blacklisting (stops wasting ticks on rooftop cubes / blocked drops!)
     goal_track: Option<(&'static str, Vec2, u64, f64)>,
+    drop_hold: Option<DropHold>,
     blacklist: Vec<(Vec2, f64)>,
 }
 
@@ -54,6 +62,7 @@ impl BotBrain {
             roam_anchor: None,
             roam_tick: 0,
             goal_track: None,
+            drop_hold: None,
             blacklist: Vec::new(),
         }
     }
@@ -64,22 +73,69 @@ impl BotBrain {
             .any(|(bp, exp)| now < *exp && dist2d(*bp, pt) < 11.0)
     }
 
+    // Returns true while intentionally holding inside a drop ring.
     fn track_goal_progress(
         &mut self,
         label: &'static str,
         goal: Vec2,
-        pos2: Vec2,
-        tick: u64,
-        now: f64,
-    ) {
+        obs: &Observation,
+    ) -> bool {
+        let pos2 = [obs.self_obs.pos[0], obs.self_obs.pos[1]];
+        let tick = obs.tick;
+        let now = obs.t;
         let trackable = matches!(
             label,
             "CUBE" | "KILL_LOOT" | "LOOT_WPN" | "SEEK_CRATE" | "ROOF_APPROACH" | "ROOF_CLIMB" | "REGEN_ROOF" | "DROP"
         );
         if !trackable {
             self.goal_track = None;
-            return;
+            self.drop_hold = None;
+            return false;
         }
+
+        // Reaching a drop's ring is progress. Waiting for it to land or for our
+        // capture clock is not failed travel, even if we never reach its center.
+        let arrived_drop = obs.drops.iter().find(|drop| {
+            label == "DROP"
+                && dist2d(goal, [drop.pos[0], drop.pos[1]]) < 1.0
+                && dist2d(pos2, [drop.pos[0], drop.pos[1]]) <= drop.radius
+                && ((obs.self_obs.pos[2] - drop.pos[2]).abs() < 4.0
+                    || drop.holder == Some(obs.self_obs.id))
+        });
+        if let Some(drop) = arrived_drop {
+            self.goal_track = None;
+            if self.drop_hold.as_ref().is_none_or(|hold| hold.id != drop.id) {
+                self.drop_hold = Some(DropHold {
+                    id: drop.id,
+                    lands_at: now + drop.lands_in.max(0.0),
+                    previous_progress: 0.0,
+                    last_progress_t: now,
+                });
+            }
+            let hold = self.drop_hold.as_mut().unwrap();
+            if drop.lands_in > 0.0 && now <= hold.lands_at + 1.0 {
+                hold.last_progress_t = now;
+                return true;
+            }
+            if drop.holder == Some(obs.self_obs.id)
+                && drop.progress > hold.previous_progress + 1e-6
+            {
+                hold.last_progress_t = now;
+            }
+            hold.previous_progress = drop.progress;
+            // Renew the inactivity clock for a progressing recapture, even after
+            // a near-complete attempt resets. A separate absolute deadline bounds
+            // repeated contest/reset cycles without abandoning normal recapture.
+            let capture_s = drop.capture_s.max(0.0);
+            if now - hold.last_progress_t > capture_s + 1.0
+                || now > hold.lands_at + 3.0 * capture_s + 2.0
+            {
+                self.blacklist.push((goal, now + 28.0));
+                self.drop_hold = None;
+            }
+            return true;
+        }
+        self.drop_hold = None;
         let cur_d = dist2d(pos2, goal);
         let timeout_ticks: u64 = if label == "DROP" { 85 } else { 36 };
         if let Some((prev_lbl, prev_pt, start_tick, best_d)) = self.goal_track {
@@ -95,10 +151,11 @@ impl BotBrain {
                         self.climb_target = None;
                     }
                 }
-                return;
+                return false;
             }
         }
         self.goal_track = Some((label, goal, tick, cur_d));
+        false
     }
 
     pub fn act(&mut self, obs: &Observation) -> Action {
@@ -215,15 +272,10 @@ impl BotBrain {
         }
 
         // EMERGENCY LASER-DUCK: enemy charging a 315-dmg hitscan laser at us!
-        // Only duck to cover reachable within ~0.75s (<= 18 m), unless we are about to kill them first!
-        let my_laser_about_to_kill = me
-            .weapons
-            .iter()
-            .flatten()
-            .any(|w| w.kind == WeaponKind::Laser && w.charge.unwrap_or(0.0) >= 0.50)
-            && lowest_vis_enemy_hp <= 360.0;
+        // An own charging laser is not proof of an imminent kill: the target,
+        // actual damage, alignment and incoming shot timing would all need proof.
         let laser_duck_cover =
-            if !urgent_zone && !charging_los_snipers.is_empty() && !my_laser_about_to_kill {
+            if !urgent_zone && !charging_los_snipers.is_empty() {
                 self.map
                     .find_cover_pos(pos, &charging_los_snipers, safe_c, safe_r, 19.0, false)
                     .filter(|c| {
@@ -329,6 +381,8 @@ impl BotBrain {
             &self.map,
             &self.world,
             target.as_ref(),
+            // Regen mode can still be exposed or stationary: do not turn it
+            // into a blanket laser firing ban. Actual zone/duck escapes remain urgent.
             urgent_zone || doing_laser_duck,
             hold_fire_for_regen,
             allow_precharge_behind_cover,
@@ -360,7 +414,7 @@ impl BotBrain {
         let dist_to_goal = dist2d(pos2, goal2);
 
         // Track goal progress & auto-blacklist unreachable rooftop cubes/drops!
-        self.track_goal_progress(state_label, goal2, pos2, obs.tick, obs.t);
+        let holding_drop = self.track_goal_progress(state_label, goal2, obs);
 
         // Update stuck detector before pathing: ONLY enable 2.4s oscillation loop detection during pure travel states
         // (NEVER during combat strafing, corner-peeking, or holding cover!).
@@ -372,17 +426,17 @@ impl BotBrain {
             &self.map,
             obs.tick,
             pos,
-            self.prev_wanted_move,
-            is_travel_state,
+            self.prev_wanted_move && !holding_drop,
+            is_travel_state && !holding_drop,
         );
         let stuck_n = self.nav.stuck_ticks();
         // When ON a rooftop, walk straight toward goal2 (either staying on roof OR dropping off the front edge toward zone!)
-        let waypoint = if on_roof {
+        let target_is_higher =
+            goal_pos3[2] - pos[2] > 1.3 && dist_to_goal < 14.0 && state_label != "ZONE";
+        let waypoint = if on_roof || (target_is_higher && dist_to_goal <= 6.5) {
             goal2
-        } else if dist_to_goal > 6.5 {
-            self.nav.next_waypoint(&self.map, obs.tick, pos, goal2)
         } else {
-            goal2
+            self.nav.next_waypoint(&self.map, obs.tick, pos, goal2)
         };
 
         // 8. 16-Direction Micro-Steering
@@ -405,12 +459,10 @@ impl BotBrain {
             state_label,
             "ROOF_HOLD" | "REGEN_COVER" | "LASER_PRECHG" | "LASER_HIDE" | "LASER_PEEK"
         );
-        self.prev_wanted_move = dist_to_goal > 4.0 && !holding_cover;
+        self.prev_wanted_move = dist_to_goal > 4.0 && !holding_cover && !holding_drop;
         act.r#move = Some(move_dir);
 
         // 9. Jump & Boost / Jetpack decision
-        let target_is_higher =
-            goal_pos3[2] - pos[2] > 1.3 && dist_to_goal < 14.0 && state_label != "ZONE";
         let climb_jet = target_is_higher && me.energy > 14.0;
         let mut jump = false;
         let mut boost = false;
@@ -1367,5 +1419,273 @@ impl BotBrain {
         };
         let sweep = (obs.t * 1.65).sin() * 1.45;
         [wrap_angle(base_yaw + sweep), -0.04]
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::protocol::{HelloMap, RawObservation};
+    use serde_json::json;
+
+    fn fixture() -> (BotBrain, Observation) {
+        let cfg: Config = serde_json::from_value(json!({
+            "vision":{"range":200,"fov_deg":120,"near_range":45},
+            "sound":{"bearing_noise_deg":7,"near":60,"mid":160,
+                "step_speed":5,"step_every":0.6},
+            "weapons":{},"loot":{"pickup_radius":4,"equip_s":1},
+            "zone":{"start_center":[0,0],"start_radius":500,"phases":[]}
+        })).unwrap();
+        let map = ArenaMap::empty();
+        let nav = Navigator::new(&map);
+        let brain = BotBrain {
+            cfg,map,nav,world:WorldState::new(16),prev_wanted_move:false,
+            regen_mode:false,cached_cover:None,climb_target:None,
+            roam_anchor:None,roam_tick:0,goal_track:None,drop_hold:None,
+            blacklist:Vec::new(),
+        };
+        let raw: RawObservation = serde_json::from_value(json!({
+            "tick":1740,"t":87,"alive":16,
+            "self":{"id":0,"pos":[0,0,0],"vel":[0,0,0],"aim":[0,0],
+                "hp":1400,"max_hp":1400,"energy":100,"max_energy":100,
+                "grounded":true,"cubes":0,"in_zone":true,
+                "weapons":[{"kind":"gun","cooldown":0,"ammo":12,"reload":0},null]},
+            "zone":{"center":[0,0],"radius":500,"next_center":[0,0],
+                "next_radius":380,"shrink_start":200,"shrink_end":240,"dps":20},
+            "drops":[{"id":9000,"pos":[0,0,0],"radius":8,
+                "lands_in":8,"capture_s":4,"progress":0,"holder":null}]
+        })).unwrap();
+        (brain,raw.into())
+    }
+
+    fn label(action: &Action) -> &str {
+        action.debug.as_ref().and_then(|d| d.label.as_deref()).unwrap_or("")
+    }
+
+    #[test]
+    fn early_drop_arrival_waits_through_landing_and_capture() {
+        let (mut brain,mut obs) = fixture();
+        // Deliberately stop inside the ring, away from the center. The server
+        // permits capture here; neither travel watchdog may force a jet escape.
+        obs.self_obs.pos = [6.0,0.0,0.0];
+        for step in 0..120 {
+            obs.tick = 1740+step*2;
+            obs.t = 87.0+step as f64*0.1;
+            obs.drops[0].lands_in = (95.0-obs.t).max(0.0);
+            if obs.t >= 95.0 {
+                obs.drops[0].holder = Some(0);
+                obs.drops[0].progress = obs.t-95.0;
+            }
+            let action = brain.act(&obs);
+            assert!(label(&action).starts_with("DROP"),"t={}: {}",obs.t,label(&action));
+            assert!(!brain.is_blacklisted([0.0,0.0],obs.t));
+            assert_eq!(brain.nav.stuck_ticks(),0);
+            assert_ne!(action.jump,Some(true));
+        }
+        obs.t = 99.0;
+        obs.tick = 1980;
+        obs.drops.clear();
+        brain.act(&obs);
+        assert!(brain.drop_hold.is_none());
+        assert!(brain.blacklist.is_empty());
+    }
+
+    #[test]
+    fn frozen_or_contested_drop_capture_is_bounded() {
+        for holder in [None,Some(0),Some(1)] {
+            let (mut brain,mut obs) = fixture();
+            obs.drops[0].lands_in = 0.0;
+            obs.drops[0].holder = holder;
+            for step in 0..60 {
+                obs.tick = 2000+step*2;
+                obs.t = 100.0+step as f64*0.1;
+                brain.act(&obs);
+            }
+            assert!(brain.is_blacklisted([0.0,0.0],obs.t),"holder={holder:?}");
+        }
+    }
+
+    #[test]
+    fn brief_drop_contest_does_not_cancel_a_resumed_capture() {
+        let (mut brain,mut obs) = fixture();
+        obs.drops[0].lands_in = 0.0;
+        for step in 0..70 {
+            obs.tick = 2000+step*2;
+            obs.t = 100.0+step as f64*0.1;
+            let elapsed = step as f64*0.1;
+            let (holder,progress) = if elapsed < 1.0 {
+                (Some(0),elapsed)
+            } else if elapsed < 3.0 {
+                (None,0.0)
+            } else {
+                (Some(0),elapsed-3.0)
+            };
+            obs.drops[0].holder = holder;
+            obs.drops[0].progress = progress;
+            let action = brain.act(&obs);
+            assert!(label(&action).starts_with("DROP"),"t={}: {}",obs.t,label(&action));
+            assert!(brain.blacklist.is_empty());
+        }
+    }
+
+    #[test]
+    fn authoritative_capture_progress_overrides_height_estimate() {
+        let (mut brain,mut obs) = fixture();
+        obs.self_obs.pos[2] = 10.0;
+        obs.drops[0].lands_in = 0.0;
+        obs.drops[0].holder = Some(0);
+        for step in 0..40 {
+            obs.tick = 2000+step*2;
+            obs.t = 100.0+step as f64*0.1;
+            obs.drops[0].progress = step as f64*0.1;
+            assert!(brain.track_goal_progress("DROP",[0.0,0.0],&obs));
+            assert!(brain.goal_track.is_none());
+            assert!(brain.blacklist.is_empty());
+        }
+    }
+
+    #[test]
+    fn nearly_complete_capture_can_restart_after_a_brief_contest() {
+        let (mut brain, mut obs) = fixture();
+        obs.drops[0].lands_in = 0.0;
+        for step in 0..100 {
+            obs.tick = 2000 + step * 2;
+            obs.t = 100.0 + step as f64 * 0.1;
+            let elapsed = step as f64 * 0.1;
+            let (holder, progress) = if elapsed < 4.0 {
+                (Some(0), elapsed)
+            } else if elapsed < 6.0 {
+                (None, 0.0)
+            } else {
+                (Some(0), elapsed - 6.0)
+            };
+            obs.drops[0].holder = holder;
+            obs.drops[0].progress = progress;
+            let action = brain.act(&obs);
+            assert!(label(&action).starts_with("DROP"), "t={}: {}", obs.t, label(&action));
+            assert!(brain.blacklist.is_empty());
+        }
+    }
+
+    #[test]
+    fn repeated_capture_resets_have_an_absolute_deadline() {
+        let (mut brain, mut obs) = fixture();
+        obs.drops[0].lands_in = 0.0;
+        obs.drops[0].holder = Some(0);
+        for step in 0..160 {
+            obs.tick = 2000 + step * 2;
+            obs.t = 100.0 + step as f64 * 0.1;
+            obs.drops[0].progress = (step % 30) as f64 * 0.1;
+            brain.act(&obs);
+        }
+        assert!(brain.is_blacklisted([0.0, 0.0], obs.t));
+    }
+
+    #[test]
+    fn unreachable_drop_still_uses_travel_watchdog() {
+        for pos in [[30.0,0.0,0.0],[0.0,0.0,10.0]] {
+            let (mut brain,mut obs) = fixture();
+            obs.self_obs.pos = pos;
+            for step in 0..46 {
+                obs.tick = 1740+step*2;
+                obs.t = 87.0+step as f64*0.1;
+                obs.drops[0].lands_in = (95.0-obs.t).max(0.0);
+                brain.act(&obs);
+            }
+            assert!(brain.is_blacklisted([0.0,0.0],obs.t),"pos={pos:?}");
+        }
+    }
+
+    #[test]
+    fn zone_escape_interrupts_drop_waiting() {
+        let (mut brain,mut obs) = fixture();
+        assert!(label(&brain.act(&obs)).starts_with("DROP"));
+        obs.t += 0.1;
+        obs.tick += 2;
+        obs.self_obs.in_zone = false;
+        obs.zone.center = [100.0,0.0];
+        obs.zone.next_center = [100.0,0.0];
+        obs.zone.radius = 20.0;
+        obs.zone.next_radius = 10.0;
+        assert!(label(&brain.act(&obs)).starts_with("ZONE"));
+        assert!(brain.drop_hold.is_none());
+        assert!(brain.blacklist.is_empty());
+    }
+
+    #[test]
+    fn stale_landing_countdown_does_not_allow_unlimited_wait() {
+        let (mut brain,mut obs) = fixture();
+        for step in 0..160 {
+            obs.tick = 1740+step*2;
+            obs.t = 87.0+step as f64*0.1;
+            // An unchanged countdown should not keep moving the landing deadline.
+            brain.act(&obs);
+        }
+        assert!(brain.is_blacklisted([0.0,0.0],obs.t));
+    }
+
+    fn corner_map() -> ArenaMap {
+        let unique = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH)
+            .unwrap().as_nanos();
+        let dir = std::env::temp_dir().join(format!("mechbot-brain-test-{}-{unique}",std::process::id()));
+        std::fs::create_dir(&dir).unwrap();
+        let world = json!({
+            "bounds":{"minX":-64,"maxX":64,"minY":-64,"maxY":64},
+            "terrain":{"minX":-64,"minY":-64,"step":128,"nx":2,"ny":2,"scale":0.01},
+            "prisms":[{"base":0,"top":20,"ring":[8,-8,16,-8,16,8,8,8]}]
+        });
+        std::fs::write(dir.join("world.json"),world.to_string()).unwrap();
+        std::fs::write(dir.join("terrain.i16"),[0u8;8]).unwrap();
+        let map = ArenaMap::load(&HelloMap {
+            dir:dir.to_string_lossy().into_owned(),
+            files:vec!["world.json".into(),"terrain.i16".into()],
+        });
+        // Only this test's freshly-created directory is removed.
+        std::fs::remove_file(dir.join("world.json")).unwrap();
+        std::fs::remove_file(dir.join("terrain.i16")).unwrap();
+        std::fs::remove_dir(dir).unwrap();
+        assert!(map.loaded);
+        map
+    }
+
+    #[test]
+    fn nonlethal_own_laser_does_not_disable_emergency_duck() {
+        let (mut brain,mut obs) = fixture();
+        brain.map = corner_map();
+        brain.nav = Navigator::new(&brain.map);
+        obs.drops.clear();
+        obs.self_obs.pos = [0.0,12.0,0.0];
+        obs.self_obs.weapons[1] = Some(serde_json::from_value(json!({
+            "kind":"laser","cooldown":0,"charge":0.5,
+            "stats":{"damage":315,"charge":0.75,"min_frac":0.35}
+        })).unwrap());
+        obs.mechs = serde_json::from_value(json!([{
+            "id":1,"kind":"mech","pos":[50,12,0],"vel":[0,0,0],
+            "aim":[3.141592653589793,0],"hp":350,"max_hp":1400,
+            "cubes":0,"weapons":["laser"],"charging":true
+        }])).unwrap();
+        let action = brain.act(&obs);
+        assert!(label(&action).starts_with("LASER_DUCK"),"{}",label(&action));
+    }
+
+    #[test]
+    fn exposed_regen_retreat_preserves_defensive_gun_and_laser_fire() {
+        for charge in [0.0,0.3] {
+            let (mut brain,mut obs) = fixture();
+            obs.drops.clear();
+            obs.self_obs.hp = 600.0;
+            obs.self_obs.aim = [0.0,-0.05];
+            obs.self_obs.weapons[1] = Some(serde_json::from_value(json!({
+                "kind":"laser","cooldown":0,"charge":charge
+            })).unwrap());
+            obs.mechs = serde_json::from_value(json!([{
+                "id":1,"kind":"mech","pos":[50,0,0],"vel":[0,0,0],
+                "aim":[3.141592653589793,0],"hp":1400,"max_hp":1400,
+                "cubes":0,"weapons":["gun"],"charging":false
+            }])).unwrap();
+            let action = brain.act(&obs);
+            assert!(label(&action).starts_with("REGEN"),"{}",label(&action));
+            assert_eq!(action.fire,Some([true,true]));
+        }
     }
 }
