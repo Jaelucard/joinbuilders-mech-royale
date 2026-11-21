@@ -1,0 +1,15 @@
+{
+  "user_reported_official_score": 4.81,
+  "score_submission_commit_verified": false,
+  "local_baseline_commit": "5b783d19f138239033be32b527318f9247a9f9b8",
+  "preserved_git_branch": "baseline/scoring-5b783d1",
+  "candidate_branch": "fix/scoring-control",
+  "runtime_image_id": "sha256:f6e6353659f5eb77382e5ce5aa56a968f023f0e3ebab229ce75ff35aa262e4f3",
+  "runtime_image_tag": "mechbot:research-5b783d1",
+  "builder_image_id": "sha256:8a59ac7675617eb381f444484ecd0d8aaa14b930b450afa438147786db369de3",
+  "builder_image_tag": "mechbot:research-builder-5b783d1",
+  "notes": [
+    "Local baseline is current source at start of work; not verified as the exact official4.81 submission.",
+    "Proxy outcomes are approximate simulations, separate from official scoring."
+  ]
+}

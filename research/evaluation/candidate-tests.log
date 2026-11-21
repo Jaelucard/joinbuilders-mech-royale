@@ -1,0 +1,68 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling serde v1.0.219
+   Compiling serde_json v1.0.140
+   Compiling itoa v1.0.19
+   Compiling ryu v1.0.23
+   Compiling memchr v2.8.3
+   Compiling syn v2.0.119
+   Compiling serde_derive v1.0.219
+   Compiling mechbot v0.1.0 (/build)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.01s
+     Running unittests src/lib.rs (target/debug/deps/mechbot-b67f5ad20cd0adcf)
+
+running 33 tests
+test brain::tests::authoritative_capture_progress_overrides_height_estimate ... ok
+test brain::tests::exposed_regen_retreat_preserves_defensive_gun_and_laser_fire ... ok
+test brain::tests::zone_escape_interrupts_drop_waiting ... ok
+test brain::tests::brief_drop_contest_does_not_cancel_a_resumed_capture ... ok
+test combat::tests::close_pressure_keeps_gun_and_arc_return_fire ... ok
+test brain::tests::early_drop_arrival_waits_through_landing_and_capture ... ok
+test combat::tests::charged_laser_does_not_release_at_an_occluded_corner ... ok
+test brain::tests::nearly_complete_capture_can_restart_after_a_brief_contest ... ok
+test combat::tests::conflicting_mortar_does_not_fire_along_gun_pitch ... ok
+test combat::tests::cooldown_on_second_tick_uses_second_tick_slew ... ok
+test combat::tests::gun_tracks_its_lead_during_charge_in_either_slot ... ok
+test combat::tests::misaligned_laser_holds_while_turning_for_release ... ok
+test combat::tests::lost_target_releases_at_current_aim_without_prolonging_slowdown ... ok
+test combat::tests::mortar_uses_gun_cooldown_and_reload_windows ... ok
+test combat::tests::release_owns_aim_and_only_compatible_gun_shots_fire ... ok
+test combat::tests::gun_only_preserves_legacy_aim_fire_reload_and_urgent_behavior ... ok
+test combat::tests::shorted_laser_does_not_start_or_steal_gun_aim ... ok
+test map::navigation_tests::diagonal_ramp_retains_astar_distance_allowance ... ok
+test brain::tests::unreachable_drop_still_uses_travel_watchdog ... ok
+test combat::tests::urgent_escape_requests_release_even_before_minimum_charge ... ok
+test map::navigation_tests::diagonal_shortcut_preserves_corner_clearance ... ok
+test map::navigation_tests::traversal_checks_briefly_crossed_cells_and_does_not_clamp_outside_goals ... ok
+test map::navigation_tests::open_grid_traversal_handles_all_directions_and_boundary_endpoints ... ok
+test map::navigation_tests::recovery_does_not_ignore_physical_obstructions ... ok
+test map::navigation_tests::uphill_cliff_is_directional_but_gradual_ramp_is_valid ... ok
+test brain::tests::frozen_or_contested_drop_capture_is_bounded ... ok
+test nav::navigation_tests::conservative_raster_start_can_recover_to_a_physically_clear_cell ... ok
+test nav::navigation_tests::smoothing_and_waypoint_advancement_keep_a_valid_detour ... ok
+test brain::tests::repeated_capture_resets_have_an_absolute_deadline ... ok
+test nav::navigation_tests::close_unreachable_goal_does_not_restore_rejected_cliff_shortcut ... ok
+test brain::tests::nonlethal_own_laser_does_not_disable_emergency_duck ... ok
+test brain::tests::stale_landing_countdown_does_not_allow_unlimited_wait ... ok
+test nav::navigation_tests::real_arena_cliff_witness_is_not_a_direct_route ... ok
+
+test result: ok. 33 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+     Running unittests src/main.rs (target/debug/deps/mechbot-84049b00c239c823)
+
+running 4 tests
+warn: failed to read "/nonexistent/v2/world.json": No such file or directory (os error 2)
+test tests::test_linear_intercept ... ok
+test tests::test_mortar_solver ... ok
+test tests::test_empty_map_and_nav_fallback ... ok
+1000 LoS rays: clear=156 in 1.68ms (roof_anchors=252)
+test tests::test_real_arena_nav_and_los ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+   Doc-tests mechbot
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

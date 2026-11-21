@@ -1,0 +1,28 @@
+{
+  "source_commit": "7b2f1547e2e2a827fa3bbfb6085068ff73cf3b45",
+  "branch": "fix/scoring-control",
+  "user_reported_official_baseline": 4.81,
+  "official_candidate_score": null,
+  "runtime_image_tag": "mechbot:candidate",
+  "runtime_image_id": "sha256:9b2c6de1cc2d4276df65ec044f1eb0773b5b6105ab220969460b87bf9dfa49b0",
+  "builder_image_tag": "mechbot:candidate-builder",
+  "builder_image_id": "sha256:372e3775e8789ebd10b202dfb6b404a4f4b1148d3c1997dba354be576146fbda",
+  "source_sha256": {
+    "src/brain.rs": "c09cbf44f1ecc1a54b38d5e4f0bb8380f5cb0c6ab5d00578618b26b8834a3e27",
+    "src/combat.rs": "28d8beac5f08c83431b6771b2999e36e9a1f70cf3c26db6f83d398242c0e97c3",
+    "src/lib.rs": "61fab161ee764afb80c693d26c50d1986cd204ddbc8bd22011be8a5529317fd5",
+    "src/main.rs": "35fba295991370e7c0e5e4d96ed5e0c84ddbef8b5fb02614a8ccf6f6a8de41b7",
+    "src/map.rs": "7694a2d875bf770e0cc23c5af22c79e3e9798668208603571232b9f6ec790431",
+    "src/nav.rs": "a0a545c27c782a30869448aa6dddab6ff64e87aa8433e14a76e01425ad5a6d15",
+    "src/protocol.rs": "9f26d08e3e6ad7b3e9ac7f6a3068af56be551dbc78ba5f48bc9ec6887c309130",
+    "src/world.rs": "1d6967855b5b07bbabdff6122a15f1d9b30eb292f34ce3a36ad5aadf7d123d52"
+  },
+  "tests_passed": 37,
+  "conformance_observations": 300,
+  "conformance_late": 0,
+  "conformance_wrong_tick": 0,
+  "conformance_bad_lines": 0,
+  "conformance_p99_ms": 7.7,
+  "conformance_max_ms": 8.1,
+  "submission_state": "Local tested candidate, not pushed or submitted."
+}

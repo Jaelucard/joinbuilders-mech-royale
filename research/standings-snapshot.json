@@ -1,0 +1,48 @@
+{
+  "checked_at_utc": "2026-11-21T08:43:33.9016033Z",
+  "source": "https://www.joinbuilders.org/buildathon/standings/builders",
+  "scorer_version": "builders-3",
+  "user_reported_score": 4.81,
+  "user_team_identity_verified": false,
+  "practice_limit": 4,
+  "team_count": 193,
+  "standings": [
+    {
+      "at": "2026-11-21T08:17:23.28751+00:00",
+      "rank": 1,
+      "team": "azing",
+      "score": 5.96
+    },
+    {
+      "at": "2026-11-21T08:23:01.800186+00:00",
+      "rank": 3,
+      "team": "2.3%",
+      "score": 5.6
+    },
+    {
+      "at": "2026-11-21T08:38:04.598098+00:00",
+      "rank": 8,
+      "team": "giddygiddyboy",
+      "score": 5.56
+    },
+    {
+      "at": "2026-11-21T02:30:59.35803+00:00",
+      "rank": 32,
+      "team": "ImagineLosing",
+      "score": 5.04
+    },
+    {
+      "at": "2026-11-21T04:56:15.101823+00:00",
+      "rank": 55,
+      "team": "BingBU",
+      "score": 4.58
+    },
+    {
+      "at": "2026-11-21T02:20:26.872387+00:00",
+      "rank": 74,
+      "team": "fortnite pirate token",
+      "score": 4.19
+    }
+  ],
+  "baseline_note": "Corrected by user from 0.81 to 4.81; official submission commit unverified."
+}

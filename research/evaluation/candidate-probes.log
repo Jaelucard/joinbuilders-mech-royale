@@ -1,0 +1,7 @@
+warn: failed to read "/missing-probe-map/v2/world.json": No such file or directory (os error 2)
+vanguard-v4 initialized (slot=0, map_loaded=false, prisms=0, roofs=0, nav=1x1) in 0.1ms
+shared aim: fire=[true, true], chosen=Some([0.07748249020009375, -0.024919833661580633]), gun required=[0.07748249020009375, -0.024919833661580633], lateral separation=0.000m
+drop: t=87.0, lands_in=8.0, DROP | hp:1400 c:0 e:0
+Combat/drop expectations passed (baseline=false).
+navigation: rise=5.476592m, cells_walkable=true/true, line_walkable=false, waypoint=[-246.3800048828125, 56.910003662109375]
+Navigation expectations passed (baseline=false).

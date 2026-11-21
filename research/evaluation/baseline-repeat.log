@@ -1,0 +1,77 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling syn v2.0.119
+   Compiling serde v1.0.219
+   Compiling serde_derive v1.0.219
+   Compiling serde_json v1.0.140
+   Compiling memchr v2.8.3
+   Compiling itoa v1.0.19
+   Compiling ryu v1.0.23
+   Compiling mechbot v0.1.0 (/build)
+   Compiling mechsim v0.1.0 (/build/sim)
+    Finished `release` profile [optimized] target(s) in 17.68s
+vanguard-v4 initialized (slot=2, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 38.9ms
+  seed=1000 place=14 pts= 2 k=2 t= 37.4s c=2 lo=gun+mortar    by=npc       rear=0 thr=1 dealt= 3061 taken= 1525 st=["COMBAT:140", "LOOT_WPN:96", "REGEN_COVER:45", "FLANK:34", "CUBE:18"]
+vanguard-v4 initialized (slot=15, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 37.5ms
+  seed=8919 place=14 pts= 2 k=1 t= 35.2s c=0 lo=gun+lightning by=laser     rear=0 thr=4 dealt= 2415 taken= 1642 st=["REGEN_COVER:149", "COMBAT:129", "LOOT_WPN:34", "KILL_LOOT:21", "LASER_DUCK:16"]
+vanguard-v4 initialized (slot=8, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 38.6ms
+  seed=16838 place= 8 pts= 8 k=5 t=155.7s c=10 lo=gun+lightning by=laser     rear=0 thr=1 dealt= 9523 taken= 4158 st=["REGEN_COVER:515", "COMBAT:482", "CUBE:198", "LOOT_WPN:127", "FLANK:82"]
+vanguard-v4 initialized (slot=9, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 36.2ms
+  seed=24757 place=10 pts= 6 k=4 t= 91.7s c=7 lo=gun+lightning by=gun       rear=0 thr=2 dealt= 5101 taken= 2301 st=["CUBE:284", "COMBAT:212", "REGEN_COVER:142", "LOOT_WPN:67", "FARM_FIGHT:64"]
+vanguard-v4 initialized (slot=6, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 34.9ms
+  seed=32676 place= 8 pts= 8 k=5 t=123.1s c=0 lo=gun+laser     by=gun       rear=0 thr=2 dealt= 6747 taken= 2563 st=["REGEN_COVER:315", "COMBAT:301", "PATROL:129", "ROOF_CLIMB:97", "LASER_PEEK:83"]
+vanguard-v4 initialized (slot=3, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 35.6ms
+  seed=40595 place= 1 pts=15 k=7 t=480.0s c=9 lo=gun+laser     by=WIN       rear=0 thr=0 dealt=11114 taken= 3085 st=["CUBE:574", "COMBAT:566", "ROOF_HOLD^:507", "PATROL:455", "REGEN_COVER:325"]
+vanguard-v4 initialized (slot=4, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 37.3ms
+  seed=48514 place= 1 pts=15 k=10 t=480.0s c=21 lo=gun+laser     by=WIN       rear=0 thr=0 dealt=16422 taken= 2493 st=["ROOF_HOLD^:572", "DROP:453", "CUBE:320", "COMBAT:241", "REGEN_COVER:231"]
+vanguard-v4 initialized (slot=4, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 39.5ms
+  seed=56433 place=16 pts= 0 k=0 t= 19.5s c=0 lo=gun           by=laser     rear=0 thr=5 dealt=  675 taken= 1688 st=["REGEN_COVER:96", "COMBAT:49", "LOOT_WPN:21", "LASER_DUCK:17", "FARM_FIGHT:9"]
+PROXY_RESULT {"cubes":2,"gun_hits":35,"gun_shots":56,"killed_by":"npc","kills":2,"laser_hits":0,"laser_shots":0,"loadout":"gun+mortar","mode":"practice","place":14,"points":2.0,"seed":1000,"survival_s":37.35}
+PROXY_RESULT {"cubes":0,"gun_hits":43,"gun_shots":54,"killed_by":"laser","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":14,"points":2.0,"seed":8919,"survival_s":35.2}
+PROXY_RESULT {"cubes":10,"gun_hits":116,"gun_shots":174,"killed_by":"laser","kills":5,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":8,"points":8.0,"seed":16838,"survival_s":155.70000000000002}
+PROXY_RESULT {"cubes":7,"gun_hits":82,"gun_shots":135,"killed_by":"gun","kills":4,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":10,"points":6.0,"seed":24757,"survival_s":91.7}
+PROXY_RESULT {"cubes":0,"gun_hits":55,"gun_shots":73,"killed_by":"gun","kills":5,"laser_hits":13,"laser_shots":19,"loadout":"gun+laser","mode":"practice","place":8,"points":8.0,"seed":32676,"survival_s":123.05000000000001}
+PROXY_RESULT {"cubes":9,"gun_hits":79,"gun_shots":126,"killed_by":"SURVIVED","kills":7,"laser_hits":17,"laser_shots":23,"loadout":"gun+laser","mode":"practice","place":1,"points":15.0,"seed":40595,"survival_s":480.0}
+PROXY_RESULT {"cubes":21,"gun_hits":82,"gun_shots":152,"killed_by":"SURVIVED","kills":10,"laser_hits":24,"laser_shots":35,"loadout":"gun+laser","mode":"practice","place":1,"points":15.0,"seed":48514,"survival_s":480.0}
+PROXY_RESULT {"cubes":0,"gun_hits":15,"gun_shots":27,"killed_by":"laser","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":56433,"survival_s":19.5}
+=== MECHSIM (PRACTICE, 8 matches in 0.96s) ===
+MEAN SCORE: 7.00 / 15.00  |  Wins: 2  |  Early deaths (<=2 pts): 3/8
+Avg kills: 4.25  |  Avg survival: 177.8s  |  Avg cubes: 6.1  |  Avg threats@death: 1.9
+Accuracy: Gun 507/797 (63.6%)  |  Laser 54/77 (70.1%)
+Rear-hit deaths: 0/8  |  On-roof deaths: 0/8
+Killed by weapon: {"SURVIVED": 2, "gun": 2, "npc": 1, "laser": 3}  |  by tier: {"Npc": 1, "Medium": 2, "Expert": 2, "Hard": 1, "SURVIVED": 2}
+Score by loadout: ["gun+laser(3): 12.67", "gun+lightning(3): 5.33", "gun+mortar(1): 2.00", "gun(1): 0.00"]
+Bot act() ms: p50 0.006  p99 1.081  max 1.824
+vanguard-v4 initialized (slot=2, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 37.2ms
+  seed=1000 place= 1 pts=15 k=2 t=480.0s c=13 lo=gun+lightning by=WIN       rear=0 thr=0 dealt= 5683 taken= 1620 st=["COMBAT:377", "PATROL:202", "REGEN_COVER:191", "DROP:184", "CUBE:169"]
+vanguard-v4 initialized (slot=15, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 36.2ms
+  seed=8919 place= 1 pts=15 k=6 t=480.0s c=14 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 8538 taken= 2451 st=["ROOF_HOLD^:594", "CUBE:395", "REGEN_COVER:387", "COMBAT:267", "PATROL:170"]
+vanguard-v4 initialized (slot=8, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 36.0ms
+  seed=16838 place= 1 pts=15 k=3 t=480.0s c=15 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 2493 taken= 1350 st=["ROOF_HOLD^:683", "LOOT_WPN:310", "PATROL:308", "CUBE:299", "COMBAT:209"]
+vanguard-v4 initialized (slot=9, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 35.3ms
+  seed=24757 place= 1 pts=15 k=1 t=480.0s c=8 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 1542 taken=    0 st=["ROOF_HOLD^:1306", "CUBE:296", "ROOF_APPROACH:99", "ROOF_CLIMB:94", "PATROL:90"]
+vanguard-v4 initialized (slot=6, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 35.4ms
+  seed=32676 place= 1 pts=15 k=2 t=480.0s c=2 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 2761 taken=  360 st=["ROOF_HOLD^:613", "ROOF_CLIMB:445", "PATROL:434", "CUBE:184", "ROOF_APPROACH:164"]
+vanguard-v4 initialized (slot=3, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 40.0ms
+  seed=40595 place= 3 pts=13 k=1 t=281.1s c=12 lo=gun+laser     by=zone      rear=0 thr=0 dealt= 2832 taken= 1734 st=["ROOF_HOLD^:1361", "ZONE:368", "CUBE:279", "COMBAT:214", "REGEN_COVER:168"]
+vanguard-v4 initialized (slot=4, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 38.4ms
+  seed=48514 place= 1 pts=15 k=4 t=480.0s c=15 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 6091 taken=  908 st=["PATROL:479", "CUBE:382", "COMBAT:303", "DROP:280", "ROOF_CLIMB:280"]
+vanguard-v4 initialized (slot=4, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 36.1ms
+  seed=56433 place=16 pts= 0 k=0 t=  9.6s c=0 lo=gun           by=gun       rear=0 thr=1 dealt=  495 taken= 1418 st=["COMBAT:42", "LOOT_WPN:21", "REGEN_COVER:20", "FARM_FIGHT:9", "SEEK_CRATE:4"]
+PROXY_RESULT {"cubes":13,"gun_hits":86,"gun_shots":159,"killed_by":"SURVIVED","kills":2,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"ffa","place":1,"points":15.0,"seed":1000,"survival_s":480.0}
+PROXY_RESULT {"cubes":14,"gun_hits":62,"gun_shots":131,"killed_by":"SURVIVED","kills":6,"laser_hits":12,"laser_shots":23,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":8919,"survival_s":480.0}
+PROXY_RESULT {"cubes":15,"gun_hits":38,"gun_shots":118,"killed_by":"SURVIVED","kills":3,"laser_hits":1,"laser_shots":3,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":16838,"survival_s":480.0}
+PROXY_RESULT {"cubes":8,"gun_hits":7,"gun_shots":62,"killed_by":"SURVIVED","kills":1,"laser_hits":2,"laser_shots":8,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":24757,"survival_s":480.0}
+PROXY_RESULT {"cubes":2,"gun_hits":17,"gun_shots":36,"killed_by":"SURVIVED","kills":2,"laser_hits":5,"laser_shots":8,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":32676,"survival_s":480.0}
+PROXY_RESULT {"cubes":12,"gun_hits":23,"gun_shots":58,"killed_by":"zone","kills":1,"laser_hits":5,"laser_shots":9,"loadout":"gun+laser","mode":"ffa","place":3,"points":13.0,"seed":40595,"survival_s":281.05}
+PROXY_RESULT {"cubes":15,"gun_hits":36,"gun_shots":97,"killed_by":"SURVIVED","kills":4,"laser_hits":9,"laser_shots":25,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":48514,"survival_s":480.0}
+PROXY_RESULT {"cubes":0,"gun_hits":11,"gun_shots":19,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"ffa","place":16,"points":0.0,"seed":56433,"survival_s":9.55}
+=== MECHSIM (FFA, 8 matches in 0.94s) ===
+MEAN SCORE: 12.88 / 15.00  |  Wins: 6  |  Early deaths (<=2 pts): 1/8
+Avg kills: 2.38  |  Avg survival: 396.3s  |  Avg cubes: 9.9  |  Avg threats@death: 0.1
+Accuracy: Gun 280/680 (41.2%)  |  Laser 34/76 (44.7%)
+Rear-hit deaths: 0/8  |  On-roof deaths: 1/8
+Killed by weapon: {"gun": 1, "SURVIVED": 6, "zone": 1}  |  by tier: {"SURVIVED": 6, "Zone": 1, "Expert": 1}
+Score by loadout: ["gun+lightning(1): 15.00", "gun+laser(6): 14.67", "gun(1): 0.00"]
+Bot act() ms: p50 0.004  p99 1.170  max 1.796

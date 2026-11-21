@@ -1,0 +1,165 @@
+{
+  "kind": "approximate local simulator; not official scoring",
+  "official_user_reported_baseline": 4.81,
+  "official_candidate_score": null,
+  "baseline_label": "baseline",
+  "comparisons": [
+    {
+      "label": "navigation-only",
+      "mode": "practice",
+      "n": 24,
+      "baseline_mean": 7.041666666666667,
+      "candidate_mean": 7.166666666666667,
+      "mean_difference": 0.125,
+      "paired_bootstrap_95": [
+        -1.4583333333333333,
+        1.75
+      ],
+      "better": 9,
+      "equal": 7,
+      "worse": 8,
+      "baseline_survival_s": 184.99791666666667,
+      "candidate_survival_s": 196.00416666666666,
+      "baseline_low_placement": 7,
+      "candidate_low_placement": 8
+    },
+    {
+      "label": "navigation-only",
+      "mode": "ffa",
+      "n": 24,
+      "baseline_mean": 14.291666666666666,
+      "candidate_mean": 14.291666666666666,
+      "mean_difference": 0.0,
+      "paired_bootstrap_95": [
+        -0.25,
+        0.25
+      ],
+      "better": 1,
+      "equal": 22,
+      "worse": 1,
+      "baseline_survival_s": 452.10833333333335,
+      "candidate_survival_s": 445.90416666666664,
+      "baseline_low_placement": 1,
+      "candidate_low_placement": 1
+    },
+    {
+      "label": "brain-only",
+      "mode": "practice",
+      "n": 24,
+      "baseline_mean": 7.041666666666667,
+      "candidate_mean": 4.5,
+      "mean_difference": -2.5416666666666665,
+      "paired_bootstrap_95": [
+        -4.291666666666667,
+        -0.9583333333333334
+      ],
+      "better": 1,
+      "equal": 13,
+      "worse": 10,
+      "baseline_survival_s": 184.99791666666667,
+      "candidate_survival_s": 114.43958333333333,
+      "baseline_low_placement": 7,
+      "candidate_low_placement": 10
+    },
+    {
+      "label": "brain-only",
+      "mode": "ffa",
+      "n": 24,
+      "baseline_mean": 14.291666666666666,
+      "candidate_mean": 14.333333333333334,
+      "mean_difference": 0.041666666666666664,
+      "paired_bootstrap_95": [
+        -0.125,
+        0.25
+      ],
+      "better": 1,
+      "equal": 22,
+      "worse": 1,
+      "baseline_survival_s": 452.10833333333335,
+      "candidate_survival_s": 449.09791666666666,
+      "baseline_low_placement": 1,
+      "candidate_low_placement": 1
+    },
+    {
+      "label": "combat-only",
+      "mode": "practice",
+      "n": 24,
+      "baseline_mean": 7.041666666666667,
+      "candidate_mean": 5.125,
+      "mean_difference": -1.9166666666666667,
+      "paired_bootstrap_95": [
+        -3.7083333333333335,
+        -0.2916666666666667
+      ],
+      "better": 3,
+      "equal": 11,
+      "worse": 10,
+      "baseline_survival_s": 184.99791666666667,
+      "candidate_survival_s": 121.05000000000001,
+      "baseline_low_placement": 7,
+      "candidate_low_placement": 6
+    },
+    {
+      "label": "combat-only",
+      "mode": "ffa",
+      "n": 24,
+      "baseline_mean": 14.291666666666666,
+      "candidate_mean": 14.291666666666666,
+      "mean_difference": 0.0,
+      "paired_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "better": 0,
+      "equal": 24,
+      "worse": 0,
+      "baseline_survival_s": 452.10833333333335,
+      "candidate_survival_s": 452.10833333333335,
+      "baseline_low_placement": 1,
+      "candidate_low_placement": 1
+    },
+    {
+      "label": "candidate-v1",
+      "mode": "practice",
+      "n": 24,
+      "baseline_mean": 7.041666666666667,
+      "candidate_mean": 5.416666666666667,
+      "mean_difference": -1.625,
+      "paired_bootstrap_95": [
+        -2.8333333333333335,
+        -0.4166666666666667
+      ],
+      "better": 4,
+      "equal": 9,
+      "worse": 11,
+      "baseline_survival_s": 184.99791666666667,
+      "candidate_survival_s": 136.14166666666668,
+      "baseline_low_placement": 7,
+      "candidate_low_placement": 7
+    },
+    {
+      "label": "candidate-v1",
+      "mode": "ffa",
+      "n": 24,
+      "baseline_mean": 14.291666666666666,
+      "candidate_mean": 13.833333333333334,
+      "mean_difference": -0.4583333333333333,
+      "paired_bootstrap_95": [
+        -1.0416666666666667,
+        0.041666666666666664
+      ],
+      "better": 1,
+      "equal": 18,
+      "worse": 5,
+      "baseline_survival_s": 452.10833333333335,
+      "candidate_survival_s": 388.5291666666667,
+      "baseline_low_placement": 1,
+      "candidate_low_placement": 1
+    }
+  ],
+  "limitations": [
+    "Uncalibrated opponent/physics model; shared production geometry.",
+    "HashMap tie ordering can vary across repeats despite identical match seeds.",
+    "Intervals describe paired proxy outcomes, not official score uncertainty."
+  ]
+}

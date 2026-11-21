@@ -1,0 +1,51 @@
+{
+  "kind": "approximate local simulator; not official scoring",
+  "official_user_reported_baseline": 4.81,
+  "official_candidate_score": null,
+  "baseline_label": "baseline",
+  "comparisons": [
+    {
+      "label": "candidate-final",
+      "mode": "practice",
+      "n": 24,
+      "baseline_mean": 7.041666666666667,
+      "candidate_mean": 7.041666666666667,
+      "mean_difference": 0.0,
+      "paired_bootstrap_95": [
+        -1.5416666666666667,
+        1.5833333333333333
+      ],
+      "better": 6,
+      "equal": 10,
+      "worse": 8,
+      "baseline_survival_s": 184.99791666666667,
+      "candidate_survival_s": 210.75,
+      "baseline_low_placement": 7,
+      "candidate_low_placement": 6
+    },
+    {
+      "label": "candidate-final",
+      "mode": "ffa",
+      "n": 24,
+      "baseline_mean": 14.291666666666666,
+      "candidate_mean": 14.0,
+      "mean_difference": -0.2916666666666667,
+      "paired_bootstrap_95": [
+        -0.8333333333333334,
+        0.125
+      ],
+      "better": 1,
+      "equal": 20,
+      "worse": 3,
+      "baseline_survival_s": 452.10833333333335,
+      "candidate_survival_s": 412.9291666666667,
+      "baseline_low_placement": 1,
+      "candidate_low_placement": 1
+    }
+  ],
+  "limitations": [
+    "Uncalibrated opponent/physics model; shared production geometry.",
+    "HashMap tie ordering can vary across repeats despite identical match seeds.",
+    "Intervals describe paired proxy outcomes, not official score uncertainty."
+  ]
+}

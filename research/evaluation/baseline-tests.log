@@ -1,0 +1,41 @@
+docker :    Compiling proc-macro2 v1.0.107
+At line:2 char:1
++ docker run --rm --network none --mount 'type=bind,source=C:/Users/low ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (   Compiling proc-macro2 v1.0.107:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling serde v1.0.219
+   Compiling serde_json v1.0.140
+   Compiling itoa v1.0.19
+   Compiling memchr v2.8.3
+   Compiling ryu v1.0.23
+   Compiling syn v2.0.119
+   Compiling serde_derive v1.0.219
+   Compiling mechbot v0.1.0 (/build)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.52s
+     Running unittests src/lib.rs (target/debug/deps/mechbot-b67f5ad20cd0adcf)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/mechbot-84049b00c239c823)
+
+running 4 tests
+test tests::test_linear_intercept ... ok
+test tests::test_mortar_solver ... ok
+warn: failed to read "/nonexistent/v2/world.json": No such file or directory (os error 2)
+test tests::test_empty_map_and_nav_fallback ... ok
+1000 LoS rays: clear=156 in 1.09ms (roof_anchors=252)
+test tests::test_real_arena_nav_and_los ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+   Doc-tests mechbot
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
