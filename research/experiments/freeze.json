@@ -1,0 +1,21 @@
+{
+  "frozen_at_utc": "2026-11-21T14:16:04.175084+00:00",
+  "files_sha256": {
+    "plan.json": "123aa0d2ac0dd45e8dbe87275d7d58e5de791777debc52fcae7f1fec9ad35d97",
+    "run_suite.py": "c4ba215688cc562cd4cda66242711e8e5adf730fc34c727860428855e62d54bd",
+    "navigation.py": "85ec57fa7655d3be40817935e860433fa728fc134c6ec43628e3863f4066d79b",
+    "combat.py": "db8cfca60b6254d3706eb1ba21968c94e984633a09c633904cd68c493eb4abdb",
+    "brain.py": "acf8aca8eda14a1ed78d6808faa014edc66fa082cde07cd524eb3e5be4f8136c",
+    "brain/threat_tests.rs": "e24529ada731d1468ab39df0c09035e394f08d49f61d720ac662f367fe1e7ae3"
+  },
+  "note": "Recorded before launching the64configuration screen; source options and prospective gate fixed.",
+  "validation_hardening": {
+    "recorded_at_utc": "2026-11-21T14:22:36.071460+00:00",
+    "reason": "Independent review added map/image/baseline-source bindings and pre/post arena checks before selection or holdout. Active screen source/model snapshots unchanged.",
+    "run_suite_sha256": "d22d44b209b19f8446e63123eec526eaf2fe7d847af3ad1817581f8b4870cd5c"
+  },
+  "arena_sha256": {
+    "kit/arena/v2/world.json": "e0302dd4777b527b00a6a4b2e02759915402a23c58839d921e9fcc6d58092445",
+    "kit/arena/v2/terrain.i16": "3aa74308e096e36ed29230f135b0f3ff3ae09dfa164c2b687455b4f975b01d38"
+  }
+}
