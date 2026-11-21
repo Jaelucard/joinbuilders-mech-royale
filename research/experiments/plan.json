@@ -1,0 +1,13 @@
+{
+  "frozen_before_screening": true,
+  "baseline_commit": "411af5f530934aa21d8cb5dfff35259219595159",
+  "official_baseline_user_reported": 4.81,
+  "screen": {"navigation": ["baseline", "safe", "canopy", "safe_canopy"], "combat": ["baseline", "shared", "window", "shot"], "brain": ["baseline", "drop", "threat", "drop_threat"], "combinations": 64, "practice_seed_indices": [0, 47]},
+  "promotion_eligible_options": {"navigation": ["safe", "safe_canopy"], "combat": ["shared", "window", "shot"], "brain": ["drop_threat"], "reason": "Preserve the user's required traversal, shared aim, drop capture, and unsupported lethal-assumption fixes. Other configurations are diagnostic controls only."},
+  "selection": "One eligible candidate with highest screening mean; break ties by fewer changed component families, then stable identifier. Freeze source hashes before validation. No holdout-based retuning or replacement winner.",
+  "validation": {"seed_indices": [72, 167], "modes": ["practice", "ffa"], "independent_process_repeats": 2},
+  "promotion_gate_each_repeat": {"practice_mean_gain_min": 0.5, "practice_paired_bootstrap_95_lower_strictly_above": 0.0, "ffa_mean_decline_max": 0.25, "regression_tests_pass": true, "docker_conformance_pass": true},
+  "environment": "Frozen v3 geometry; analytic segment-cylinder intersection and actual body radius in movement, identically applied to all variants. No optical canopy model. Uncontrolled HashMap tie iteration remains.",
+  "scope": "Complete the predefined outstanding component/interaction experiments. If no candidate passes the prospective gate, do not push or tune repeatedly on the holdout.",
+  "publication": "Authorized only if the gate passes. Preserve v3/v4 and prior candidate; publish exact tested source to the repository default branch without force pushing. No official competition submission authorized or automated."
+}
