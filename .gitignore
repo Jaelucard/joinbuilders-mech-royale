@@ -1,0 +1,4 @@
+/target/
+/kit/
+*.tar.gz
+*.gz

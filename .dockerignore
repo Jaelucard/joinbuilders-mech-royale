@@ -1,0 +1,7 @@
+.git
+.gitignore
+target
+kit
+assets
+README.md
+*.tar.gz
