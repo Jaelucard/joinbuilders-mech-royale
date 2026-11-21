@@ -185,6 +185,52 @@ fn slew_one_tick(cur: [f64; 2], desired: [f64; 2], turn_rate: f64, pitch_rate: f
     [wrap_angle(cur[0] + dy), cur[1] + dp]
 }
 
+/// A trigger remains held for two simulation ticks. A weapon still cooling down
+/// on the first tick fires along the second tick's torso direction instead.
+fn shot_aim(
+    me: &SelfObs,
+    command: [f64; 2],
+    cooldown: f64,
+) -> [f64; 2] {
+    let turn = me.stat("turn_rate", 4.0);
+    let pitch = me.stat("pitch_rate", 3.0);
+    let first = slew_one_tick(me.aim, command, turn, pitch);
+    if cooldown > 0.05 {
+        slew_one_tick(first, command, turn, pitch)
+    } else {
+        first
+    }
+}
+
+#[derive(Clone, Copy)]
+struct ShotAlignment {
+    desired: [f64; 2],
+    yaw_tolerance: f64,
+    pitch_tolerance: f64,
+}
+
+impl ShotAlignment {
+    fn accepts(self, actual: [f64; 2]) -> bool {
+        wrap_angle(self.desired[0] - actual[0]).abs() <= self.yaw_tolerance
+            && (self.desired[1] - actual[1]).abs() <= self.pitch_tolerance
+    }
+}
+
+/// With no selected target, do not accidentally discharge toward a patrol yaw.
+/// Release at the current direction, preserving the previous discharge timing
+/// without retaining half-speed movement or steering a release toward patrol.
+fn release_untargeted_laser(out: &mut CombatDecision, me: &SelfObs) {
+    for (slot, w) in me.weapons.iter().enumerate() {
+        let Some(w) = w else { continue };
+        let charge = w.charge.unwrap_or(0.0);
+        if w.kind == WeaponKind::Laser && charge > 0.0 {
+            out.aim = Some(me.aim);
+            out.fire[slot] = false;
+            out.charging_laser = false;
+        }
+    }
+}
+
 pub fn select_target(
     obs: &Observation,
     cfg: &Config,
@@ -394,6 +440,7 @@ pub fn evaluate_combat(
 
     let Some(t) = target else {
         out.reload = gun_needs_passive_reload;
+        release_untargeted_laser(&mut out, me);
         return out;
     };
 
@@ -411,6 +458,8 @@ pub fn evaluate_combat(
     let cube_mult = 1.0 + cfg.cubes.stat_cap.min(me.cubes as f64) * cfg.cubes.damage_per_cube;
 
     let mut best_aim: Option<(i32, [f64; 2])> = None;
+    let dual_loadout = me.weapons.iter().flatten().count() > 1;
+    let mut shot_alignment: [Option<ShotAlignment>; 2] = [None, None];
     let mut set_aim = |prio: i32, a: [f64; 2]| {
         if best_aim.is_none_or(|(p, _)| prio > p) {
             best_aim = Some((prio, a));
@@ -424,6 +473,7 @@ pub fn evaluate_combat(
     if hold_fire_for_regen && t.is_crate {
         out.aim = best_aim.map(|(_, a)| a);
         out.reload = gun_needs_passive_reload;
+        release_untargeted_laser(&mut out, me);
         return out;
     }
 
@@ -457,7 +507,6 @@ pub fn evaluate_combat(
                 let desired = aim_angles(muzzle_next, lead_pos);
 
                 if cur_charge > 0.0 {
-                    set_aim(100, desired);
                     // Require actual me.aim to be close (<= 0.055 rad slew margin) AND post-slew dead-center
                     // so hitscan laser lands 95%+ regardless of pre-slew vs post-slew server tick order!
                     let next_aim = slew_one_tick(me.aim, desired, turn_rate, pitch_rate);
@@ -478,6 +527,15 @@ pub fn evaluate_combat(
                     let est_dmg =
                         max_dmg * (min_frac + (1.0 - min_frac) * frac) * cube_mult * cookoff;
 
+                    // Charging does not shoot: let a ready gun track its lead until
+                    // the laser needs to prepare a release. Reserve aim before the
+                    // full-charge window and before unavoidable auto-discharge.
+                    let prepare_release = urgent_move
+                        || cur_charge + 0.15 >= full_charge
+                        || (cur_charge >= min_charge && est_dmg >= t.hp * 1.05)
+                        || cur_charge + 0.10 >= full_charge + hold_s;
+                    set_aim(if prepare_release { 100 } else { 40 }, desired);
+
                     let should_release = los_next
                         && dist <= range - 1.0
                         && aligned
@@ -488,8 +546,9 @@ pub fn evaluate_combat(
                     if should_release {
                         out.fire[slot] = false;
                         out.charging_laser = false;
-                    } else if urgent_move && cur_charge >= min_charge {
-                        // Drop laser slow immediately so we hit full 19.5 m/s boost speed to duck enemy lasers or outrun storm!
+                    } else if urgent_move {
+                        // False requests release, even below min_charge (the server
+                        // then fires at the minimum). Keep this laser's aim selected.
                         out.fire[slot] = false;
                         out.charging_laser = false;
                     } else {
@@ -508,7 +567,7 @@ pub fn evaluate_combat(
                         allow_precharge_behind_cover && t.is_mech
                     };
                     if ok_target && can_start {
-                        set_aim(80, desired);
+                        set_aim(40, desired);
                         out.fire[slot] = true;
                         out.charging_laser = true;
                     }
@@ -531,6 +590,11 @@ pub fn evaluate_combat(
                     if me.energy >= min_energy {
                         let l_prio = if yaw_err <= cone_rad * 0.6 { 55 } else { 90 };
                         set_aim(l_prio, direct_aim);
+                        shot_alignment[slot] = Some(ShotAlignment {
+                            desired: direct_aim,
+                            yaw_tolerance: cone_rad * 0.92,
+                            pitch_tolerance: f64::INFINITY,
+                        });
                         if yaw_err <= cone_rad * 0.92 {
                             out.fire[slot] = true;
                         }
@@ -558,12 +622,19 @@ pub fn evaluate_combat(
                             ]
                         };
                         let desired = aim_angles(muzzle, pred);
-                        set_aim(65, desired);
+                        // A gun that cannot shoot during this action should not
+                        // prevent a ready mortar/arc from using the shared torso.
+                        set_aim(if dual_loadout && w.cooldown > 0.10 { 25 } else { 65 }, desired);
                         let next_aim = slew_one_tick(me.aim, desired, turn_rate, pitch_rate);
                         let yaw_err = wrap_angle(desired[0] - next_aim[0]).abs();
                         let pitch_err = (desired[1] - next_aim[1]).abs();
                         let yaw_tol = ((t.radius * 1.45) / horiz_dist).atan().max(0.045);
                         let pitch_tol = ((t.half_height * 1.45) / dist.max(1.0)).atan().max(0.045);
+                        shot_alignment[slot] = Some(ShotAlignment {
+                            desired,
+                            yaw_tolerance: yaw_tol,
+                            pitch_tolerance: pitch_tol,
+                        });
                         if yaw_err <= yaw_tol && pitch_err <= pitch_tol {
                             out.fire[slot] = true;
                         }
@@ -631,6 +702,11 @@ pub fn evaluate_combat(
                             45
                         };
                         set_aim(prio, [yaw, pitch]);
+                        shot_alignment[slot] = Some(ShotAlignment {
+                            desired: [yaw, pitch],
+                            yaw_tolerance: 0.09,
+                            pitch_tolerance: 0.07,
+                        });
                         let next_aim = slew_one_tick(me.aim, [yaw, pitch], turn_rate, pitch_rate);
                         let yaw_err = wrap_angle(yaw - next_aim[0]).abs();
                         let pitch_err = (pitch - next_aim[1]).abs();
@@ -644,6 +720,22 @@ pub fn evaluate_combat(
     }
 
     out.aim = best_aim.map(|(_, a)| a);
+    if dual_loadout {
+        if let Some(command) = out.aim {
+            for (slot, plan) in shot_alignment.iter().enumerate() {
+                let (Some(plan), Some(w)) = (plan, &me.weapons[slot]) else { continue };
+                // Preserve the existing tolerances; only fix which actual aim
+                // they are evaluated against. Never mask a laser trigger here:
+                // false releases a charge, unlike the other weapons.
+                let aligned = plan.accepts(shot_aim(me, command, w.cooldown));
+                out.fire[slot] = if w.kind == WeaponKind::Lightning {
+                    out.fire[slot] && aligned
+                } else {
+                    aligned
+                };
+            }
+        }
+    }
     out
 }
 
@@ -906,4 +998,270 @@ pub fn best_nearby_pickup(
 #[allow(dead_code)]
 pub fn check_visible_pickup(_p: &PickupObs) -> bool {
     true
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::protocol::{RawObservation, WeaponObs};
+    use serde_json::json;
+    use std::collections::HashMap;
+
+    fn config() -> Config {
+        serde_json::from_value(json!({
+            "vision":{"range":200,"fov_deg":120,"near_range":45},
+            "sound":{"bearing_noise_deg":7,"near":60,"mid":160,
+                "step_speed":5,"step_every":0.6},
+            "weapons":{},"loot":{"pickup_radius":4,"equip_s":1},
+            "cubes":{},"zone":{"start_center":[0,0],"start_radius":560}
+        })).unwrap()
+    }
+
+    fn weapon(kind: WeaponKind) -> WeaponObs {
+        WeaponObs {
+            kind,cooldown:0.0,ammo:Some(12.0),reload:Some(0.0),
+            charge:Some(0.0),stats:HashMap::new(),
+        }
+    }
+
+    fn observation(weapons: [Option<WeaponObs>; 2]) -> Observation {
+        let raw: RawObservation = serde_json::from_value(json!({
+            "tick":100,"t":5,"alive":16,
+            "self":{"id":0,"pos":[0,0,0],"vel":[0,0,0],"aim":[0,0],
+                "hp":1400,"max_hp":1400,"energy":100,"max_energy":100,
+                "grounded":true,"cubes":0,"weapons":[null,null],"in_zone":true},
+            "zone":{"center":[0,0],"radius":500,"next_center":[0,0],
+                "next_radius":380,"shrink_start":200,"shrink_end":240,"dps":20}
+        })).unwrap();
+        let mut obs: Observation = raw.into();
+        obs.self_obs.weapons = weapons;
+        obs
+    }
+
+    fn target(vy: f64) -> CombatTarget {
+        CombatTarget {
+            is_mech:true,is_crate:false,pos:[100.0,0.0,4.5],vel:[0.0,vy,0.0],
+            hp:1400.0,radius:2.5,half_height:4.5,has_mortar:false,
+            has_laser:false,has_lightning:false,score:1.0,
+        }
+    }
+
+    fn decide(obs: &Observation, target: Option<&CombatTarget>, urgent: bool) -> CombatDecision {
+        evaluate_combat(obs,&config(),&ArenaMap::empty(),&WorldState::new(16),
+            target,urgent,false,false,false)
+    }
+
+    #[test]
+    fn gun_tracks_its_lead_during_charge_in_either_slot() {
+        let mut laser = weapon(WeaponKind::Laser);
+        laser.charge = Some(0.3);
+        let mut obs = observation([Some(weapon(WeaponKind::Gun)),Some(laser)]);
+        let t = target(19.5);
+        let (hit,_) = solve_linear_intercept(muzzle_pos(&obs.self_obs),252.0,t.pos,t.vel).unwrap();
+        let expected = aim_angles(muzzle_pos(&obs.self_obs),hit);
+        let d = decide(&obs,Some(&t),false);
+        assert_eq!(d.fire,[true,true]);
+        assert_eq!(d.aim,Some(expected));
+        assert!(d.charging_laser);
+        obs.self_obs.weapons.swap(0,1);
+        let swapped = decide(&obs,Some(&t),false);
+        assert_eq!(d.aim,swapped.aim);
+        assert_eq!(d.fire,[swapped.fire[1],swapped.fire[0]]);
+    }
+
+    #[test]
+    fn release_owns_aim_and_only_compatible_gun_shots_fire() {
+        let mut laser = weapon(WeaponKind::Laser);
+        laser.charge = Some(0.75);
+        let mut obs = observation([Some(weapon(WeaponKind::Gun)),Some(laser)]);
+        let t = target(19.5);
+        obs.self_obs.aim = aim_angles(muzzle_pos(&obs.self_obs),[100.0,0.975,4.5]);
+        let d = decide(&obs,Some(&t),false);
+        assert_eq!(d.fire,[false,false]);
+        assert!(!d.charging_laser);
+        assert!((d.aim.unwrap()[0]-obs.self_obs.aim[0]).abs()<1e-12);
+        assert!((d.aim.unwrap()[1]-obs.self_obs.aim[1]).abs()<1e-12);
+
+        // Stationary targets permit both a laser release and a gun shot.
+        let stationary = target(0.0);
+        obs.self_obs.aim = aim_angles(muzzle_pos(&obs.self_obs),stationary.pos);
+        let compatible = decide(&obs,Some(&stationary),false);
+        assert_eq!(compatible.fire,[true,false]);
+    }
+
+    #[test]
+    fn misaligned_laser_holds_while_turning_for_release() {
+        let mut laser = weapon(WeaponKind::Laser);
+        laser.charge = Some(0.75);
+        let mut obs = observation([Some(weapon(WeaponKind::Gun)),Some(laser)]);
+        obs.self_obs.aim = [1.0,0.0];
+        let d = decide(&obs,Some(&target(0.0)),false);
+        assert!(d.fire[1]);
+        assert!(d.charging_laser);
+        assert!(!d.fire[0]);
+        assert_eq!(d.aim.unwrap()[0],0.0);
+    }
+
+    #[test]
+    fn conflicting_mortar_does_not_fire_along_gun_pitch() {
+        let mut obs = observation([
+            Some(weapon(WeaponKind::Gun)),Some(weapon(WeaponKind::Mortar)),
+        ]);
+        let d = decide(&obs,Some(&target(0.0)),false);
+        assert_eq!(d.fire,[true,false]);
+        assert!(d.aim.unwrap()[1]<0.0);
+        obs.self_obs.weapons.swap(0,1);
+        let swapped = decide(&obs,Some(&target(0.0)),false);
+        assert_eq!(swapped.aim,d.aim);
+        assert_eq!(swapped.fire,[false,true]);
+    }
+
+    #[test]
+    fn mortar_uses_gun_cooldown_and_reload_windows() {
+        let mut gun = weapon(WeaponKind::Gun);
+        gun.cooldown = 0.2;
+        let mut obs = observation([Some(gun),Some(weapon(WeaponKind::Mortar))]);
+        let d = decide(&obs,Some(&target(0.0)),false);
+        assert!(d.fire[1]);
+        assert!(d.aim.unwrap()[1]>0.1);
+        obs.self_obs.weapons[0].as_mut().unwrap().reload = Some(1.0);
+        let reload = decide(&obs,Some(&target(0.0)),false);
+        assert!(!reload.fire[0]);
+        assert!(reload.fire[1]);
+    }
+
+    #[test]
+    fn cooldown_on_second_tick_uses_second_tick_slew() {
+        let mut gun = weapon(WeaponKind::Gun);
+        gun.cooldown = 0.08;
+        let mut inactive_laser = weapon(WeaponKind::Laser);
+        inactive_laser.cooldown = 1.0;
+        let mut obs = observation([Some(gun),Some(inactive_laser)]);
+        obs.self_obs.aim = [0.3,0.0];
+        assert!(decide(&obs,Some(&target(0.0)),false).fire[0]);
+        obs.self_obs.weapons[0].as_mut().unwrap().cooldown = 0.0;
+        assert!(!decide(&obs,Some(&target(0.0)),false).fire[0]);
+    }
+
+    #[test]
+    fn lost_target_releases_at_current_aim_without_prolonging_slowdown() {
+        let mut laser = weapon(WeaponKind::Laser);
+        laser.charge = Some(0.3);
+        let mut obs = observation([Some(weapon(WeaponKind::Gun)),Some(laser)]);
+        obs.self_obs.aim = [0.8,0.2];
+        let release = decide(&obs,None,false);
+        assert_eq!(release.aim,Some(obs.self_obs.aim));
+        assert_eq!(release.fire,[false,false]);
+        assert!(!release.charging_laser);
+        let escape = decide(&obs,None,true);
+        assert_eq!(escape.aim,Some(obs.self_obs.aim));
+        assert_eq!(escape.fire,[false,false]);
+        assert!(!escape.charging_laser);
+
+        obs.self_obs.weapons[1].as_mut().unwrap().charge = Some(2.7);
+        let deadline = decide(&obs,None,false);
+        assert_eq!(deadline.aim,Some(obs.self_obs.aim));
+        assert!(!deadline.fire[1]);
+        obs.self_obs.weapons[1].as_mut().unwrap().charge = Some(0.05);
+        let below_minimum = decide(&obs,None,false);
+        assert_eq!(below_minimum.aim,Some(obs.self_obs.aim));
+        assert!(!below_minimum.fire[1]);
+    }
+
+    #[test]
+    fn urgent_escape_requests_release_even_before_minimum_charge() {
+        let mut laser = weapon(WeaponKind::Laser);
+        laser.charge = Some(0.05);
+        let obs = observation([Some(weapon(WeaponKind::Gun)),Some(laser)]);
+        let d = decide(&obs,Some(&target(0.0)),true);
+        assert_eq!(d.fire,[true,false]);
+        assert!(!d.charging_laser);
+        assert!(d.aim.is_some());
+    }
+
+    #[test]
+    fn shorted_laser_does_not_start_or_steal_gun_aim() {
+        let obs = observation([Some(weapon(WeaponKind::Gun)),Some(weapon(WeaponKind::Laser))]);
+        let mut world = WorldState::new(16);
+        world.shorted_until_t = 10.0;
+        let d = evaluate_combat(&obs,&config(),&ArenaMap::empty(),&world,
+            Some(&target(19.5)),false,false,false,false);
+        assert_eq!(d.fire,[true,false]);
+        assert!(d.aim.unwrap()[0]>0.07);
+    }
+
+    #[test]
+    fn close_pressure_keeps_gun_and_arc_return_fire() {
+        let obs = observation([
+            Some(weapon(WeaponKind::Gun)),Some(weapon(WeaponKind::Lightning)),
+        ]);
+        let mut close = target(12.0);
+        close.pos[0] = 30.0;
+        let d = decide(&obs,Some(&close),true);
+        assert_eq!(d.fire,[true,true]);
+    }
+
+    #[test]
+    fn charged_laser_does_not_release_at_an_occluded_corner() {
+        // A real opaque wall fixture verifies that retaining a charge is distinct
+        // from firing, and that a missed gun shot is not manufactured by arbitration.
+        let dir = std::env::temp_dir().join(format!("mechbot-combat-wall-{}",std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        std::fs::write(dir.join("world.json"),json!({
+            "bounds":{"minX":-10,"maxX":110,"minY":-10,"maxY":10},
+            "terrain":{"minX":-10,"minY":-10,"step":60,"nx":3,"ny":3,"scale":0.01},
+            "prisms":[{"base":0,"top":20,"ring":[45,-10,55,-10,55,10,45,10]}]
+        }).to_string()).unwrap();
+        std::fs::write(dir.join("terrain.i16"),[0u8;18]).unwrap();
+        let map = ArenaMap::load(&crate::protocol::HelloMap {
+            dir:dir.to_string_lossy().into_owned(),
+            files:vec!["world.json".into(),"terrain.i16".into()],
+        });
+        let mut laser = weapon(WeaponKind::Laser);
+        laser.charge = Some(0.75);
+        let obs = observation([Some(weapon(WeaponKind::Gun)),Some(laser)]);
+        let t = target(0.0);
+        assert!(map.loaded);
+        assert!(!map.has_los(muzzle_pos(&obs.self_obs),t.pos));
+        let d = evaluate_combat(&obs,&config(),&map,&WorldState::new(16),
+            Some(&t),false,false,true,false);
+        assert_eq!(d.fire,[false,true]);
+        assert!(d.charging_laser);
+        std::fs::remove_file(dir.join("world.json")).unwrap();
+        std::fs::remove_file(dir.join("terrain.i16")).unwrap();
+        std::fs::remove_dir(dir).unwrap();
+    }
+
+    #[test]
+    fn gun_only_preserves_legacy_aim_fire_reload_and_urgent_behavior() {
+        // Golden outcomes from the prior gun-only policy: no new global gate,
+        // cooldown filtering, or suppression while escaping.
+        for (yaw,vy,cooldown,expected_fire) in [
+            (0.0,0.0,0.0,true),(0.0,19.5,0.0,true),
+            (0.3,0.0,0.0,false),(0.3,0.0,0.08,false),
+            (0.0,0.0,0.2,true),(1.0,19.5,0.0,false),
+        ] {
+            let mut gun = weapon(WeaponKind::Gun);
+            gun.cooldown = cooldown;
+            let mut obs = observation([Some(gun),None]);
+            obs.self_obs.aim[0] = yaw;
+            let t = target(vy);
+            let (hit,_) = solve_linear_intercept(muzzle_pos(&obs.self_obs),252.0,t.pos,t.vel).unwrap();
+            let expected_aim = aim_angles(muzzle_pos(&obs.self_obs),hit);
+            for urgent in [false,true] {
+                let d = decide(&obs,Some(&t),urgent);
+                assert_eq!(d.aim,Some(expected_aim));
+                assert_eq!(d.fire,[expected_fire,false]);
+                assert!(!d.reload);
+            }
+        }
+        let mut gun = weapon(WeaponKind::Gun);
+        gun.ammo = Some(3.0);
+        let mut obs = observation([Some(gun),None]);
+        let idle = decide(&obs,None,false);
+        assert!(idle.reload);
+        assert_eq!(idle.aim,None);
+        obs.self_obs.weapons[0].as_mut().unwrap().reload = Some(1.0);
+        assert!(!decide(&obs,Some(&target(0.0)),false).fire[0]);
+    }
 }
