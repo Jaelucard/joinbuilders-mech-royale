@@ -1,17 +1,10 @@
-mod brain;
-mod combat;
-mod map;
-mod nav;
-mod protocol;
-mod world;
-
-use brain::BotBrain;
-use protocol::{parse_server_message, Ready, ServerMessage};
+use mechbot::brain::BotBrain;
+use mechbot::protocol::{self, parse_server_message, Ready, ServerMessage};
 use std::io::{self, BufRead, BufReader, Write};
 use std::sync::mpsc;
 use std::thread;
 
-const BOT_NAME: &str = "vanguard-v2";
+const BOT_NAME: &str = "vanguard-v3";
 
 fn main() {
     let (tx, rx) = mpsc::channel::<Option<Vec<String>>>();
@@ -138,10 +131,10 @@ fn send_json<W: Write, T: serde::Serialize>(out: &mut W, msg: &T) {
 
 #[cfg(test)]
 mod tests {
-    use crate::combat::{solve_linear_intercept, solve_mortar_pitches};
-    use crate::map::ArenaMap;
-    use crate::nav::Navigator;
-    use crate::protocol::HelloMap;
+    use mechbot::combat::{solve_linear_intercept, solve_mortar_pitches};
+    use mechbot::map::ArenaMap;
+    use mechbot::nav::Navigator;
+    use mechbot::protocol::HelloMap;
 
     #[test]
     fn test_linear_intercept() {

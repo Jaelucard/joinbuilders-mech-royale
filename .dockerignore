@@ -2,6 +2,7 @@
 .gitignore
 target
 kit
+sim
 assets
 README.md
 *.tar.gz

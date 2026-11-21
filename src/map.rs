@@ -287,12 +287,14 @@ pub struct ArenaMap {
     los_nx: usize,
     los_ny: usize,
     solid_top: Vec<f32>,
+    building_top: Vec<f32>,
     elevated_prisms: Vec<u16>,
     // Precomputed 2D ground navigation grid (4 m cells)
     pub nav_nx: usize,
     pub nav_ny: usize,
     pub walkable: Vec<bool>,
     pub wall_dist: Vec<u8>,
+    pub nav_z: Vec<f32>,
     pub roof_top: Vec<f32>,
     pub roof_anchors: Vec<RoofAnchor>,
 }
@@ -318,11 +320,13 @@ impl ArenaMap {
             los_nx: 1,
             los_ny: 1,
             solid_top: vec![0.0],
+            building_top: vec![f32::NEG_INFINITY],
             elevated_prisms: Vec::new(),
             nav_nx: 1,
             nav_ny: 1,
             walkable: vec![true],
             wall_dist: vec![10],
+            nav_z: vec![0.0],
             roof_top: vec![f32::NAN],
             roof_anchors: Vec::new(),
         }
@@ -426,11 +430,13 @@ impl ArenaMap {
             los_nx,
             los_ny,
             solid_top: vec![0.0; los_nx * los_ny],
+            building_top: vec![f32::NEG_INFINITY; los_nx * los_ny],
             elevated_prisms: Vec::new(),
             nav_nx,
             nav_ny,
             walkable: vec![false; nav_nx * nav_ny],
             wall_dist: vec![0; nav_nx * nav_ny],
+            nav_z: vec![0.0; nav_nx * nav_ny],
             roof_top: vec![f32::NAN; nav_nx * nav_ny],
             roof_anchors: Vec::new(),
         };
@@ -473,6 +479,9 @@ impl ArenaMap {
                         if p.base <= tz + 2.5 {
                             if p.top > self.solid_top[row + ix] {
                                 self.solid_top[row + ix] = p.top;
+                            }
+                            if p.top > self.building_top[row + ix] {
+                                self.building_top[row + ix] = p.top;
                             }
                         } else {
                             any_elevated = true;
@@ -517,6 +526,7 @@ impl ArenaMap {
                 }
 
                 let z0 = self.terrain_z(wx, wy);
+                self.nav_z[idx] = z0;
                 let dz_x =
                     (self.terrain_z(wx + 2.0, wy) - self.terrain_z(wx - 2.0, wy)).abs() * 0.25;
                 let dz_y =
@@ -702,11 +712,28 @@ impl ArenaMap {
     }
 
     #[inline]
+    pub fn building_top_at(&self, x: f32, y: f32) -> f32 {
+        if !self.loaded {
+            return f32::NEG_INFINITY;
+        }
+        let ix = (((x - self.min_x) / LOS_STEP).floor() as isize)
+            .clamp(0, self.los_nx as isize - 1) as usize;
+        let iy = (((y - self.min_y) / LOS_STEP).floor() as isize)
+            .clamp(0, self.los_ny as isize - 1) as usize;
+        self.building_top[iy * self.los_nx + ix]
+    }
+
+    /// True ONLY when actually standing on/near an elevated building roof (never mid-air jumps!).
+    #[inline]
     pub fn is_on_roof(&self, pos: Vec3) -> bool {
         if !self.loaded {
             return false;
         }
-        pos[2] > self.terrain_z(pos[0] as f32, pos[1] as f32) as f64 + 3.0
+        let x = pos[0] as f32;
+        let y = pos[1] as f32;
+        let tz = self.terrain_z(x, y) as f64;
+        let bt = self.building_top_at(x, y);
+        bt.is_finite() && (bt as f64) > tz + 3.0 && pos[2] >= (bt as f64) - 1.5
     }
 
     #[inline]
@@ -755,7 +782,8 @@ impl ArenaMap {
         self.wall_dist[gy * self.nav_nx + gx]
     }
 
-    /// Fast wall check at `(x, y, feet_z)` using the 2 m height-field + elevated bridges.
+    /// Fast wall & steep-cliff check at `(x, y, feet_z)` using `building_top`, terrain slope, and bridges.
+    /// Walkable hills (< 48 deg) pass cleanly while solid buildings and vertical riverbank cliffs block!
     #[inline]
     pub fn is_blocked_at(&self, x: f64, y: f64, feet_z: f64, radius: f64) -> bool {
         if !self.loaded {
@@ -772,9 +800,18 @@ impl ArenaMap {
         {
             return true;
         }
+        let tz_center = self.terrain_z(xf, yf);
+        let max_slope_dz = rf.max(1.5) * 1.11 + 0.35; // ~48 deg max walkable slope
         let offsets = [[0.0, 0.0], [rf, 0.0], [-rf, 0.0], [0.0, rf], [0.0, -rf]];
         for [ox, oy] in offsets {
-            if self.solid_top_at(xf + ox, yf + oy) > zf + MECH_STEP_UP {
+            let sx = xf + ox;
+            let sy = yf + oy;
+            let bt = self.building_top_at(sx, sy);
+            if bt.is_finite() && bt > zf + MECH_STEP_UP {
+                return true;
+            }
+            let tz = self.terrain_z(sx, sy);
+            if tz > zf + MECH_STEP_UP && (tz - tz_center) > max_slope_dz {
                 return true;
             }
         }
@@ -848,6 +885,7 @@ impl ArenaMap {
 
     /// Find the best cover cell (including our current cell!) to break LoS from `threats`.
     /// Works on BOTH ground and rooftops!
+    /// Set `prefer_far = false` for instant laser-ducking (closest corner wins!) and `true` for regen cover.
     pub fn find_cover_pos(
         &self,
         from: Vec3,
@@ -855,6 +893,7 @@ impl ArenaMap {
         zone_center: Vec2,
         zone_radius: f64,
         max_search_r: f64,
+        prefer_far: bool,
     ) -> Option<Vec3> {
         if !self.loaded || threats.is_empty() {
             return None;
@@ -917,7 +956,7 @@ impl ArenaMap {
                     continue;
                 }
 
-                // Check center-of-mass AND eye height so we are truly hidden (not exposing our head!)
+                // Check eye height so we are truly hidden behind cover (ultra-fast, 1 ray per threat!)
                 let candidate_eye = [w[0], w[1], cz + 7.5];
                 let mut exposed = 0usize;
                 let mut min_threat_dist = f64::INFINITY;
@@ -929,13 +968,22 @@ impl ArenaMap {
                     }
                 }
 
-                // Strong stability bonus for staying put when ALREADY safely hidden!
-                let stay_bonus = if exposed == 0 && dist_me < 5.0 { 10.0 } else { 0.0 };
-                let roof_bonus = if on_roof && (cz - from[2]).abs() < 1.8 { 14.0 } else { 0.0 };
+                let stay_bonus = if exposed == 0 && dist_me < 5.0 {
+                    10.0
+                } else {
+                    0.0
+                };
+                let roof_bonus = if on_roof && (cz - from[2]).abs() < 1.8 {
+                    14.0
+                } else {
+                    0.0
+                };
+                let dist_w = if prefer_far { 1.45 } else { 2.4 };
+                let sep_w = if prefer_far { 0.45 } else { 0.15 };
 
                 let score = -(exposed as f64) * 240.0
-                    - dist_me * 1.45
-                    + min_threat_dist.min(75.0) * 0.45
+                    - dist_me * dist_w
+                    + min_threat_dist.min(75.0) * sep_w
                     - (dist_zone / zone_radius.max(10.0)) * 10.0
                     + if is_cover_edge { 4.0 } else { 0.0 }
                     + stay_bonus

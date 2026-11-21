@@ -54,41 +54,77 @@ impl Navigator {
             path_idx: 0,
             cached_goal: None,
             last_plan_tick: 0,
-            pos_history: Vec::with_capacity(16),
+            pos_history: Vec::with_capacity(30),
             stuck_ticks: 0,
             unstuck_dir: [1.0, 0.0],
         }
     }
 
-    pub fn update_stuck(&mut self, tick: u64, pos: Vec3, wanted_move: bool) -> bool {
+    pub fn update_stuck(
+        &mut self,
+        map: &ArenaMap,
+        tick: u64,
+        pos: Vec3,
+        wanted_move: bool,
+        allow_loop_detect: bool,
+    ) -> bool {
         self.pos_history.push((tick, pos));
-        if self.pos_history.len() > 10 {
+        if self.pos_history.len() > 26 {
             self.pos_history.remove(0);
         }
         if !wanted_move {
             self.stuck_ticks = 0;
             return false;
         }
-        if self.pos_history.len() >= 8 {
-            let (_, old_pos) = self.pos_history[0];
-            let moved = dist2d([pos[0], pos[1]], [old_pos[0], old_pos[1]]);
-            if moved < 1.6 {
-                self.stuck_ticks += 1;
-                if self.stuck_ticks == 1 {
-                    // Pick an escape side direction rotated ~90 deg from current heading
-                    let angle = (tick as f64 * 1.7).sin().signum() * std::f64::consts::FRAC_PI_2;
-                    let base = if let Some(wp) = self.current_waypoint() {
-                        (wp[1] - pos[1]).atan2(wp[0] - pos[0])
-                    } else {
-                        0.0
-                    };
-                    self.unstuck_dir = [(base + angle).cos(), (base + angle).sin()];
+        let n = self.pos_history.len();
+        let short_stall = n >= 8
+            && dist2d(
+                [pos[0], pos[1]],
+                [self.pos_history[n - 8].1[0], self.pos_history[n - 8].1[1]],
+            ) < 1.6;
+        // ONLY check 2.4s oscillation loops during travel states (ZONE/PATROL/LOOT), NEVER during combat strafing or corner-peeking!
+        let loop_stall = allow_loop_detect
+            && n >= 24
+            && dist2d([pos[0], pos[1]], [self.pos_history[0].1[0], self.pos_history[0].1[1]])
+                < 8.5;
+        if short_stall || loop_stall {
+            self.stuck_ticks += 1;
+            // Strictly rotate escape direction every 4 stuck ticks so we NEVER pin against a thin wall or cliff!
+            if self.stuck_ticks == 1 || self.stuck_ticks % 4 == 0 {
+                let base = if let Some(wp) = self.current_waypoint() {
+                    (wp[1] - pos[1]).atan2(wp[0] - pos[0])
+                } else {
+                    0.0
+                };
+                let step_i = (self.stuck_ticks / 4) as usize;
+                let mut chosen = None;
+                for k in 0..8usize {
+                    let ang = base
+                        + ((step_i + k) as f64) * std::f64::consts::FRAC_PI_4
+                        + std::f64::consts::FRAC_PI_2;
+                    let dx = ang.cos();
+                    let dy = ang.sin();
+                    // Check BOTH near (2.0 m) and mid (4.2 m) so thin stadium walls & cliffs don't fool us!
+                    if !map.is_blocked_at(pos[0] + dx * 2.0, pos[1] + dy * 2.0, pos[2], 1.8)
+                        && !map.is_blocked_at(pos[0] + dx * 4.2, pos[1] + dy * 4.2, pos[2], 2.0)
+                    {
+                        chosen = Some([dx, dy]);
+                        break;
+                    }
                 }
-                return true;
+                let fallback_ang = base + (step_i as f64 + 1.0) * std::f64::consts::FRAC_PI_4;
+                self.unstuck_dir =
+                    chosen.unwrap_or([fallback_ang.cos(), fallback_ang.sin()]);
+                self.cached_goal = None;
             }
+            return true;
         }
         self.stuck_ticks = 0;
         false
+    }
+
+    pub fn stuck_ticks(&self) -> u32 {
+        self.stuck_ticks
     }
 
     #[allow(dead_code)]
@@ -235,6 +271,7 @@ impl Navigator {
             let cx = cur % nx;
             let cy = cur / nx;
             let cg = self.g_score[cur];
+            let cur_tz = map.nav_z[cur];
 
             let ch = octile(cx, cy, gx, gy);
             if ch < best_fallback_h {
@@ -252,6 +289,11 @@ impl Navigator {
                 let nyu = nyi as usize;
                 let nidx = nyu * nx + nxu;
                 if !map.walkable[nidx] {
+                    continue;
+                }
+                // O(1) cliff check: prevent routing straight up steep (> 46 deg) riverbank/bridge cliffs!
+                let climb_dz = map.nav_z[nidx] - cur_tz;
+                if climb_dz > base_cost * NAV_STEP * 1.05 && climb_dz > 1.2 {
                     continue;
                 }
                 // Prevent diagonal corner cutting through solid walls

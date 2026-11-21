@@ -1,4 +1,5 @@
 /target/
 /kit/
+/sim/
 *.tar.gz
 *.gz

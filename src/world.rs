@@ -14,6 +14,7 @@ pub struct TrackedEnemy {
     pub weapons: Vec<WeaponKind>,
     pub charging: bool,
     pub charge_start_t: Option<f64>,
+    pub laser_cd_until: f64,
     pub last_seen_t: f64,
     pub visible_now: bool,
     pub last_damaged_me_t: f64,
@@ -71,6 +72,7 @@ pub struct WorldState {
     pub recent_sounds: Vec<TimedSound>,
     pub last_combat_t: f64,
     pub last_damaged_t: f64,
+    pub last_damaged_rear: bool,
     pub last_damaged_bearing: Option<f64>,
     pub last_damaged_by: Option<u64>,
     pub shorted_until_t: f64,
@@ -93,6 +95,7 @@ impl WorldState {
             recent_sounds: Vec::new(),
             last_combat_t: -100.0,
             last_damaged_t: -100.0,
+            last_damaged_rear: false,
             last_damaged_bearing: None,
             last_damaged_by: None,
             shorted_until_t: -100.0,
@@ -121,6 +124,7 @@ impl WorldState {
                 "damaged" => {
                     self.last_combat_t = now;
                     self.last_damaged_t = now;
+                    self.last_damaged_rear = ev.get("rear").and_then(|v| v.as_bool()).unwrap_or(false);
                     if let Some(b) = ev.get("bearing").and_then(|v| v.as_f64()) {
                         self.last_damaged_bearing = Some(b);
                     }
@@ -206,6 +210,7 @@ impl WorldState {
                         weapons: a.weapons.clone(),
                         charging: a.charging,
                         charge_start_t: if a.charging { Some(now) } else { None },
+                        laser_cd_until: -100.0,
                         last_seen_t: now,
                         visible_now: true,
                         last_damaged_me_t: -100.0,
@@ -249,7 +254,13 @@ impl WorldState {
             }
         }
 
+        let laser_cd = cfg.weapons.laser.get("cooldown").copied().unwrap_or(1.65);
         for b in &obs.beams {
+            if b.kind == "laser" {
+                if let Some(e) = self.enemies.get_mut(&b.by) {
+                    e.laser_cd_until = (now - b.age) + laser_cd;
+                }
+            }
             if b.path.len() >= 2 {
                 let end = b.path[b.path.len() - 1];
                 for m in &vis_mechs {
@@ -260,7 +271,7 @@ impl WorldState {
             }
         }
 
-        self.enemies.retain(|_, e| now - e.last_seen_t <= 10.0);
+        self.enemies.retain(|_, e| now - e.last_seen_t <= 18.0);
 
         let seen_pickup_ids: Vec<u64> = obs.pickups.iter().map(|p| p.id).collect();
         for p in &obs.pickups {
