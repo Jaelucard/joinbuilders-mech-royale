@@ -1,0 +1,53 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 30B 0.0s
+#1 transferring dockerfile: 551B 0.0s done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for docker.io/library/rust:1.85-slim-bookworm
+#2 DONE 0.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.1s
+
+#4 [internal] load build context
+#4 DONE 0.0s
+
+#5 [builder 1/6] FROM docker.io/library/rust:1.85-slim-bookworm@sha256:9f841bbe9e7d8e37ceb96ed907265a3a0df7f44e3737d0b100e7907a679acb36
+#5 resolve docker.io/library/rust:1.85-slim-bookworm@sha256:9f841bbe9e7d8e37ceb96ed907265a3a0df7f44e3737d0b100e7907a679acb36 0.1s done
+#5 DONE 0.1s
+
+#4 [internal] load build context
+#4 transferring context: 247.95kB 0.0s done
+#4 DONE 0.1s
+
+#6 [builder 2/6] WORKDIR /build
+#6 CACHED
+
+#7 [builder 3/6] COPY Cargo.toml Cargo.lock ./
+#7 CACHED
+
+#8 [builder 4/6] RUN mkdir src && echo "fn main() {}" > src/main.rs &&     cargo build --release --locked &&     rm -rf src
+#8 CACHED
+
+#9 [builder 5/6] COPY src ./src
+#9 DONE 0.1s
+
+#10 [builder 6/6] RUN touch src/main.rs && cargo build --release --locked
+#10 0.360    Compiling mechbot v0.1.0 (/build)
+#10 12.53     Finished `release` profile [optimized] target(s) in 12.24s
+#10 DONE 12.6s
+
+#11 exporting to image
+#11 exporting layers
+#11 exporting layers 0.4s done
+#11 exporting manifest sha256:0ec7b84a3d70e9317ec3792e1ddc2f604c8c07eff3965939cdf79053fdf374d2 0.0s done
+#11 exporting config sha256:62417767518cd7ef3621702aabed928d7e6da3be001bf5d9b9451a98a86a8c95 0.0s done
+#11 exporting attestation manifest sha256:fa01642675c875b01df5689b566f6ff87e593e48aa0212dba1b9d0c192ed678a 0.0s done
+#11 exporting manifest list sha256:f4ff9f37bfec45d625691c0b40b8a3d4b2745538b534025e3763eaf4183441d7
+#11 exporting manifest list sha256:f4ff9f37bfec45d625691c0b40b8a3d4b2745538b534025e3763eaf4183441d7 0.0s done
+#11 naming to docker.io/library/mechbot:experiment-selected-builder done
+#11 unpacking to docker.io/library/mechbot:experiment-selected-builder 0.1s done
+#11 DONE 0.7s

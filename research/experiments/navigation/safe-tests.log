@@ -1,0 +1,52 @@
+
+running 18 tests
+test map::experiment_terrain_precision_tests::interpolated_collision_accepts_uniform_45_degree_ramp ... ok
+test map::experiment_terrain_precision_tests::interpolated_collision_rejects_steeper_uniform_ramp ... ok
+test map::navigation_tests::diagonal_ramp_retains_astar_distance_allowance ... ok
+test map::navigation_tests::diagonal_shortcut_preserves_corner_clearance ... ok
+test map::navigation_tests::near_wall_recovery_restores_clearance_for_stock_and_larger_bodies ... ok
+test map::navigation_tests::open_grid_traversal_handles_all_directions_and_boundary_endpoints ... ok
+test map::navigation_tests::recovery_cannot_cross_a_wall_to_reach_a_valid_cell ... ok
+test map::navigation_tests::recovery_cannot_shrink_a_blocked_body_or_keep_hugging_the_wall ... ok
+test map::navigation_tests::recovery_does_not_ignore_physical_obstructions ... ok
+test map::navigation_tests::recovery_does_not_skip_a_brief_uphill_cell_near_a_corner ... ok
+test map::navigation_tests::recovery_preserves_physical_slope_limits_before_rejoining_grid ... ok
+test map::navigation_tests::recovery_rejoins_directed_edges_and_corner_rules ... ok
+test map::navigation_tests::traversal_checks_briefly_crossed_cells_and_does_not_clamp_outside_goals ... ok
+test map::navigation_tests::uphill_cliff_is_directional_but_gradual_ramp_is_valid ... ok
+test nav::navigation_tests::close_unreachable_goal_does_not_restore_rejected_cliff_shortcut ... ok
+test nav::navigation_tests::conservative_raster_start_can_recover_to_a_physically_clear_cell ... ok
+test nav::navigation_tests::real_arena_cliff_witness_is_not_a_direct_route ... ok
+test nav::navigation_tests::smoothing_and_waypoint_advancement_keep_a_valid_detour ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+
+running 4 tests
+test tests::test_empty_map_and_nav_fallback ... ok
+test tests::test_linear_intercept ... ok
+test tests::test_mortar_solver ... ok
+test tests::test_real_arena_nav_and_los ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling syn v2.0.119
+   Compiling serde v1.0.219
+   Compiling serde_derive v1.0.219
+   Compiling serde_json v1.0.140
+   Compiling memchr v2.8.3
+   Compiling ryu v1.0.23
+   Compiling itoa v1.0.19
+   Compiling mechbot v0.1.0 (/build)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 9.93s
+     Running unittests src/lib.rs (target/debug/deps/mechbot-b67f5ad20cd0adcf)
+     Running unittests src/main.rs (target/debug/deps/mechbot-84049b00c239c823)
+   Doc-tests mechbot

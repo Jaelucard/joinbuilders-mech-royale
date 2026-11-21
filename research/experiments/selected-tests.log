@@ -1,0 +1,90 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling syn v2.0.119
+   Compiling serde v1.0.219
+   Compiling serde_derive v1.0.219
+   Compiling serde_json v1.0.140
+   Compiling ryu v1.0.23
+   Compiling itoa v1.0.19
+   Compiling memchr v2.8.3
+   Compiling mechbot v0.1.0 (/build)
+warning: unused import: `HelloMap`
+    --> src/brain.rs:1434:27
+     |
+1434 |     use crate::protocol::{HelloMap, RawObservation};
+     |                           ^^^^^^^^
+     |
+     = note: `#[warn(unused_imports)]` on by default
+
+warning: `mechbot` (lib test) generated 1 warning (run `cargo fix --lib -p mechbot --tests` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 13.31s
+     Running unittests src/lib.rs (target/debug/deps/mechbot-b67f5ad20cd0adcf)
+
+running 48 tests
+test brain::experiment_drop_tests::authoritative_capture_progress_overrides_height_estimate ... ok
+test brain::experiment_drop_tests::brief_drop_contest_does_not_cancel_a_resumed_capture ... ok
+test brain::experiment_drop_tests::early_drop_arrival_waits_through_landing_and_capture ... ok
+test brain::experiment_drop_tests::frozen_or_contested_drop_capture_is_bounded ... ok
+test brain::experiment_drop_tests::nearly_complete_capture_can_restart_after_a_brief_contest ... ok
+test brain::experiment_drop_tests::repeated_capture_resets_have_an_absolute_deadline ... ok
+test brain::experiment_drop_tests::stale_landing_countdown_does_not_allow_unlimited_wait ... ok
+test brain::experiment_drop_tests::unreachable_drop_still_uses_travel_watchdog ... ok
+test brain::experiment_drop_tests::zone_escape_interrupts_drop_waiting ... ok
+test brain::experiment_threat_tests::aimed_charger_is_not_ignored_for_an_unproven_own_kill ... ok
+test brain::experiment_threat_tests::charger_facing_elsewhere_does_not_abort_our_charge ... ok
+test brain::experiment_threat_tests::exposed_regen_does_not_become_a_blanket_firing_ban ... ok
+test brain::experiment_threat_tests::gun_only_keeps_defensive_fire_while_ducking_a_charger ... ok
+test brain::experiment_threat_tests::recently_damaging_charger_remains_a_threat_while_turning ... ok
+test combat::tests::charged_laser_does_not_release_at_an_occluded_corner ... ok
+test combat::tests::close_pressure_keeps_gun_and_arc_return_fire ... ok
+test combat::tests::conflicting_mortar_does_not_fire_along_gun_pitch ... ok
+test combat::tests::cooldown_on_second_tick_uses_second_tick_slew ... ok
+test combat::tests::cooldown_window_keeps_gun_when_mortar_cannot_fire_in_time ... ok
+test combat::tests::cooldown_window_preserves_a_mortar_shot_and_timely_gun_return ... ok
+test combat::tests::cooldown_window_rejects_a_mortar_shot_that_delays_ready_gun ... ok
+test combat::tests::gun_only_preserves_legacy_aim_fire_reload_and_urgent_behavior ... ok
+test combat::tests::gun_tracks_its_lead_during_charge_in_either_slot ... ok
+test combat::tests::lost_target_releases_at_current_aim_without_prolonging_slowdown ... ok
+test combat::tests::misaligned_laser_holds_while_turning_for_release ... ok
+test combat::tests::mortar_uses_gun_cooldown_and_reload_windows ... ok
+test combat::tests::release_owns_aim_and_only_compatible_gun_shots_fire ... ok
+test combat::tests::reloading_gun_still_allows_multi_decision_mortar_preparation ... ok
+test combat::tests::shorted_laser_does_not_start_or_steal_gun_aim ... ok
+test combat::tests::urgent_escape_requests_release_even_before_minimum_charge ... ok
+test map::experiment_terrain_precision_tests::interpolated_collision_accepts_uniform_45_degree_ramp ... ok
+test map::experiment_terrain_precision_tests::interpolated_collision_rejects_steeper_uniform_ramp ... ok
+test map::navigation_tests::diagonal_ramp_retains_astar_distance_allowance ... ok
+test map::navigation_tests::diagonal_shortcut_preserves_corner_clearance ... ok
+test map::navigation_tests::near_wall_recovery_restores_clearance_for_stock_and_larger_bodies ... ok
+test map::navigation_tests::open_grid_traversal_handles_all_directions_and_boundary_endpoints ... ok
+test map::navigation_tests::recovery_cannot_cross_a_wall_to_reach_a_valid_cell ... ok
+test map::navigation_tests::recovery_cannot_shrink_a_blocked_body_or_keep_hugging_the_wall ... ok
+test map::navigation_tests::recovery_does_not_ignore_physical_obstructions ... ok
+test map::navigation_tests::recovery_does_not_skip_a_brief_uphill_cell_near_a_corner ... ok
+test map::navigation_tests::recovery_preserves_physical_slope_limits_before_rejoining_grid ... ok
+test map::navigation_tests::recovery_rejoins_directed_edges_and_corner_rules ... ok
+test map::navigation_tests::traversal_checks_briefly_crossed_cells_and_does_not_clamp_outside_goals ... ok
+test map::navigation_tests::uphill_cliff_is_directional_but_gradual_ramp_is_valid ... ok
+test nav::navigation_tests::close_unreachable_goal_does_not_restore_rejected_cliff_shortcut ... ok
+test nav::navigation_tests::conservative_raster_start_can_recover_to_a_physically_clear_cell ... ok
+test nav::navigation_tests::real_arena_cliff_witness_is_not_a_direct_route ... ok
+test nav::navigation_tests::smoothing_and_waypoint_advancement_keep_a_valid_detour ... ok
+
+test result: ok. 48 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.28s
+
+     Running unittests src/main.rs (target/debug/deps/mechbot-84049b00c239c823)
+
+running 4 tests
+test tests::test_empty_map_and_nav_fallback ... ok
+test tests::test_linear_intercept ... ok
+test tests::test_mortar_solver ... ok
+test tests::test_real_arena_nav_and_los ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.24s
+
+   Doc-tests mechbot
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

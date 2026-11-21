@@ -16,6 +16,8 @@ A Rust bot for the **Mech Royale** (`mechfight/1`) 16-mech battle royale competi
 
 ## Build & Conformance Check
 
+The latest [experiment campaign](research/experiments/RESULTS.md) completed 64 configurations and 3,840 approximate local matches against the confirmed v3 baseline. The frozen finalist passed 52 tests and Docker conformance, but failed the predeclared improvement threshold in both validation process runs. **No candidate was pushed.** Its local gains are not official score predictions; production source in this checkout remains the earlier local R2 candidate.
+
 The `fix/scoring-control` candidate adds directed navigation checks, shared weapon-aim scheduling, explicit lost-target laser release, and capture-aware supply-drop waiting. The unsupported lethal-laser duck exception is removed. See [implementation results](research/implementation-results.md) for separate commits, regression tests, matched proxy comparisons, and remaining limitations. The reported official baseline is **4.81**; no candidate official score has been measured.
 
 The user confirmed **4.81 on v3 `411af5f`** and **BB-488640B1 / 4.65 on v4 `5b783d1`**. The [scored-revision investigation](research/scored-revision-investigation.md) isolates terrain sampling and canopy preference as the actual code delta. The later local candidate repairs pass 47 tests plus Docker conformance, but [repair validation](research/repair-validation.md) remains mixed; that branch has no official score.

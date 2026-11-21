@@ -1,0 +1,56 @@
+{
+  "id": "n-safe_canopy_c-shot_b-drop_threat",
+  "options": [
+    "safe_canopy",
+    "shot",
+    "drop_threat"
+  ],
+  "suite": "smoke",
+  "matches": 1,
+  "start_index": 0,
+  "modes": [
+    "practice"
+  ],
+  "completed_utc": "2026-11-21T14:13:58.191450+00:00",
+  "source_sha256": {
+    "src/brain.rs": "dd069020d7b0dbd8c9c39d854d36bb9549eced3d0abca813ffab7c56e8c52764",
+    "src/combat.rs": "5c99df6c942b42e45ef2e88e091b6d3f590c6343fc921b2050d44e9f8040da69",
+    "src/lib.rs": "61fab161ee764afb80c693d26c50d1986cd204ddbc8bd22011be8a5529317fd5",
+    "src/main.rs": "cdb411357207fe8d01f7ee631d614b40172a82ecbc1b68e6a0e0951b4cbb15ec",
+    "src/map.rs": "e86e73a3047e9cc11f6cb06ee8a646ed53c3732949ef3458d3ab990befc8f3ec",
+    "src/nav.rs": "0610ccaab8aac44fdd80c18fd0d877c7721c23e27ecd30e680592cf3dac92495",
+    "src/protocol.rs": "9f26d08e3e6ad7b3e9ac7f6a3068af56be551dbc78ba5f48bc9ec6887c309130",
+    "src/world.rs": "e7b5df853ea48573fe1d988246ed571a5affc4c01e4b4b9b155efdd0730b467f"
+  },
+  "harness_sha256": {
+    "sim/src/main.rs": "4414dddb490d05c77aad97efdf6cb40427edc046b6f6941f8675b9c6cbf7bde4",
+    "sim/src/environment_map.rs": "4664e24d1caa611acf97c0083f7a99d477514bafbda65274c251b8555e0a4c2b",
+    "sim/Cargo.toml": "0118605f65c88883a2e4e612c7a6ac63dd8796431956808cdd38244fe2aa03e0",
+    "sim/Cargo.lock": "2eefb9894f89e12f2218b8c760556b284b3ba87b92281d7951f58703ef8a6cc7",
+    "sim/hello_config.json": "bfccac26fde8a4fe33e7b5a6c3fb6e3a1137ac64c3134c608699b79de0f6732c"
+  },
+  "image_id": "sha256:d567974e1e11d572aa1558cfafdd74cfee2432d7125386f149da50d3ffc898ab",
+  "map_sha256": {
+    "kit/arena/v2/world.json": "e0302dd4777b527b00a6a4b2e02759915402a23c58839d921e9fcc6d58092445",
+    "kit/arena/v2/terrain.i16": "3aa74308e096e36ed29230f135b0f3ff3ae09dfa164c2b687455b4f975b01d38"
+  },
+  "means": {
+    "practice": 2.0
+  },
+  "outcomes": [
+    {
+      "gun_hits": 26,
+      "gun_shots": 50,
+      "killed_by": "lightning",
+      "kills": 2,
+      "laser_hits": 0,
+      "laser_shots": 0,
+      "loadout": "gun+mortar",
+      "mode": "practice",
+      "place": 14,
+      "points": 2.0,
+      "seed": 1000
+    }
+  ],
+  "kind": "approximate corrected local simulator; not official scoring"
+}

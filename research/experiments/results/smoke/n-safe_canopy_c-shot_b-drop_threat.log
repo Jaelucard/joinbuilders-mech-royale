@@ -1,0 +1,83 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling syn v2.0.119
+   Compiling serde v1.0.219
+   Compiling serde_derive v1.0.219
+   Compiling serde_json v1.0.140
+   Compiling ryu v1.0.23
+   Compiling itoa v1.0.19
+   Compiling memchr v2.8.3
+   Compiling mechbot v0.1.0 (/build)
+   Compiling mechsim v0.1.0 (/build/sim)
+warning: methods `find_cover_pos`, `find_slice_pie_pos`, `find_peek_pair`, `nearest_walkable_cell`, and `line_walkable` are never used
+    --> src/environment_map.rs:889:12
+     |
+302  | impl ArenaMap {
+     | ------------- methods in this implementation
+...
+889  |     pub fn find_cover_pos(
+     |            ^^^^^^^^^^^^^^
+...
+1001 |     pub fn find_slice_pie_pos(
+     |            ^^^^^^^^^^^^^^^^^^
+...
+1081 |     pub fn find_peek_pair(
+     |            ^^^^^^^^^^^^^^
+...
+1210 |     pub fn nearest_walkable_cell(&self, x: f64, y: f64, max_radius: usize) -> Option<(usize, usize)> {
+     |            ^^^^^^^^^^^^^^^^^^^^^
+...
+1245 |     pub fn line_walkable(&self, a: [f64; 2], b: [f64; 2]) -> bool {
+     |            ^^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` on by default
+
+warning: `mechsim` (bin "mechsim" test) generated 1 warning
+    Finished `release` profile [optimized] target(s) in 14.36s
+     Running unittests src/main.rs (sim/target/release/deps/mechsim-af775affde8a0c0b)
+
+running 3 tests
+test geometry_audit::high_and_lateral_misses_stay_misses ... ok
+test geometry_audit::slanted_entry_is_detected ... ok
+test geometry_audit::vertical_entry_and_tangent_are_detected ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Compiling mechsim v0.1.0 (/build/sim)
+warning: methods `find_cover_pos`, `find_slice_pie_pos`, `find_peek_pair`, `nearest_walkable_cell`, and `line_walkable` are never used
+    --> src/environment_map.rs:889:12
+     |
+302  | impl ArenaMap {
+     | ------------- methods in this implementation
+...
+889  |     pub fn find_cover_pos(
+     |            ^^^^^^^^^^^^^^
+...
+1001 |     pub fn find_slice_pie_pos(
+     |            ^^^^^^^^^^^^^^^^^^
+...
+1081 |     pub fn find_peek_pair(
+     |            ^^^^^^^^^^^^^^
+...
+1210 |     pub fn nearest_walkable_cell(&self, x: f64, y: f64, max_radius: usize) -> Option<(usize, usize)> {
+     |            ^^^^^^^^^^^^^^^^^^^^^
+...
+1245 |     pub fn line_walkable(&self, a: [f64; 2], b: [f64; 2]) -> bool {
+     |            ^^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` on by default
+
+warning: `mechsim` (bin "mechsim") generated 1 warning
+    Finished `release` profile [optimized] target(s) in 6.15s
+vanguard-v3 initialized (slot=2, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 48.0ms
+  seed=1000 place=14 pts= 2 k=2 t= 28.0s c=2 lo=gun+mortar    by=lightning rear=0 thr=2 dealt= 2774 taken= 1530 st=["LOOT_WPN:107", "COMBAT:56", "SLICE_PIE:36", "FARM_FIGHT:21", "CUBE:18"]
+EXPERIMENT_RESULT {"gun_hits":26,"gun_shots":50,"killed_by":"lightning","kills":2,"laser_hits":0,"laser_shots":0,"loadout":"gun+mortar","mode":"practice","place":14,"points":2.0,"seed":1000}
+=== MECHSIM (PRACTICE, 1 matches in 0.08s) ===
+MEAN SCORE: 2.00 / 15.00  |  Wins: 0  |  Early deaths (<=2 pts): 1/1
+Avg kills: 2.00  |  Avg survival: 28.0s  |  Avg cubes: 2.0  |  Avg threats@death: 2.0
+Accuracy: Gun 26/50 (52.0%)  |  Laser 0/0 (0.0%)
+Rear-hit deaths: 0/1  |  On-roof deaths: 0/1
+Killed by weapon: {"lightning": 1}  |  by tier: {"Easy": 1}
+Score by loadout: ["gun+mortar(1): 2.00"]
+Bot act() ms: p50 0.008  p99 1.790  max 1.897

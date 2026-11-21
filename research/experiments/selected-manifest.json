@@ -1,0 +1,35 @@
+{
+  "id": "n-safe_c-window_b-drop_threat",
+  "options": [
+    "safe",
+    "window",
+    "drop_threat"
+  ],
+  "baseline_commit": "411af5f530934aa21d8cb5dfff35259219595159",
+  "source_sha256": {
+    "src/brain.rs": "33792e20dee6bf38d1f555205e54b69f30b5f2ee69b6489d4a69fdabd41680ce",
+    "src/combat.rs": "af17440e1f7d24c4a5b3c674434bbce0828115cc5704e8dc04fd356934769d9b",
+    "src/lib.rs": "61fab161ee764afb80c693d26c50d1986cd204ddbc8bd22011be8a5529317fd5",
+    "src/main.rs": "cdb411357207fe8d01f7ee631d614b40172a82ecbc1b68e6a0e0951b4cbb15ec",
+    "src/map.rs": "be89e2a37534fd8345973ebf70b996c3f1897119590ebefbdcc77f2da18c068c",
+    "src/nav.rs": "0610ccaab8aac44fdd80c18fd0d877c7721c23e27ecd30e680592cf3dac92495",
+    "src/protocol.rs": "9f26d08e3e6ad7b3e9ac7f6a3068af56be551dbc78ba5f48bc9ec6887c309130",
+    "src/world.rs": "e7b5df853ea48573fe1d988246ed571a5affc4c01e4b4b9b155efdd0730b467f"
+  },
+  "builder_image_tag": "mechbot:experiment-selected-builder",
+  "builder_image_id": "sha256:f4ff9f37bfec45d625691c0b40b8a3d4b2745538b534025e3763eaf4183441d7",
+  "runtime_image_tag": "mechbot:experiment-selected",
+  "runtime_image_id": "sha256:1d1eceb6941c9d510d24c72c9f3b5718958b56980b69b843a567b1378b2c5f82",
+  "tests_pass": true,
+  "official_candidate_score": null,
+  "publication_state": "Not pushed: failed both prospective practice-score gates.",
+  "tests_passed": 52,
+  "conformance_pass": true,
+  "conformance_observations": 300,
+  "conformance_late": 0,
+  "conformance_bad_lines": 0,
+  "conformance_wrong_tick": 0,
+  "conformance_p99_ms": 1.9,
+  "conformance_max_ms": 2.8,
+  "known_cooldown_witness_pass": true
+}

@@ -1,0 +1,27 @@
+{
+  "base_revision": "411af5f530934aa21d8cb5dfff35259219595159",
+  "builder_image_id": "sha256:d567974e1e11d572aa1558cfafdd74cfee2432d7125386f149da50d3ffc898ab",
+  "variants": {
+    "shared": {
+      "exit_code": 0,
+      "source_sha256": "130f068c65c1c47fc148fbf03e442064dc59ee19ef732695c98187a5b6e1d874",
+      "test_result": [
+        "test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      ]
+    },
+    "window": {
+      "exit_code": 0,
+      "source_sha256": "af17440e1f7d24c4a5b3c674434bbce0828115cc5704e8dc04fd356934769d9b",
+      "test_result": [
+        "test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+      ]
+    },
+    "shot": {
+      "exit_code": 0,
+      "source_sha256": "5c99df6c942b42e45ef2e88e091b6d3f590c6343fc921b2050d44e9f8040da69",
+      "test_result": [
+        "test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+      ]
+    }
+  }
+}

@@ -1,0 +1,1063 @@
+{
+  "marginal_screen_means_descriptive_only": {
+    "navigation": {
+      "baseline": 4.6171875,
+      "canopy": 5.006510416666667,
+      "safe": 4.928385416666667,
+      "safe_canopy": 5.204427083333333
+    },
+    "combat": {
+      "baseline": 4.986979166666667,
+      "shared": 4.815104166666667,
+      "shot": 4.916666666666667,
+      "window": 5.037760416666667
+    },
+    "brain": {
+      "baseline": 4.850260416666667,
+      "drop": 4.717447916666667,
+      "drop_threat": 5.07421875,
+      "threat": 5.114583333333333
+    }
+  },
+  "consistent_practice_losses": [
+    {
+      "seed": 1085903,
+      "first": {
+        "delta": -13.0,
+        "baseline": {
+          "gun_hits": 102,
+          "gun_shots": 168,
+          "killed_by": "SURVIVED",
+          "kills": 7,
+          "laser_hits": 14,
+          "laser_shots": 21,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 1,
+          "points": 15.0,
+          "seed": 1085903
+        },
+        "candidate": {
+          "gun_hits": 87,
+          "gun_shots": 117,
+          "killed_by": "gun",
+          "kills": 1,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun",
+          "mode": "practice",
+          "place": 14,
+          "points": 2.0,
+          "seed": 1085903
+        }
+      },
+      "repeat": {
+        "delta": -13.0,
+        "baseline": {
+          "gun_hits": 102,
+          "gun_shots": 168,
+          "killed_by": "SURVIVED",
+          "kills": 7,
+          "laser_hits": 14,
+          "laser_shots": 21,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 1,
+          "points": 15.0,
+          "seed": 1085903
+        },
+        "candidate": {
+          "gun_hits": 87,
+          "gun_shots": 117,
+          "killed_by": "gun",
+          "kills": 1,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun",
+          "mode": "practice",
+          "place": 14,
+          "points": 2.0,
+          "seed": 1085903
+        }
+      }
+    },
+    {
+      "seed": 689953,
+      "first": {
+        "delta": -8.0,
+        "baseline": {
+          "gun_hits": 98,
+          "gun_shots": 143,
+          "killed_by": "gun",
+          "kills": 5,
+          "laser_hits": 19,
+          "laser_shots": 25,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 7,
+          "points": 9.0,
+          "seed": 689953
+        },
+        "candidate": {
+          "gun_hits": 36,
+          "gun_shots": 42,
+          "killed_by": "gun",
+          "kills": 1,
+          "laser_hits": 4,
+          "laser_shots": 4,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 15,
+          "points": 1.0,
+          "seed": 689953
+        }
+      },
+      "repeat": {
+        "delta": -8.0,
+        "baseline": {
+          "gun_hits": 98,
+          "gun_shots": 143,
+          "killed_by": "gun",
+          "kills": 5,
+          "laser_hits": 19,
+          "laser_shots": 25,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 7,
+          "points": 9.0,
+          "seed": 689953
+        },
+        "candidate": {
+          "gun_hits": 36,
+          "gun_shots": 42,
+          "killed_by": "gun",
+          "kills": 1,
+          "laser_hits": 4,
+          "laser_shots": 4,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 15,
+          "points": 1.0,
+          "seed": 689953
+        }
+      }
+    },
+    {
+      "seed": 737467,
+      "first": {
+        "delta": -8.0,
+        "baseline": {
+          "gun_hits": 105,
+          "gun_shots": 155,
+          "killed_by": "SURVIVED",
+          "kills": 10,
+          "laser_hits": 22,
+          "laser_shots": 25,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 1,
+          "points": 15.0,
+          "seed": 737467
+        },
+        "candidate": {
+          "gun_hits": 73,
+          "gun_shots": 103,
+          "killed_by": "lightning",
+          "kills": 5,
+          "laser_hits": 9,
+          "laser_shots": 17,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 9,
+          "points": 7.0,
+          "seed": 737467
+        }
+      },
+      "repeat": {
+        "delta": -8.0,
+        "baseline": {
+          "gun_hits": 105,
+          "gun_shots": 155,
+          "killed_by": "SURVIVED",
+          "kills": 10,
+          "laser_hits": 22,
+          "laser_shots": 25,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 1,
+          "points": 15.0,
+          "seed": 737467
+        },
+        "candidate": {
+          "gun_hits": 73,
+          "gun_shots": 103,
+          "killed_by": "lightning",
+          "kills": 5,
+          "laser_hits": 9,
+          "laser_shots": 17,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 9,
+          "points": 7.0,
+          "seed": 737467
+        }
+      }
+    },
+    {
+      "seed": 990875,
+      "first": {
+        "delta": -6.0,
+        "baseline": {
+          "gun_hits": 103,
+          "gun_shots": 148,
+          "killed_by": "gun",
+          "kills": 8,
+          "laser_hits": 22,
+          "laser_shots": 25,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 6,
+          "points": 10.0,
+          "seed": 990875
+        },
+        "candidate": {
+          "gun_hits": 37,
+          "gun_shots": 57,
+          "killed_by": "gun",
+          "kills": 4,
+          "laser_hits": 9,
+          "laser_shots": 9,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 12,
+          "points": 4.0,
+          "seed": 990875
+        }
+      },
+      "repeat": {
+        "delta": -6.0,
+        "baseline": {
+          "gun_hits": 103,
+          "gun_shots": 148,
+          "killed_by": "gun",
+          "kills": 8,
+          "laser_hits": 22,
+          "laser_shots": 25,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 6,
+          "points": 10.0,
+          "seed": 990875
+        },
+        "candidate": {
+          "gun_hits": 37,
+          "gun_shots": 57,
+          "killed_by": "gun",
+          "kills": 4,
+          "laser_hits": 9,
+          "laser_shots": 9,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 12,
+          "points": 4.0,
+          "seed": 990875
+        }
+      }
+    },
+    {
+      "seed": 777062,
+      "first": {
+        "delta": -5.0,
+        "baseline": {
+          "gun_hits": 122,
+          "gun_shots": 182,
+          "killed_by": "zone",
+          "kills": 11,
+          "laser_hits": 25,
+          "laser_shots": 32,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 3,
+          "points": 13.0,
+          "seed": 777062
+        },
+        "candidate": {
+          "gun_hits": 116,
+          "gun_shots": 167,
+          "killed_by": "gun",
+          "kills": 7,
+          "laser_hits": 13,
+          "laser_shots": 19,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 8,
+          "points": 8.0,
+          "seed": 777062
+        }
+      },
+      "repeat": {
+        "delta": -5.0,
+        "baseline": {
+          "gun_hits": 122,
+          "gun_shots": 182,
+          "killed_by": "zone",
+          "kills": 11,
+          "laser_hits": 25,
+          "laser_shots": 32,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 3,
+          "points": 13.0,
+          "seed": 777062
+        },
+        "candidate": {
+          "gun_hits": 116,
+          "gun_shots": 167,
+          "killed_by": "gun",
+          "kills": 7,
+          "laser_hits": 13,
+          "laser_shots": 19,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 8,
+          "points": 8.0,
+          "seed": 777062
+        }
+      }
+    },
+    {
+      "seed": 927523,
+      "first": {
+        "delta": -5.0,
+        "baseline": {
+          "gun_hits": 58,
+          "gun_shots": 79,
+          "killed_by": "lightning",
+          "kills": 3,
+          "laser_hits": 9,
+          "laser_shots": 14,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 10,
+          "points": 6.0,
+          "seed": 927523
+        },
+        "candidate": {
+          "gun_hits": 24,
+          "gun_shots": 29,
+          "killed_by": "npc",
+          "kills": 1,
+          "laser_hits": 2,
+          "laser_shots": 2,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 15,
+          "points": 1.0,
+          "seed": 927523
+        }
+      },
+      "repeat": {
+        "delta": -5.0,
+        "baseline": {
+          "gun_hits": 58,
+          "gun_shots": 79,
+          "killed_by": "lightning",
+          "kills": 3,
+          "laser_hits": 9,
+          "laser_shots": 14,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 10,
+          "points": 6.0,
+          "seed": 927523
+        },
+        "candidate": {
+          "gun_hits": 24,
+          "gun_shots": 29,
+          "killed_by": "npc",
+          "kills": 1,
+          "laser_hits": 2,
+          "laser_shots": 2,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 15,
+          "points": 1.0,
+          "seed": 927523
+        }
+      }
+    },
+    {
+      "seed": 872090,
+      "first": {
+        "delta": -4.0,
+        "baseline": {
+          "gun_hits": 63,
+          "gun_shots": 91,
+          "killed_by": "gun",
+          "kills": 3,
+          "laser_hits": 6,
+          "laser_shots": 10,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 10,
+          "points": 6.0,
+          "seed": 872090
+        },
+        "candidate": {
+          "gun_hits": 35,
+          "gun_shots": 59,
+          "killed_by": "laser",
+          "kills": 1,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun+mortar",
+          "mode": "practice",
+          "place": 14,
+          "points": 2.0,
+          "seed": 872090
+        }
+      },
+      "repeat": {
+        "delta": -4.0,
+        "baseline": {
+          "gun_hits": 63,
+          "gun_shots": 91,
+          "killed_by": "gun",
+          "kills": 3,
+          "laser_hits": 6,
+          "laser_shots": 10,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 10,
+          "points": 6.0,
+          "seed": 872090
+        },
+        "candidate": {
+          "gun_hits": 35,
+          "gun_shots": 59,
+          "killed_by": "laser",
+          "kills": 1,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun+mortar",
+          "mode": "practice",
+          "place": 14,
+          "points": 2.0,
+          "seed": 872090
+        }
+      }
+    },
+    {
+      "seed": 1196769,
+      "first": {
+        "delta": -4.0,
+        "baseline": {
+          "gun_hits": 116,
+          "gun_shots": 168,
+          "killed_by": "lightning",
+          "kills": 4,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun+lightning",
+          "mode": "practice",
+          "place": 7,
+          "points": 9.0,
+          "seed": 1196769
+        },
+        "candidate": {
+          "gun_hits": 77,
+          "gun_shots": 102,
+          "killed_by": "gun",
+          "kills": 1,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun+lightning",
+          "mode": "practice",
+          "place": 11,
+          "points": 5.0,
+          "seed": 1196769
+        }
+      },
+      "repeat": {
+        "delta": -4.0,
+        "baseline": {
+          "gun_hits": 116,
+          "gun_shots": 168,
+          "killed_by": "lightning",
+          "kills": 4,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun+lightning",
+          "mode": "practice",
+          "place": 7,
+          "points": 9.0,
+          "seed": 1196769
+        },
+        "candidate": {
+          "gun_hits": 77,
+          "gun_shots": 102,
+          "killed_by": "gun",
+          "kills": 1,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun+lightning",
+          "mode": "practice",
+          "place": 11,
+          "points": 5.0,
+          "seed": 1196769
+        }
+      }
+    },
+    {
+      "seed": 856252,
+      "first": {
+        "delta": -3.0,
+        "baseline": {
+          "gun_hits": 45,
+          "gun_shots": 57,
+          "killed_by": "gun",
+          "kills": 1,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun+mortar",
+          "mode": "practice",
+          "place": 12,
+          "points": 4.0,
+          "seed": 856252
+        },
+        "candidate": {
+          "gun_hits": 35,
+          "gun_shots": 41,
+          "killed_by": "laser",
+          "kills": 1,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun+mortar",
+          "mode": "practice",
+          "place": 15,
+          "points": 1.0,
+          "seed": 856252
+        }
+      },
+      "repeat": {
+        "delta": -3.0,
+        "baseline": {
+          "gun_hits": 45,
+          "gun_shots": 57,
+          "killed_by": "gun",
+          "kills": 1,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun+mortar",
+          "mode": "practice",
+          "place": 12,
+          "points": 4.0,
+          "seed": 856252
+        },
+        "candidate": {
+          "gun_hits": 35,
+          "gun_shots": 41,
+          "killed_by": "laser",
+          "kills": 1,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun+mortar",
+          "mode": "practice",
+          "place": 15,
+          "points": 1.0,
+          "seed": 856252
+        }
+      }
+    },
+    {
+      "seed": 887928,
+      "first": {
+        "delta": -3.0,
+        "baseline": {
+          "gun_hits": 59,
+          "gun_shots": 105,
+          "killed_by": "gun",
+          "kills": 5,
+          "laser_hits": 18,
+          "laser_shots": 24,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 6,
+          "points": 10.0,
+          "seed": 887928
+        },
+        "candidate": {
+          "gun_hits": 28,
+          "gun_shots": 72,
+          "killed_by": "laser",
+          "kills": 2,
+          "laser_hits": 10,
+          "laser_shots": 12,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 9,
+          "points": 7.0,
+          "seed": 887928
+        }
+      },
+      "repeat": {
+        "delta": -3.0,
+        "baseline": {
+          "gun_hits": 59,
+          "gun_shots": 105,
+          "killed_by": "gun",
+          "kills": 5,
+          "laser_hits": 18,
+          "laser_shots": 24,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 6,
+          "points": 10.0,
+          "seed": 887928
+        },
+        "candidate": {
+          "gun_hits": 28,
+          "gun_shots": 72,
+          "killed_by": "laser",
+          "kills": 2,
+          "laser_hits": 10,
+          "laser_shots": 12,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 9,
+          "points": 7.0,
+          "seed": 887928
+        }
+      }
+    },
+    {
+      "seed": 658277,
+      "first": {
+        "delta": -2.0,
+        "baseline": {
+          "gun_hits": 86,
+          "gun_shots": 130,
+          "killed_by": "lightning",
+          "kills": 6,
+          "laser_hits": 17,
+          "laser_shots": 18,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 9,
+          "points": 7.0,
+          "seed": 658277
+        },
+        "candidate": {
+          "gun_hits": 49,
+          "gun_shots": 84,
+          "killed_by": "gun",
+          "kills": 4,
+          "laser_hits": 10,
+          "laser_shots": 11,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 11,
+          "points": 5.0,
+          "seed": 658277
+        }
+      },
+      "repeat": {
+        "delta": -2.0,
+        "baseline": {
+          "gun_hits": 86,
+          "gun_shots": 130,
+          "killed_by": "lightning",
+          "kills": 6,
+          "laser_hits": 17,
+          "laser_shots": 18,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 9,
+          "points": 7.0,
+          "seed": 658277
+        },
+        "candidate": {
+          "gun_hits": 49,
+          "gun_shots": 84,
+          "killed_by": "gun",
+          "kills": 4,
+          "laser_hits": 10,
+          "laser_shots": 11,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 11,
+          "points": 5.0,
+          "seed": 658277
+        }
+      }
+    },
+    {
+      "seed": 975037,
+      "first": {
+        "delta": -2.0,
+        "baseline": {
+          "gun_hits": 31,
+          "gun_shots": 51,
+          "killed_by": "gun",
+          "kills": 2,
+          "laser_hits": 8,
+          "laser_shots": 9,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 14,
+          "points": 2.0,
+          "seed": 975037
+        },
+        "candidate": {
+          "gun_hits": 18,
+          "gun_shots": 31,
+          "killed_by": "gun",
+          "kills": 0,
+          "laser_hits": 5,
+          "laser_shots": 5,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 16,
+          "points": 0.0,
+          "seed": 975037
+        }
+      },
+      "repeat": {
+        "delta": -2.0,
+        "baseline": {
+          "gun_hits": 31,
+          "gun_shots": 51,
+          "killed_by": "gun",
+          "kills": 2,
+          "laser_hits": 8,
+          "laser_shots": 9,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 14,
+          "points": 2.0,
+          "seed": 975037
+        },
+        "candidate": {
+          "gun_hits": 18,
+          "gun_shots": 31,
+          "killed_by": "gun",
+          "kills": 0,
+          "laser_hits": 5,
+          "laser_shots": 5,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 16,
+          "points": 0.0,
+          "seed": 975037
+        }
+      }
+    },
+    {
+      "seed": 1283878,
+      "first": {
+        "delta": -2.0,
+        "baseline": {
+          "gun_hits": 79,
+          "gun_shots": 108,
+          "killed_by": "zone",
+          "kills": 2,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun+lightning",
+          "mode": "practice",
+          "place": 10,
+          "points": 6.0,
+          "seed": 1283878
+        },
+        "candidate": {
+          "gun_hits": 106,
+          "gun_shots": 127,
+          "killed_by": "gun",
+          "kills": 3,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun+lightning",
+          "mode": "practice",
+          "place": 12,
+          "points": 4.0,
+          "seed": 1283878
+        }
+      },
+      "repeat": {
+        "delta": -2.0,
+        "baseline": {
+          "gun_hits": 79,
+          "gun_shots": 108,
+          "killed_by": "zone",
+          "kills": 2,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun+lightning",
+          "mode": "practice",
+          "place": 10,
+          "points": 6.0,
+          "seed": 1283878
+        },
+        "candidate": {
+          "gun_hits": 106,
+          "gun_shots": 127,
+          "killed_by": "gun",
+          "kills": 3,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun+lightning",
+          "mode": "practice",
+          "place": 12,
+          "points": 4.0,
+          "seed": 1283878
+        }
+      }
+    },
+    {
+      "seed": 1323473,
+      "first": {
+        "delta": -2.0,
+        "baseline": {
+          "gun_hits": 63,
+          "gun_shots": 121,
+          "killed_by": "mortar",
+          "kills": 7,
+          "laser_hits": 10,
+          "laser_shots": 12,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 7,
+          "points": 9.0,
+          "seed": 1323473
+        },
+        "candidate": {
+          "gun_hits": 68,
+          "gun_shots": 120,
+          "killed_by": "gun",
+          "kills": 5,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun+lightning",
+          "mode": "practice",
+          "place": 9,
+          "points": 7.0,
+          "seed": 1323473
+        }
+      },
+      "repeat": {
+        "delta": -2.0,
+        "baseline": {
+          "gun_hits": 63,
+          "gun_shots": 121,
+          "killed_by": "mortar",
+          "kills": 7,
+          "laser_hits": 10,
+          "laser_shots": 12,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 7,
+          "points": 9.0,
+          "seed": 1323473
+        },
+        "candidate": {
+          "gun_hits": 68,
+          "gun_shots": 120,
+          "killed_by": "gun",
+          "kills": 5,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun+lightning",
+          "mode": "practice",
+          "place": 9,
+          "points": 7.0,
+          "seed": 1323473
+        }
+      }
+    },
+    {
+      "seed": 721629,
+      "first": {
+        "delta": -1.0,
+        "baseline": {
+          "gun_hits": 37,
+          "gun_shots": 46,
+          "killed_by": "gun",
+          "kills": 2,
+          "laser_hits": 4,
+          "laser_shots": 4,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 14,
+          "points": 2.0,
+          "seed": 721629
+        },
+        "candidate": {
+          "gun_hits": 30,
+          "gun_shots": 36,
+          "killed_by": "gun",
+          "kills": 1,
+          "laser_hits": 3,
+          "laser_shots": 3,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 15,
+          "points": 1.0,
+          "seed": 721629
+        }
+      },
+      "repeat": {
+        "delta": -1.0,
+        "baseline": {
+          "gun_hits": 37,
+          "gun_shots": 46,
+          "killed_by": "gun",
+          "kills": 2,
+          "laser_hits": 4,
+          "laser_shots": 4,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 14,
+          "points": 2.0,
+          "seed": 721629
+        },
+        "candidate": {
+          "gun_hits": 30,
+          "gun_shots": 36,
+          "killed_by": "gun",
+          "kills": 1,
+          "laser_hits": 3,
+          "laser_shots": 3,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 15,
+          "points": 1.0,
+          "seed": 721629
+        }
+      }
+    },
+    {
+      "seed": 1022551,
+      "first": {
+        "delta": -1.0,
+        "baseline": {
+          "gun_hits": 52,
+          "gun_shots": 74,
+          "killed_by": "laser",
+          "kills": 4,
+          "laser_hits": 13,
+          "laser_shots": 13,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 11,
+          "points": 5.0,
+          "seed": 1022551
+        },
+        "candidate": {
+          "gun_hits": 70,
+          "gun_shots": 97,
+          "killed_by": "laser",
+          "kills": 3,
+          "laser_hits": 14,
+          "laser_shots": 19,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 12,
+          "points": 4.0,
+          "seed": 1022551
+        }
+      },
+      "repeat": {
+        "delta": -1.0,
+        "baseline": {
+          "gun_hits": 52,
+          "gun_shots": 74,
+          "killed_by": "laser",
+          "kills": 4,
+          "laser_hits": 13,
+          "laser_shots": 13,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 11,
+          "points": 5.0,
+          "seed": 1022551
+        },
+        "candidate": {
+          "gun_hits": 70,
+          "gun_shots": 97,
+          "killed_by": "laser",
+          "kills": 3,
+          "laser_hits": 14,
+          "laser_shots": 19,
+          "loadout": "gun+laser",
+          "mode": "practice",
+          "place": 12,
+          "points": 4.0,
+          "seed": 1022551
+        }
+      }
+    },
+    {
+      "seed": 1268040,
+      "first": {
+        "delta": -1.0,
+        "baseline": {
+          "gun_hits": 59,
+          "gun_shots": 71,
+          "killed_by": "laser",
+          "kills": 2,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun+lightning",
+          "mode": "practice",
+          "place": 14,
+          "points": 2.0,
+          "seed": 1268040
+        },
+        "candidate": {
+          "gun_hits": 46,
+          "gun_shots": 63,
+          "killed_by": "gun",
+          "kills": 1,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun+lightning",
+          "mode": "practice",
+          "place": 15,
+          "points": 1.0,
+          "seed": 1268040
+        }
+      },
+      "repeat": {
+        "delta": -1.0,
+        "baseline": {
+          "gun_hits": 59,
+          "gun_shots": 71,
+          "killed_by": "laser",
+          "kills": 2,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun+lightning",
+          "mode": "practice",
+          "place": 14,
+          "points": 2.0,
+          "seed": 1268040
+        },
+        "candidate": {
+          "gun_hits": 46,
+          "gun_shots": 63,
+          "killed_by": "gun",
+          "kills": 1,
+          "laser_hits": 0,
+          "laser_shots": 0,
+          "loadout": "gun+lightning",
+          "mode": "practice",
+          "place": 15,
+          "points": 1.0,
+          "seed": 1268040
+        }
+      }
+    }
+  ],
+  "matches_total": 3840,
+  "note": "The same 96 seeds were repeated in independent processes; repeats are not 192 independent scenarios."
+}

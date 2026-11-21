@@ -1,0 +1,65 @@
+[
+  {
+    "navigation": "baseline",
+    "brain": "drop",
+    "combat": "baseline",
+    "legacy_policy": false,
+    "exit_code": 0,
+    "expected_outcome_verified": true,
+    "log": "baseline-drop.log"
+  },
+  {
+    "navigation": "baseline",
+    "brain": "threat",
+    "combat": "baseline",
+    "legacy_policy": false,
+    "exit_code": 0,
+    "expected_outcome_verified": true,
+    "log": "baseline-threat.log"
+  },
+  {
+    "navigation": "baseline",
+    "brain": "drop_threat",
+    "combat": "baseline",
+    "legacy_policy": false,
+    "exit_code": 0,
+    "expected_outcome_verified": true,
+    "log": "baseline-drop_threat.log"
+  },
+  {
+    "navigation": "safe",
+    "brain": "drop_threat",
+    "combat": "baseline",
+    "legacy_policy": false,
+    "exit_code": 0,
+    "expected_outcome_verified": true,
+    "log": "safe-drop_threat.log"
+  },
+  {
+    "navigation": "safe",
+    "brain": "drop_threat",
+    "combat": "window",
+    "legacy_policy": false,
+    "exit_code": 0,
+    "expected_outcome_verified": true,
+    "log": "safe-drop_threat-window.log"
+  },
+  {
+    "navigation": "safe",
+    "brain": "drop_threat",
+    "combat": "shot",
+    "legacy_policy": false,
+    "exit_code": 0,
+    "expected_outcome_verified": true,
+    "log": "safe-drop_threat-shot.log"
+  },
+  {
+    "navigation": "baseline",
+    "brain": "threat",
+    "combat": "baseline",
+    "legacy_policy": true,
+    "exit_code": 101,
+    "expected_outcome_verified": true,
+    "log": "baseline-threat-legacy-red.log"
+  }
+]

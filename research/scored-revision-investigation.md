@@ -1,5 +1,7 @@
 # Investigation of the two officially scored revisions
 
+Later work: the [completed component/interaction campaign](experiments/RESULTS.md) tested 64 configurations using a corrected local model, then validated one frozen finalist prospectively. It did not meet the conditional push gate. This report remains the historical v3/v4 attribution audit; its proxy means use a different harness and must not be combined with the later campaign.
+
 The user has now identified both sources: **4.81 belongs to v3 `411af5f530934aa21d8cb5dfff35259219595159`**, while **BB-488640B1 / 4.65 belongs to v4 `5b783d19f138239033be32b527318f9247a9f9b8`**. These are user-confirmed submission associations; official submission rows, scorer versions and per-game results have not been independently retrieved. The later local candidate was not involved in either run.
 
 ## Actual code change

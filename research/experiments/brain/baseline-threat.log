@@ -1,0 +1,22 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling syn v2.0.119
+   Compiling serde v1.0.219
+   Compiling serde_derive v1.0.219
+   Compiling serde_json v1.0.140
+   Compiling itoa v1.0.19
+   Compiling memchr v2.8.3
+   Compiling ryu v1.0.23
+   Compiling mechbot v0.1.0 (/build)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.26s
+     Running unittests src/lib.rs (target/debug/deps/mechbot-b67f5ad20cd0adcf)
+
+running 5 tests
+test brain::experiment_threat_tests::aimed_charger_is_not_ignored_for_an_unproven_own_kill ... ok
+test brain::experiment_threat_tests::charger_facing_elsewhere_does_not_abort_our_charge ... ok
+test brain::experiment_threat_tests::exposed_regen_does_not_become_a_blanket_firing_ban ... ok
+test brain::experiment_threat_tests::gun_only_keeps_defensive_fire_while_ducking_a_charger ... ok
+test brain::experiment_threat_tests::recently_damaging_charger_remains_a_threat_while_turning ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s

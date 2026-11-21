@@ -1,0 +1,629 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling syn v2.0.119
+   Compiling serde v1.0.219
+   Compiling serde_derive v1.0.219
+   Compiling serde_json v1.0.140
+   Compiling memchr v2.8.3
+   Compiling ryu v1.0.23
+   Compiling itoa v1.0.19
+   Compiling mechbot v0.1.0 (/build)
+   Compiling mechsim v0.1.0 (/build/sim)
+warning: methods `find_cover_pos`, `find_slice_pie_pos`, `find_peek_pair`, `nearest_walkable_cell`, and `line_walkable` are never used
+    --> src/environment_map.rs:889:12
+     |
+302  | impl ArenaMap {
+     | ------------- methods in this implementation
+...
+889  |     pub fn find_cover_pos(
+     |            ^^^^^^^^^^^^^^
+...
+1001 |     pub fn find_slice_pie_pos(
+     |            ^^^^^^^^^^^^^^^^^^
+...
+1081 |     pub fn find_peek_pair(
+     |            ^^^^^^^^^^^^^^
+...
+1210 |     pub fn nearest_walkable_cell(&self, x: f64, y: f64, max_radius: usize) -> Option<(usize, usize)> {
+     |            ^^^^^^^^^^^^^^^^^^^^^
+...
+1245 |     pub fn line_walkable(&self, a: [f64; 2], b: [f64; 2]) -> bool {
+     |            ^^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` on by default
+
+warning: `mechsim` (bin "mechsim") generated 1 warning
+    Finished `release` profile [optimized] target(s) in 23.84s
+vanguard-v3 initialized (slot=3, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 47.8ms
+  seed=571168 place=12 pts= 4 k=3 t=127.6s c=11 lo=gun+laser     by=laser     rear=1 thr=2 dealt= 7283 taken= 3718 st=["CUBE:287", "REGEN_COVER:248", "COMBAT:207", "PATROL:197", "LOOT_WPN:66"]
+vanguard-v3 initialized (slot=14, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 48.7ms
+  seed=579087 place=15 pts= 1 k=0 t= 48.2s c=3 lo=gun+lightning by=laser     rear=0 thr=4 dealt= 1336 taken= 1825 st=["COMBAT:173", "PATROL:79", "KITE_COVER:60", "SLICE_PIE:42", "LOOT_WPN:39"]
+vanguard-v3 initialized (slot=10, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 49.5ms
+  seed=587006 place=16 pts= 0 k=0 t= 34.1s c=0 lo=gun           by=lightning rear=0 thr=2 dealt= 1845 taken= 1432 st=["REGEN_COVER:261", "COMBAT:52", "KITE_COVER:26", "LOOT_WPN:3"]
+vanguard-v3 initialized (slot=7, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.3ms
+  seed=594925 place=15 pts= 1 k=1 t= 34.8s c=0 lo=gun+laser     by=gun       rear=1 thr=1 dealt= 3612 taken= 1598 st=["REGEN_COVER:261", "LOOT_WPN:33", "SLICE_PIE:25", "COMBAT:12", "KITE_COVER:10"]
+vanguard-v3 initialized (slot=4, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 52.3ms
+  seed=602844 place=16 pts= 0 k=0 t= 21.2s c=0 lo=gun           by=gun       rear=1 thr=2 dealt=  810 taken= 1422 st=["REGEN_COVER:108", "COMBAT:72", "KITE_COVER:20", "FARM_FIGHT:13"]
+vanguard-v3 initialized (slot=5, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 49.0ms
+  seed=610763 place= 9 pts= 7 k=4 t=185.5s c=7 lo=gun+laser     by=gun       rear=0 thr=1 dealt= 7339 taken= 1872 st=["COMBAT:768", "DROP:243", "PATROL:235", "CUBE:234", "FARM_FIGHT:152"]
+vanguard-v3 initialized (slot=6, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 56.7ms
+  seed=618682 place=13 pts= 3 k=1 t= 84.5s c=1 lo=gun+lightning by=laser     rear=0 thr=4 dealt= 4305 taken= 2974 st=["COMBAT:310", "REGEN_COVER:234", "PATROL:85", "LOOT_WPN:60", "FLANK:39"]
+vanguard-v3 initialized (slot=11, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 48.4ms
+  seed=626601 place=16 pts= 0 k=0 t= 12.0s c=0 lo=gun           by=gun       rear=0 thr=3 dealt= 1125 taken= 1440 st=["KITE_COVER:53", "REGEN_COVER:42", "COMBAT:25"]
+vanguard-v3 initialized (slot=8, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 49.9ms
+  seed=634520 place=16 pts= 0 k=0 t= 21.1s c=0 lo=gun           by=gun       rear=0 thr=4 dealt= 1755 taken= 1440 st=["REGEN_COVER:141", "COMBAT:49", "KITE_COVER:22"]
+vanguard-v3 initialized (slot=1, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.8ms
+  seed=642439 place= 5 pts=11 k=7 t=163.6s c=5 lo=gun+laser     by=laser     rear=0 thr=1 dealt=10882 taken= 4102 st=["REGEN_COVER:597", "REGEN_COVER^:252", "COMBAT:241", "CUBE:166", "LOOT_WPN:81"]
+vanguard-v3 initialized (slot=3, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 55.4ms
+  seed=650358 place=16 pts= 0 k=0 t= 11.6s c=0 lo=gun           by=gun       rear=0 thr=3 dealt=  810 taken= 1440 st=["REGEN_COVER:45", "LOOT_WPN:37", "COMBAT:20", "REGEN_KITE:14"]
+vanguard-v3 initialized (slot=14, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 60.6ms
+  seed=658277 place= 9 pts= 7 k=6 t=144.9s c=3 lo=gun+laser     by=lightning rear=0 thr=1 dealt=10503 taken= 2600 st=["REGEN_COVER:334", "COMBAT:269", "PATROL:197", "CUBE:147", "LOOT_WPN:144"]
+vanguard-v3 initialized (slot=13, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 45.8ms
+  seed=666196 place=15 pts= 1 k=0 t= 24.0s c=2 lo=gun+mortar    by=gun       rear=0 thr=2 dealt= 2693 taken= 1774 st=["REGEN_COVER:146", "COMBAT:41", "LOOT_WPN:16", "FARM_FIGHT:13", "SLICE_PIE:10"]
+vanguard-v3 initialized (slot=12, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 48.8ms
+  seed=674115 place=11 pts= 5 k=3 t= 58.2s c=3 lo=gun+laser     by=gun       rear=0 thr=1 dealt= 6301 taken= 2277 st=["REGEN_COVER:93", "PATROL:86", "COMBAT:82", "ROOF_CLIMB:82", "CUBE:81"]
+vanguard-v3 initialized (slot=15, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 47.4ms
+  seed=682034 place=16 pts= 0 k=0 t= 12.8s c=0 lo=gun+lightning by=gun       rear=0 thr=3 dealt= 1215 taken= 1440 st=["REGEN_COVER:54", "LOOT_WPN:39", "KITE_COVER:32", "LASER_DUCK:4"]
+vanguard-v3 initialized (slot=2, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.4ms
+  seed=689953 place= 7 pts= 9 k=5 t=175.7s c=0 lo=gun+laser     by=gun       rear=0 thr=3 dealt=10801 taken= 4912 st=["REGEN_COVER:858", "COMBAT:245", "PATROL:202", "KITE_COVER:84", "LASER_DUCK:63"]
+vanguard-v3 initialized (slot=1, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 58.3ms
+  seed=697872 place=16 pts= 0 k=0 t=  7.4s c=0 lo=gun           by=gun       rear=0 thr=4 dealt=  765 taken= 1440 st=["REGEN_KITE:46", "COMBAT:15", "KITE_COVER:11", "LOOT_WPN:2"]
+vanguard-v3 initialized (slot=11, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 50.9ms
+  seed=705791 place= 8 pts= 8 k=5 t=218.5s c=7 lo=gun+mortar    by=gun       rear=0 thr=1 dealt=11241 taken= 6627 st=["REGEN_COVER:786", "COMBAT:582", "LOOT_WPN:201", "KITE_COVER:190", "CUBE:165"]
+vanguard-v3 initialized (slot=4, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 42.8ms
+  seed=713710 place=14 pts= 2 k=1 t= 67.2s c=0 lo=gun           by=gun       rear=0 thr=1 dealt= 3825 taken= 1672 st=["REGEN_COVER:435", "COMBAT:150", "KITE_COVER:48", "LOOT_WPN:40"]
+vanguard-v3 initialized (slot=5, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 44.8ms
+  seed=721629 place=14 pts= 2 k=2 t= 18.5s c=0 lo=gun+laser     by=gun       rear=0 thr=1 dealt= 2870 taken= 1418 st=["REGEN_COVER:107", "COMBAT:33", "LOOT_WPN:30", "KITE_COVER:16"]
+vanguard-v3 initialized (slot=2, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 48.8ms
+  seed=729548 place=15 pts= 1 k=1 t= 23.1s c=0 lo=gun           by=laser     rear=1 thr=1 dealt= 2385 taken= 1688 st=["REGEN_COVER:113", "COMBAT:79", "LOOT_WPN:28", "KITE_COVER:12"]
+vanguard-v3 initialized (slot=7, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 53.8ms
+  seed=737467 place= 1 pts=15 k=10 t=480.0s c=15 lo=gun+laser     by=WIN       rear=0 thr=0 dealt=16127 taken= 4888 st=["ROOF_HOLD^:1277", "PATROL:506", "REGEN_COVER:345", "COMBAT:272", "CUBE:200"]
+vanguard-v3 initialized (slot=8, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 50.1ms
+  seed=745386 place=16 pts= 0 k=0 t= 35.0s c=0 lo=gun           by=gun       rear=1 thr=2 dealt= 1170 taken= 1454 st=["REGEN_COVER:165", "COMBAT:109", "LOOT_WPN:46", "KITE_COVER:17", "CUBE:13"]
+vanguard-v3 initialized (slot=9, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 56.3ms
+  seed=753305 place=16 pts= 0 k=0 t= 17.2s c=1 lo=gun+lightning by=gun       rear=0 thr=1 dealt= 1168 taken= 1518 st=["COMBAT:112", "FARM_FIGHT:19", "REGEN_KITE:14", "LOOT_WPN:12", "CUBE:8"]
+vanguard-v3 initialized (slot=14, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 55.7ms
+  seed=761224 place=10 pts= 6 k=3 t=183.9s c=12 lo=gun+laser     by=lightning rear=0 thr=4 dealt= 7252 taken= 3785 st=["COMBAT:547", "CUBE:299", "PATROL:293", "REGEN_COVER:221", "KITE_COVER:100"]
+vanguard-v3 initialized (slot=2, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.2ms
+  seed=769143 place=11 pts= 5 k=3 t=109.8s c=8 lo=gun+lightning by=gun       rear=0 thr=2 dealt= 5273 taken= 3807 st=["REGEN_COVER:582", "CUBE:151", "COMBAT:133", "LOOT_WPN:60", "FARM_FIGHT:51"]
+vanguard-v3 initialized (slot=13, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 50.8ms
+  seed=777062 place= 3 pts=13 k=11 t=371.9s c=15 lo=gun+laser     by=zone      rear=0 thr=0 dealt=18126 taken= 4124 st=["COMBAT:1915", "REGEN_COVER:391", "PATROL:346", "ZONE:317", "CUBE:206"]
+vanguard-v3 initialized (slot=12, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.3ms
+  seed=784981 place=16 pts= 0 k=0 t=  9.4s c=0 lo=gun+laser     by=gun       rear=1 thr=3 dealt=  945 taken= 1462 st=["LOOT_WPN:48", "REGEN_COVER:41", "COMBAT:6"]
+vanguard-v3 initialized (slot=11, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 58.1ms
+  seed=792900 place=16 pts= 0 k=0 t= 17.2s c=0 lo=gun           by=gun       rear=0 thr=2 dealt= 1125 taken= 1418 st=["REGEN_COVER:91", "KITE_COVER:81", "LOOT_WPN:1"]
+vanguard-v3 initialized (slot=14, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 44.6ms
+  seed=800819 place=16 pts= 0 k=0 t= 26.3s c=0 lo=gun+lightning by=lightning rear=0 thr=4 dealt= 1395 taken= 1523 st=["KITE_COVER:85", "REGEN_COVER:58", "SLICE_PIE:47", "COMBAT:36", "FLANK:24"]
+vanguard-v3 initialized (slot=1, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 50.4ms
+  seed=808738 place=15 pts= 1 k=1 t= 21.7s c=0 lo=gun+lightning by=gun       rear=0 thr=1 dealt= 2025 taken= 1440 st=["COMBAT:105", "REGEN_COVER:98", "LOOT_WPN:15"]
+vanguard-v3 initialized (slot=0, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 43.4ms
+  seed=816657 place=15 pts= 1 k=1 t= 23.2s c=0 lo=gun           by=gun       rear=0 thr=1 dealt= 2070 taken= 1440 st=["KITE_COVER:133", "REGEN_COVER:96", "LOOT_WPN:3"]
+vanguard-v3 initialized (slot=7, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 47.1ms
+  seed=824576 place=16 pts= 0 k=0 t= 11.2s c=0 lo=gun           by=gun       rear=0 thr=3 dealt=  675 taken= 1443 st=["REGEN_COVER:45", "COMBAT:26", "PATROL:23", "KITE_COVER:18"]
+vanguard-v3 initialized (slot=5, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 46.0ms
+  seed=832495 place=15 pts= 1 k=1 t= 14.1s c=0 lo=gun           by=gun       rear=0 thr=2 dealt= 1530 taken= 1440 st=["COMBAT:58", "REGEN_KITE:41", "REGEN_COVER:28", "LOOT_WPN:15"]
+vanguard-v3 initialized (slot=6, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 52.6ms
+  seed=840414 place=15 pts= 1 k=1 t= 32.9s c=2 lo=gun+mortar    by=lightning rear=0 thr=4 dealt= 2770 taken= 1568 st=["COMBAT:92", "REGEN_COVER:45", "CUBE:45", "KITE_COVER:37", "LASER_DUCK:36"]
+vanguard-v3 initialized (slot=3, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 44.2ms
+  seed=848333 place=16 pts= 0 k=0 t= 13.1s c=0 lo=gun           by=gun       rear=0 thr=4 dealt= 1260 taken= 1440 st=["KITE_COVER:103", "REGEN_COVER:24", "COMBAT:5"]
+vanguard-v3 initialized (slot=0, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 45.4ms
+  seed=856252 place=12 pts= 4 k=1 t= 46.2s c=1 lo=gun+mortar    by=gun       rear=0 thr=1 dealt= 2953 taken= 2097 st=["REGEN_COVER:281", "COMBAT:69", "LASER_DUCK:43", "SLICE_PIE:39", "LOOT_WPN:30"]
+vanguard-v3 initialized (slot=9, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.7ms
+  seed=864171 place=16 pts= 0 k=0 t= 22.3s c=0 lo=gun           by=laser     rear=0 thr=1 dealt= 1215 taken= 1440 st=["COMBAT:155", "LOOT_WPN:31", "REGEN_COVER:29", "LASER_DUCK:9"]
+vanguard-v3 initialized (slot=10, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 46.0ms
+  seed=872090 place=10 pts= 6 k=3 t=175.5s c=1 lo=gun+laser     by=gun       rear=0 thr=4 dealt= 4951 taken= 2745 st=["PATROL:666", "ROOF_HOLD^:209", "COMBAT:163", "LOOT_WPN:134", "CUBE:99"]
+vanguard-v3 initialized (slot=15, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 57.4ms
+  seed=880009 place=16 pts= 0 k=0 t= 12.2s c=0 lo=gun+mortar    by=gun       rear=0 thr=2 dealt=  720 taken= 1422 st=["REGEN_COVER:59", "COMBAT:35", "LOOT_WPN:24", "FARM_FIGHT:2", "CUBE:2"]
+vanguard-v3 initialized (slot=13, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.6ms
+  seed=887928 place= 6 pts=10 k=5 t=123.7s c=2 lo=gun+laser     by=gun       rear=0 thr=2 dealt= 8025 taken= 2624 st=["COMBAT:361", "REGEN_COVER:326", "PATROL:151", "CUBE:150", "LOOT_WPN:47"]
+vanguard-v3 initialized (slot=12, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 58.7ms
+  seed=895847 place=16 pts= 0 k=0 t= 29.5s c=0 lo=gun           by=gun       rear=0 thr=2 dealt= 1485 taken= 1405 st=["REGEN_COVER:80", "PATROL:56", "COMBAT:51", "KITE_COVER:48", "LOOT_WPN:39"]
+vanguard-v3 initialized (slot=15, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.6ms
+  seed=903766 place=16 pts= 0 k=0 t= 18.4s c=0 lo=gun+lightning by=laser     rear=0 thr=2 dealt=  585 taken= 1665 st=["LOOT_WPN:54", "REGEN_COVER:38", "PATROL:32", "LASER_DUCK:31", "COMBAT:30"]
+vanguard-v3 initialized (slot=10, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 55.2ms
+  seed=911685 place= 1 pts=15 k=10 t=480.0s c=17 lo=gun+laser     by=WIN       rear=0 thr=0 dealt=16407 taken= 3009 st=["COMBAT:778", "CUBE:483", "REGEN_COVER:414", "DROP:247", "PATROL:221"]
+vanguard-v3 initialized (slot=9, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 57.6ms
+  seed=919604 place=16 pts= 0 k=0 t= 21.9s c=0 lo=gun           by=gun       rear=0 thr=3 dealt= 1305 taken= 1531 st=["COMBAT:97", "REGEN_COVER:56", "LOOT_WPN:40", "PATROL:14", "KITE_COVER:13"]
+vanguard-v3 initialized (slot=0, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 56.4ms
+  seed=927523 place=10 pts= 6 k=3 t= 92.1s c=0 lo=gun+laser     by=lightning rear=1 thr=3 dealt= 5956 taken= 3011 st=["REGEN_COVER:447", "CUBE:149", "COMBAT:73", "ROOF_CLIMB:71", "FLANK:40"]
+vanguard-v3 initialized (slot=3, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 60.4ms
+  seed=935442 place=15 pts= 1 k=0 t= 34.9s c=0 lo=gun+laser     by=gun       rear=0 thr=1 dealt= 2498 taken= 1478 st=["COMBAT:191", "FLANK:70", "LOOT_WPN:43", "KITE_COVER:34", "REGEN_COVER:12"]
+vanguard-v3 initialized (slot=6, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 61.5ms
+  seed=943361 place=15 pts= 1 k=1 t= 25.2s c=0 lo=gun           by=gun       rear=0 thr=1 dealt= 2475 taken= 1440 st=["REGEN_COVER:145", "LOOT_WPN:68", "KITE_COVER:26", "COMBAT:14"]
+vanguard-v3 initialized (slot=10, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 53.7ms
+  seed=951280 place=12 pts= 4 k=2 t= 86.4s c=5 lo=gun+laser     by=laser     rear=0 thr=2 dealt= 3919 taken= 3050 st=["REGEN_COVER:428", "COMBAT:206", "CUBE:100", "FLANK:44", "LASER_DUCK:24"]
+vanguard-v3 initialized (slot=7, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.6ms
+  seed=959199 place=16 pts= 0 k=0 t= 14.4s c=1 lo=gun+mortar    by=gun       rear=0 thr=2 dealt= 1030 taken= 1688 st=["COMBAT:56", "REGEN_COVER:52", "LOOT_WPN:18", "FARM_FIGHT:11", "CUBE:8"]
+vanguard-v3 initialized (slot=0, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 57.4ms
+  seed=967118 place=13 pts= 3 k=1 t= 67.9s c=0 lo=gun           by=laser     rear=0 thr=2 dealt= 3150 taken= 2872 st=["REGEN_COVER:436", "COMBAT:164", "LOOT_WPN:25", "CUBE:22", "PATROL:16"]
+vanguard-v3 initialized (slot=1, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 54.4ms
+  seed=975037 place=14 pts= 2 k=2 t= 35.2s c=0 lo=gun+laser     by=gun       rear=0 thr=2 dealt= 3929 taken= 1530 st=["REGEN_COVER:205", "SLICE_PIE:38", "COMBAT:36", "LOOT_WPN:34", "LASER_PRECHG:13"]
+vanguard-v3 initialized (slot=14, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 45.1ms
+  seed=982956 place=16 pts= 0 k=0 t= 15.9s c=0 lo=gun+lightning by=laser     rear=0 thr=1 dealt=  855 taken= 1485 st=["COMBAT:49", "LOOT_WPN:43", "REGEN_COVER:42", "PATROL:24", "FLANK:2"]
+vanguard-v3 initialized (slot=11, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 56.2ms
+  seed=990875 place= 6 pts=10 k=8 t=146.1s c=8 lo=gun+laser     by=gun       rear=0 thr=1 dealt=12625 taken= 3727 st=["REGEN_COVER:617", "COMBAT:323", "CUBE:201", "SLICE_PIE:63", "LASER_PEEK:52"]
+vanguard-v3 initialized (slot=12, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 45.2ms
+  seed=998794 place=16 pts= 0 k=0 t= 15.3s c=2 lo=gun+mortar    by=laser     rear=1 thr=1 dealt= 1021 taken= 1660 st=["REGEN_COVER:46", "FARM_FIGHT:42", "CUBE:32", "COMBAT:16", "LOOT_WPN:13"]
+vanguard-v3 initialized (slot=12, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 52.7ms
+  seed=1006713 place=15 pts= 1 k=1 t= 19.6s c=0 lo=gun+mortar    by=gun       rear=0 thr=1 dealt= 2234 taken= 1440 st=["REGEN_COVER:128", "KITE_COVER:32", "LOOT_WPN:31", "SLICE_PIE:4", "COMBAT:1"]
+vanguard-v3 initialized (slot=3, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 48.3ms
+  seed=1014632 place=16 pts= 0 k=0 t= 11.4s c=0 lo=gun           by=laser     rear=1 thr=1 dealt=  945 taken= 1710 st=["COMBAT:78", "REGEN_COVER:29", "REGEN_KITE:8"]
+vanguard-v3 initialized (slot=14, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 44.6ms
+  seed=1022551 place=11 pts= 5 k=4 t= 79.1s c=2 lo=gun+laser     by=laser     rear=0 thr=2 dealt= 6509 taken= 3172 st=["REGEN_COVER:487", "COMBAT:144", "CUBE:83", "LOOT_WPN:31", "ROOF_CLIMB:27"]
+vanguard-v3 initialized (slot=9, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.0ms
+  seed=1030470 place=13 pts= 3 k=3 t=127.9s c=3 lo=gun+lightning by=gun       rear=0 thr=3 dealt= 4637 taken= 3656 st=["REGEN_COVER:572", "COMBAT:313", "CUBE:124", "LOOT_WPN:69", "KITE_COVER:62"]
+vanguard-v3 initialized (slot=8, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.0ms
+  seed=1038389 place=16 pts= 0 k=0 t= 14.7s c=0 lo=gun           by=gun       rear=1 thr=2 dealt= 1035 taken= 1415 st=["KITE_COVER:57", "REGEN_COVER:57", "LOOT_WPN:34"]
+vanguard-v3 initialized (slot=7, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 49.5ms
+  seed=1046308 place=15 pts= 1 k=1 t= 28.1s c=0 lo=gun+mortar    by=gun       rear=0 thr=1 dealt= 2520 taken= 1440 st=["REGEN_COVER:151", "SLICE_PIE:62", "LOOT_WPN:61", "COMBAT:5", "KITE_COVER:2"]
+vanguard-v3 initialized (slot=2, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 53.1ms
+  seed=1054227 place=16 pts= 0 k=0 t= 15.4s c=0 lo=gun+mortar    by=laser     rear=0 thr=1 dealt=  540 taken= 1526 st=["LOOT_WPN:56", "COMBAT:52", "REGEN_COVER:34", "PATROL:6", "LASER_DUCK:4"]
+vanguard-v3 initialized (slot=5, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 50.4ms
+  seed=1062146 place=16 pts= 0 k=0 t= 12.0s c=0 lo=gun           by=gun       rear=0 thr=3 dealt= 1035 taken= 1428 st=["REGEN_COVER:76", "COMBAT:45"]
+vanguard-v3 initialized (slot=11, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 60.7ms
+  seed=1070065 place=16 pts= 0 k=0 t= 28.3s c=0 lo=gun+lightning by=gun       rear=1 thr=3 dealt= 1822 taken= 1410 st=["COMBAT:154", "LOOT_WPN:85", "REGEN_COVER:27", "FARM_FIGHT:14", "CUBE:4"]
+vanguard-v3 initialized (slot=8, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 45.0ms
+  seed=1077984 place= 8 pts= 8 k=6 t=131.8s c=4 lo=gun+laser     by=mortar    rear=1 thr=2 dealt=11997 taken= 3258 st=["REGEN_COVER:589", "COMBAT:267", "KITE_COVER:192", "CUBE:90", "LOOT_WPN:60"]
+vanguard-v3 initialized (slot=1, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 58.9ms
+  seed=1085903 place= 1 pts=15 k=7 t=480.0s c=18 lo=gun+laser     by=WIN       rear=0 thr=1 dealt=11411 taken= 3780 st=["COMBAT:1721", "CUBE:419", "REGEN_COVER:402", "LOOT_WPN:179", "PATROL:173"]
+vanguard-v3 initialized (slot=2, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.3ms
+  seed=1093822 place=15 pts= 1 k=1 t= 12.1s c=0 lo=gun+laser     by=gun       rear=0 thr=2 dealt= 1417 taken= 1418 st=["REGEN_KITE:46", "LOOT_WPN:29", "COMBAT:29", "REGEN_COVER:17"]
+vanguard-v3 initialized (slot=15, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 57.0ms
+  seed=1101741 place=16 pts= 0 k=0 t= 20.8s c=0 lo=gun           by=gun       rear=0 thr=2 dealt=  990 taken= 1415 st=["COMBAT:98", "REGEN_COVER:88", "LASER_DUCK:22"]
+vanguard-v3 initialized (slot=12, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 56.9ms
+  seed=1109660 place=13 pts= 3 k=1 t=107.2s c=1 lo=gun+lightning by=lightning rear=0 thr=3 dealt= 3416 taken= 3728 st=["REGEN_COVER:684", "COMBAT:121", "KITE_COVER:77", "LOOT_WPN:71", "FARM_FIGHT:40"]
+vanguard-v3 initialized (slot=13, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 43.2ms
+  seed=1117579 place=13 pts= 3 k=2 t= 56.5s c=0 lo=gun           by=lightning rear=0 thr=1 dealt= 3465 taken= 1664 st=["REGEN_COVER:276", "COMBAT:195", "KITE_COVER:67", "LOOT_WPN:28"]
+vanguard-v3 initialized (slot=15, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 48.6ms
+  seed=1125498 place=16 pts= 0 k=0 t= 18.2s c=0 lo=gun           by=gun       rear=0 thr=2 dealt= 1485 taken= 1418 st=["COMBAT:103", "REGEN_COVER:68", "FLANK:7", "PATROL:5"]
+vanguard-v3 initialized (slot=2, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 50.4ms
+  seed=1133417 place=10 pts= 6 k=1 t= 99.9s c=2 lo=gun+lightning by=lightning rear=0 thr=1 dealt= 3056 taken= 1652 st=["COMBAT:533", "PATROL:121", "REGEN_COVER:72", "LOOT_WPN:70", "CUBE:67"]
+vanguard-v3 initialized (slot=1, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 49.8ms
+  seed=1141336 place=16 pts= 0 k=0 t=  8.0s c=0 lo=gun           by=gun       rear=1 thr=3 dealt=  630 taken= 1418 st=["LOOT_WPN:31", "REGEN_COVER:26", "REGEN_KITE:23"]
+vanguard-v3 initialized (slot=8, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 48.7ms
+  seed=1149255 place= 1 pts=15 k=13 t=480.0s c=10 lo=gun+laser     by=WIN       rear=0 thr=1 dealt=18067 taken= 3380 st=["COMBAT:1359", "REGEN_COVER:355", "CUBE:310", "PATROL:145", "FARM_FIGHT:56"]
+vanguard-v3 initialized (slot=11, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 42.9ms
+  seed=1157174 place=15 pts= 1 k=1 t= 22.4s c=0 lo=gun           by=gun       rear=0 thr=2 dealt= 2205 taken= 1405 st=["KITE_COVER:166", "REGEN_COVER:51", "PATROL:5", "COMBAT:2"]
+vanguard-v3 initialized (slot=6, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 48.9ms
+  seed=1165093 place=16 pts= 0 k=0 t=  7.7s c=0 lo=gun           by=gun       rear=0 thr=2 dealt=  900 taken= 1418 st=["REGEN_COVER:46", "COMBAT:32"]
+vanguard-v3 initialized (slot=5, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 44.5ms
+  seed=1173012 place=16 pts= 0 k=0 t= 23.7s c=2 lo=gun           by=gun       rear=0 thr=2 dealt= 1561 taken= 1825 st=["REGEN_COVER:180", "COMBAT:27", "FARM_FIGHT:21", "CUBE:7", "SEEK_CRATE:3"]
+vanguard-v3 initialized (slot=4, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 49.9ms
+  seed=1180931 place=16 pts= 0 k=0 t=  7.0s c=0 lo=gun+laser     by=gun       rear=1 thr=2 dealt=  976 taken= 1418 st=["REGEN_COVER:44", "LOOT_WPN:25", "REGEN_KITE:2"]
+vanguard-v3 initialized (slot=8, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 47.1ms
+  seed=1188850 place=16 pts= 0 k=0 t= 10.6s c=0 lo=gun           by=gun       rear=1 thr=5 dealt=  495 taken= 1440 st=["REGEN_COVER:31", "FARM_FIGHT:26", "COMBAT:22", "LOOT_WPN:19", "LASER_DUCK:9"]
+vanguard-v3 initialized (slot=9, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 49.6ms
+  seed=1196769 place= 7 pts= 9 k=4 t=171.6s c=5 lo=gun+lightning by=lightning rear=0 thr=4 dealt= 8379 taken= 4046 st=["REGEN_COVER:883", "COMBAT:271", "LOOT_WPN:153", "CUBE:150", "SLICE_PIE:72"]
+vanguard-v3 initialized (slot=14, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 52.8ms
+  seed=1204688 place=15 pts= 1 k=1 t= 11.5s c=0 lo=gun+lightning by=gun       rear=0 thr=2 dealt= 1665 taken= 1418 st=["REGEN_COVER:41", "LOOT_WPN:37", "COMBAT:37"]
+vanguard-v3 initialized (slot=3, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 47.5ms
+  seed=1212607 place=13 pts= 3 k=2 t= 48.0s c=0 lo=gun           by=laser     rear=1 thr=0 dealt= 2902 taken= 1642 st=["REGEN_COVER:309", "COMBAT:145", "LOOT_WPN:13", "FARM_FIGHT:9", "SEEK_CRATE:5"]
+vanguard-v3 initialized (slot=12, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 52.4ms
+  seed=1220526 place=16 pts= 0 k=0 t=  8.8s c=0 lo=gun           by=gun       rear=0 thr=4 dealt=  765 taken= 1428 st=["KITE_COVER:35", "LOOT_WPN:33", "REGEN_COVER:21"]
+vanguard-v3 initialized (slot=13, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 46.2ms
+  seed=1228445 place=13 pts= 3 k=1 t= 44.2s c=0 lo=gun           by=gun       rear=0 thr=1 dealt= 2070 taken= 1730 st=["REGEN_COVER:322", "COMBAT:79", "LASER_DUCK:27", "KITE_COVER:14"]
+vanguard-v3 initialized (slot=10, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 49.3ms
+  seed=1236364 place=11 pts= 5 k=3 t=208.8s c=7 lo=gun+lightning by=gun       rear=1 thr=6 dealt= 6557 taken= 3259 st=["PATROL:549", "REGEN_COVER:411", "ZONE:262", "CUBE:207", "COMBAT:145"]
+vanguard-v3 initialized (slot=14, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 48.8ms
+  seed=1244283 place=16 pts= 0 k=0 t= 22.2s c=0 lo=gun+mortar    by=gun       rear=0 thr=1 dealt= 1428 taken= 1440 st=["REGEN_COVER:129", "LOOT_WPN:44", "KITE_COVER:23", "COMBAT:21", "SLICE_PIE:5"]
+vanguard-v3 initialized (slot=1, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 49.5ms
+  seed=1252202 place=14 pts= 2 k=1 t= 83.2s c=1 lo=gun+laser     by=laser     rear=0 thr=3 dealt= 4017 taken= 2754 st=["REGEN_COVER:249", "COMBAT:167", "LOOT_WPN:103", "PATROL:91", "FLANK:66"]
+vanguard-v3 initialized (slot=0, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 55.5ms
+  seed=1260121 place=15 pts= 1 k=1 t= 12.5s c=0 lo=gun+laser     by=gun       rear=1 thr=2 dealt= 1988 taken= 1440 st=["REGEN_COVER:53", "COMBAT:31", "LOOT_WPN:20", "SLICE_PIE:16", "KITE_COVER:6"]
+vanguard-v3 initialized (slot=7, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 49.4ms
+  seed=1268040 place=14 pts= 2 k=2 t= 65.2s c=1 lo=gun+lightning by=laser     rear=0 thr=0 dealt= 3385 taken= 2384 st=["REGEN_COVER:318", "LOOT_WPN:120", "COMBAT:100", "SLICE_PIE:37", "KITE_COVER:31"]
+vanguard-v3 initialized (slot=10, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 65.9ms
+  seed=1275959 place=16 pts= 0 k=0 t=  8.1s c=0 lo=gun           by=gun       rear=1 thr=1 dealt=  585 taken= 1440 st=["LOOT_WPN:56", "REGEN_COVER:15", "COMBAT:10"]
+vanguard-v3 initialized (slot=5, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 47.1ms
+  seed=1283878 place=10 pts= 6 k=2 t=219.0s c=2 lo=gun+lightning by=zone      rear=0 thr=0 dealt= 3763 taken= 1305 st=["COMBAT:455", "PATROL:440", "ZONE:404", "FLANK:327", "REGEN_COVER:320"]
+vanguard-v3 initialized (slot=4, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.3ms
+  seed=1291797 place= 1 pts=15 k=11 t=480.0s c=15 lo=gun+laser     by=WIN       rear=0 thr=1 dealt=12546 taken= 3868 st=["COMBAT:1235", "REGEN_COVER:726", "DROP:231", "CUBE:202", "LOOT_WPN:189"]
+vanguard-v3 initialized (slot=3, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.7ms
+  seed=1299716 place=10 pts= 6 k=1 t= 80.9s c=1 lo=gun+lightning by=gun       rear=0 thr=3 dealt= 3559 taken= 2618 st=["REGEN_COVER:271", "COMBAT:264", "LOOT_WPN:80", "PATROL:72", "CUBE:34"]
+vanguard-v3 initialized (slot=9, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 46.6ms
+  seed=1307635 place=15 pts= 1 k=0 t= 14.2s c=0 lo=gun+laser     by=gun       rear=1 thr=4 dealt= 1991 taken= 1462 st=["LOOT_WPN:50", "COMBAT:34", "REGEN_COVER:29", "REGEN_KITE:27", "PATROL:2"]
+vanguard-v3 initialized (slot=10, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 42.9ms
+  seed=1315554 place=15 pts= 1 k=1 t=  8.3s c=0 lo=gun+laser     by=gun       rear=1 thr=2 dealt= 1458 taken= 1418 st=["COMBAT:29", "REGEN_COVER:28", "LOOT_WPN:27"]
+vanguard-v3 initialized (slot=15, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 45.9ms
+  seed=1323473 place= 7 pts= 9 k=7 t=100.4s c=5 lo=gun+laser     by=mortar    rear=0 thr=1 dealt= 8135 taken= 3039 st=["REGEN_COVER:316", "CUBE:190", "COMBAT:152", "LOOT_WPN:102", "ZONE:67"]
+EXPERIMENT_RESULT {"gun_hits":57,"gun_shots":102,"killed_by":"laser","kills":3,"laser_hits":12,"laser_shots":18,"loadout":"gun+laser","mode":"practice","place":12,"points":4.0,"seed":571168}
+EXPERIMENT_RESULT {"gun_hits":24,"gun_shots":55,"killed_by":"laser","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":15,"points":1.0,"seed":579087}
+EXPERIMENT_RESULT {"gun_hits":41,"gun_shots":53,"killed_by":"lightning","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":587006}
+EXPERIMENT_RESULT {"gun_hits":34,"gun_shots":49,"killed_by":"gun","kills":1,"laser_hits":7,"laser_shots":8,"loadout":"gun+laser","mode":"practice","place":15,"points":1.0,"seed":594925}
+EXPERIMENT_RESULT {"gun_hits":18,"gun_shots":28,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":602844}
+EXPERIMENT_RESULT {"gun_hits":57,"gun_shots":208,"killed_by":"gun","kills":4,"laser_hits":7,"laser_shots":8,"loadout":"gun+laser","mode":"practice","place":9,"points":7.0,"seed":610763}
+EXPERIMENT_RESULT {"gun_hits":88,"gun_shots":110,"killed_by":"laser","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":13,"points":3.0,"seed":618682}
+EXPERIMENT_RESULT {"gun_hits":25,"gun_shots":29,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":626601}
+EXPERIMENT_RESULT {"gun_hits":39,"gun_shots":44,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":634520}
+EXPERIMENT_RESULT {"gun_hits":107,"gun_shots":142,"killed_by":"laser","kills":7,"laser_hits":17,"laser_shots":25,"loadout":"gun+laser","mode":"practice","place":5,"points":11.0,"seed":642439}
+EXPERIMENT_RESULT {"gun_hits":18,"gun_shots":28,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":650358}
+EXPERIMENT_RESULT {"gun_hits":86,"gun_shots":130,"killed_by":"lightning","kills":6,"laser_hits":17,"laser_shots":18,"loadout":"gun+laser","mode":"practice","place":9,"points":7.0,"seed":658277}
+EXPERIMENT_RESULT {"gun_hits":28,"gun_shots":43,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun+mortar","mode":"practice","place":15,"points":1.0,"seed":666196}
+EXPERIMENT_RESULT {"gun_hits":41,"gun_shots":76,"killed_by":"gun","kills":3,"laser_hits":12,"laser_shots":16,"loadout":"gun+laser","mode":"practice","place":11,"points":5.0,"seed":674115}
+EXPERIMENT_RESULT {"gun_hits":27,"gun_shots":32,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":16,"points":0.0,"seed":682034}
+EXPERIMENT_RESULT {"gun_hits":98,"gun_shots":143,"killed_by":"gun","kills":5,"laser_hits":19,"laser_shots":25,"loadout":"gun+laser","mode":"practice","place":7,"points":9.0,"seed":689953}
+EXPERIMENT_RESULT {"gun_hits":17,"gun_shots":20,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":697872}
+EXPERIMENT_RESULT {"gun_hits":161,"gun_shots":211,"killed_by":"gun","kills":5,"laser_hits":0,"laser_shots":0,"loadout":"gun+mortar","mode":"practice","place":8,"points":8.0,"seed":705791}
+EXPERIMENT_RESULT {"gun_hits":85,"gun_shots":104,"killed_by":"gun","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":14,"points":2.0,"seed":713710}
+EXPERIMENT_RESULT {"gun_hits":37,"gun_shots":46,"killed_by":"gun","kills":2,"laser_hits":4,"laser_shots":4,"loadout":"gun+laser","mode":"practice","place":14,"points":2.0,"seed":721629}
+EXPERIMENT_RESULT {"gun_hits":53,"gun_shots":55,"killed_by":"laser","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":15,"points":1.0,"seed":729548}
+EXPERIMENT_RESULT {"gun_hits":105,"gun_shots":155,"killed_by":"SURVIVED","kills":10,"laser_hits":22,"laser_shots":25,"loadout":"gun+laser","mode":"practice","place":1,"points":15.0,"seed":737467}
+EXPERIMENT_RESULT {"gun_hits":26,"gun_shots":45,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":745386}
+EXPERIMENT_RESULT {"gun_hits":25,"gun_shots":38,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":16,"points":0.0,"seed":753305}
+EXPERIMENT_RESULT {"gun_hits":67,"gun_shots":117,"killed_by":"lightning","kills":3,"laser_hits":9,"laser_shots":20,"loadout":"gun+laser","mode":"practice","place":10,"points":6.0,"seed":761224}
+EXPERIMENT_RESULT {"gun_hits":72,"gun_shots":132,"killed_by":"gun","kills":3,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":11,"points":5.0,"seed":769143}
+EXPERIMENT_RESULT {"gun_hits":122,"gun_shots":182,"killed_by":"zone","kills":11,"laser_hits":25,"laser_shots":32,"loadout":"gun+laser","mode":"practice","place":3,"points":13.0,"seed":777062}
+EXPERIMENT_RESULT {"gun_hits":21,"gun_shots":24,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun+laser","mode":"practice","place":16,"points":0.0,"seed":784981}
+EXPERIMENT_RESULT {"gun_hits":25,"gun_shots":38,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":792900}
+EXPERIMENT_RESULT {"gun_hits":29,"gun_shots":45,"killed_by":"lightning","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":16,"points":0.0,"seed":800819}
+EXPERIMENT_RESULT {"gun_hits":45,"gun_shots":49,"killed_by":"gun","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":15,"points":1.0,"seed":808738}
+EXPERIMENT_RESULT {"gun_hits":46,"gun_shots":56,"killed_by":"gun","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":15,"points":1.0,"seed":816657}
+EXPERIMENT_RESULT {"gun_hits":15,"gun_shots":17,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":824576}
+EXPERIMENT_RESULT {"gun_hits":34,"gun_shots":36,"killed_by":"gun","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":15,"points":1.0,"seed":832495}
+EXPERIMENT_RESULT {"gun_hits":37,"gun_shots":61,"killed_by":"lightning","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun+mortar","mode":"practice","place":15,"points":1.0,"seed":840414}
+EXPERIMENT_RESULT {"gun_hits":28,"gun_shots":35,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":848333}
+EXPERIMENT_RESULT {"gun_hits":45,"gun_shots":57,"killed_by":"gun","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun+mortar","mode":"practice","place":12,"points":4.0,"seed":856252}
+EXPERIMENT_RESULT {"gun_hits":27,"gun_shots":36,"killed_by":"laser","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":864171}
+EXPERIMENT_RESULT {"gun_hits":63,"gun_shots":91,"killed_by":"gun","kills":3,"laser_hits":6,"laser_shots":10,"loadout":"gun+laser","mode":"practice","place":10,"points":6.0,"seed":872090}
+EXPERIMENT_RESULT {"gun_hits":16,"gun_shots":30,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun+mortar","mode":"practice","place":16,"points":0.0,"seed":880009}
+EXPERIMENT_RESULT {"gun_hits":59,"gun_shots":105,"killed_by":"gun","kills":5,"laser_hits":18,"laser_shots":24,"loadout":"gun+laser","mode":"practice","place":6,"points":10.0,"seed":887928}
+EXPERIMENT_RESULT {"gun_hits":33,"gun_shots":42,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":895847}
+EXPERIMENT_RESULT {"gun_hits":13,"gun_shots":27,"killed_by":"laser","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":16,"points":0.0,"seed":903766}
+EXPERIMENT_RESULT {"gun_hits":81,"gun_shots":141,"killed_by":"SURVIVED","kills":10,"laser_hits":20,"laser_shots":30,"loadout":"gun+laser","mode":"practice","place":1,"points":15.0,"seed":911685}
+EXPERIMENT_RESULT {"gun_hits":29,"gun_shots":34,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":919604}
+EXPERIMENT_RESULT {"gun_hits":58,"gun_shots":79,"killed_by":"lightning","kills":3,"laser_hits":9,"laser_shots":14,"loadout":"gun+laser","mode":"practice","place":10,"points":6.0,"seed":927523}
+EXPERIMENT_RESULT {"gun_hits":55,"gun_shots":59,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun+laser","mode":"practice","place":15,"points":1.0,"seed":935442}
+EXPERIMENT_RESULT {"gun_hits":55,"gun_shots":60,"killed_by":"gun","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":15,"points":1.0,"seed":943361}
+EXPERIMENT_RESULT {"gun_hits":62,"gun_shots":95,"killed_by":"laser","kills":2,"laser_hits":3,"laser_shots":5,"loadout":"gun+laser","mode":"practice","place":12,"points":4.0,"seed":951280}
+EXPERIMENT_RESULT {"gun_hits":22,"gun_shots":31,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun+mortar","mode":"practice","place":16,"points":0.0,"seed":959199}
+EXPERIMENT_RESULT {"gun_hits":70,"gun_shots":79,"killed_by":"laser","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":13,"points":3.0,"seed":967118}
+EXPERIMENT_RESULT {"gun_hits":31,"gun_shots":51,"killed_by":"gun","kills":2,"laser_hits":8,"laser_shots":9,"loadout":"gun+laser","mode":"practice","place":14,"points":2.0,"seed":975037}
+EXPERIMENT_RESULT {"gun_hits":19,"gun_shots":21,"killed_by":"laser","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":16,"points":0.0,"seed":982956}
+EXPERIMENT_RESULT {"gun_hits":103,"gun_shots":148,"killed_by":"gun","kills":8,"laser_hits":22,"laser_shots":25,"loadout":"gun+laser","mode":"practice","place":6,"points":10.0,"seed":990875}
+EXPERIMENT_RESULT {"gun_hits":14,"gun_shots":30,"killed_by":"laser","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun+mortar","mode":"practice","place":16,"points":0.0,"seed":998794}
+EXPERIMENT_RESULT {"gun_hits":35,"gun_shots":48,"killed_by":"gun","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun+mortar","mode":"practice","place":15,"points":1.0,"seed":1006713}
+EXPERIMENT_RESULT {"gun_hits":21,"gun_shots":27,"killed_by":"laser","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":1014632}
+EXPERIMENT_RESULT {"gun_hits":52,"gun_shots":74,"killed_by":"laser","kills":4,"laser_hits":13,"laser_shots":13,"loadout":"gun+laser","mode":"practice","place":11,"points":5.0,"seed":1022551}
+EXPERIMENT_RESULT {"gun_hits":88,"gun_shots":147,"killed_by":"gun","kills":3,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":13,"points":3.0,"seed":1030470}
+EXPERIMENT_RESULT {"gun_hits":23,"gun_shots":36,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":1038389}
+EXPERIMENT_RESULT {"gun_hits":49,"gun_shots":62,"killed_by":"gun","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun+mortar","mode":"practice","place":15,"points":1.0,"seed":1046308}
+EXPERIMENT_RESULT {"gun_hits":12,"gun_shots":23,"killed_by":"laser","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun+mortar","mode":"practice","place":16,"points":0.0,"seed":1054227}
+EXPERIMENT_RESULT {"gun_hits":23,"gun_shots":25,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":1062146}
+EXPERIMENT_RESULT {"gun_hits":37,"gun_shots":64,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":16,"points":0.0,"seed":1070065}
+EXPERIMENT_RESULT {"gun_hits":122,"gun_shots":161,"killed_by":"mortar","kills":6,"laser_hits":15,"laser_shots":20,"loadout":"gun+laser","mode":"practice","place":8,"points":8.0,"seed":1077984}
+EXPERIMENT_RESULT {"gun_hits":102,"gun_shots":168,"killed_by":"SURVIVED","kills":7,"laser_hits":14,"laser_shots":21,"loadout":"gun+laser","mode":"practice","place":1,"points":15.0,"seed":1085903}
+EXPERIMENT_RESULT {"gun_hits":26,"gun_shots":29,"killed_by":"gun","kills":1,"laser_hits":1,"laser_shots":1,"loadout":"gun+laser","mode":"practice","place":15,"points":1.0,"seed":1093822}
+EXPERIMENT_RESULT {"gun_hits":22,"gun_shots":35,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":1101741}
+EXPERIMENT_RESULT {"gun_hits":67,"gun_shots":99,"killed_by":"lightning","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":13,"points":3.0,"seed":1109660}
+EXPERIMENT_RESULT {"gun_hits":77,"gun_shots":96,"killed_by":"lightning","kills":2,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":13,"points":3.0,"seed":1117579}
+EXPERIMENT_RESULT {"gun_hits":33,"gun_shots":33,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":1125498}
+EXPERIMENT_RESULT {"gun_hits":53,"gun_shots":79,"killed_by":"lightning","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":10,"points":6.0,"seed":1133417}
+EXPERIMENT_RESULT {"gun_hits":14,"gun_shots":23,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":1141336}
+EXPERIMENT_RESULT {"gun_hits":108,"gun_shots":184,"killed_by":"SURVIVED","kills":13,"laser_hits":28,"laser_shots":38,"loadout":"gun+laser","mode":"practice","place":1,"points":15.0,"seed":1149255}
+EXPERIMENT_RESULT {"gun_hits":49,"gun_shots":50,"killed_by":"gun","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":15,"points":1.0,"seed":1157174}
+EXPERIMENT_RESULT {"gun_hits":20,"gun_shots":22,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":1165093}
+EXPERIMENT_RESULT {"gun_hits":33,"gun_shots":44,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":1173012}
+EXPERIMENT_RESULT {"gun_hits":15,"gun_shots":17,"killed_by":"gun","kills":0,"laser_hits":1,"laser_shots":1,"loadout":"gun+laser","mode":"practice","place":16,"points":0.0,"seed":1180931}
+EXPERIMENT_RESULT {"gun_hits":11,"gun_shots":24,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":1188850}
+EXPERIMENT_RESULT {"gun_hits":116,"gun_shots":168,"killed_by":"lightning","kills":4,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":7,"points":9.0,"seed":1196769}
+EXPERIMENT_RESULT {"gun_hits":25,"gun_shots":27,"killed_by":"gun","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":15,"points":1.0,"seed":1204688}
+EXPERIMENT_RESULT {"gun_hits":64,"gun_shots":81,"killed_by":"laser","kills":2,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":13,"points":3.0,"seed":1212607}
+EXPERIMENT_RESULT {"gun_hits":17,"gun_shots":23,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":1220526}
+EXPERIMENT_RESULT {"gun_hits":46,"gun_shots":57,"killed_by":"gun","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":13,"points":3.0,"seed":1228445}
+EXPERIMENT_RESULT {"gun_hits":94,"gun_shots":159,"killed_by":"gun","kills":3,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":11,"points":5.0,"seed":1236364}
+EXPERIMENT_RESULT {"gun_hits":30,"gun_shots":36,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun+mortar","mode":"practice","place":16,"points":0.0,"seed":1244283}
+EXPERIMENT_RESULT {"gun_hits":57,"gun_shots":86,"killed_by":"laser","kills":1,"laser_hits":3,"laser_shots":3,"loadout":"gun+laser","mode":"practice","place":14,"points":2.0,"seed":1252202}
+EXPERIMENT_RESULT {"gun_hits":18,"gun_shots":31,"killed_by":"gun","kills":1,"laser_hits":4,"laser_shots":4,"loadout":"gun+laser","mode":"practice","place":15,"points":1.0,"seed":1260121}
+EXPERIMENT_RESULT {"gun_hits":59,"gun_shots":71,"killed_by":"laser","kills":2,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":14,"points":2.0,"seed":1268040}
+EXPERIMENT_RESULT {"gun_hits":13,"gun_shots":21,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"practice","place":16,"points":0.0,"seed":1275959}
+EXPERIMENT_RESULT {"gun_hits":79,"gun_shots":108,"killed_by":"zone","kills":2,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":10,"points":6.0,"seed":1283878}
+EXPERIMENT_RESULT {"gun_hits":110,"gun_shots":174,"killed_by":"SURVIVED","kills":11,"laser_hits":16,"laser_shots":24,"loadout":"gun+laser","mode":"practice","place":1,"points":15.0,"seed":1291797}
+EXPERIMENT_RESULT {"gun_hits":78,"gun_shots":102,"killed_by":"gun","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"practice","place":10,"points":6.0,"seed":1299716}
+EXPERIMENT_RESULT {"gun_hits":22,"gun_shots":33,"killed_by":"gun","kills":0,"laser_hits":2,"laser_shots":2,"loadout":"gun+laser","mode":"practice","place":15,"points":1.0,"seed":1307635}
+EXPERIMENT_RESULT {"gun_hits":19,"gun_shots":24,"killed_by":"gun","kills":1,"laser_hits":2,"laser_shots":2,"loadout":"gun+laser","mode":"practice","place":15,"points":1.0,"seed":1315554}
+EXPERIMENT_RESULT {"gun_hits":63,"gun_shots":121,"killed_by":"mortar","kills":7,"laser_hits":10,"laser_shots":12,"loadout":"gun+laser","mode":"practice","place":7,"points":9.0,"seed":1323473}
+=== MECHSIM (PRACTICE, 96 matches in 11.52s) ===
+MEAN SCORE: 3.05 / 15.00  |  Wins: 5  |  Early deaths (<=2 pts): 60/96
+Avg kills: 1.92  |  Avg survival: 80.6s  |  Avg cubes: 2.2  |  Avg threats@death: 2.0
+Accuracy: Gun 4695/6846 (68.6%)  |  Laser 346/457 (75.7%)
+Rear-hit deaths: 21/96  |  On-roof deaths: 1/96
+Killed by weapon: {"SURVIVED": 5, "laser": 17, "lightning": 10, "zone": 2, "mortar": 2, "gun": 60}  |  by tier: {"Zone": 2, "Hard": 29, "Easy": 11, "Medium": 14, "Expert": 35, "SURVIVED": 5}
+Score by loadout: ["gun+laser(32): 6.47", "gun+lightning(19): 2.68", "gun+mortar(11): 1.45", "gun(34): 0.56"]
+Bot act() ms: p50 0.011  p99 1.247  max 3.342
+vanguard-v3 initialized (slot=3, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 48.4ms
+  seed=571168 place= 1 pts=15 k=5 t=480.0s c=10 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 7919 taken= 2178 st=["PATROL:589", "COMBAT:375", "ROOF_HOLD^:371", "REGEN_COVER:279", "CUBE:199"]
+vanguard-v3 initialized (slot=14, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 58.5ms
+  seed=579087 place= 1 pts=15 k=1 t=480.0s c=11 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 1416 taken=   75 st=["ROOF_HOLD^:1162", "PATROL:386", "CUBE:208", "DROP:158", "ROOF_CLIMB:117"]
+vanguard-v3 initialized (slot=10, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 58.6ms
+  seed=587006 place= 1 pts=15 k=4 t=480.0s c=14 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 4734 taken=  990 st=["CUBE:421", "ROOF_HOLD^:360", "COMBAT:266", "REGEN_COVER:180", "ROOF_CLIMB:168"]
+vanguard-v3 initialized (slot=7, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.3ms
+  seed=594925 place= 1 pts=15 k=3 t=480.0s c=14 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 4177 taken=  385 st=["ROOF_HOLD^:670", "CUBE:481", "DROP:328", "ROOF_CLIMB:231", "COMBAT:226"]
+vanguard-v3 initialized (slot=4, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 59.3ms
+  seed=602844 place=12 pts= 4 k=0 t= 22.0s c=2 lo=gun           by=gun       rear=0 thr=2 dealt= 1289 taken= 1535 st=["REGEN_COVER:117", "COMBAT:78", "FARM_FIGHT:14", "FLANK:12"]
+vanguard-v3 initialized (slot=5, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 47.0ms
+  seed=610763 place= 1 pts=15 k=3 t=480.0s c=7 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 4830 taken= 3002 st=["ROOF_HOLD^:573", "REGEN_COVER:365", "CUBE:265", "PATROL:233", "COMBAT:189"]
+vanguard-v3 initialized (slot=6, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 45.5ms
+  seed=618682 place= 3 pts=13 k=2 t=201.4s c=1 lo=gun           by=laser     rear=0 thr=1 dealt= 4212 taken= 3359 st=["COMBAT:1175", "REGEN_COVER:299", "LOOT_WPN:158", "PATROL:128", "ZONE:101"]
+vanguard-v3 initialized (slot=11, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 56.6ms
+  seed=626601 place= 6 pts=10 k=1 t= 33.6s c=0 lo=gun           by=gun       rear=0 thr=1 dealt= 2408 taken= 1418 st=["REGEN_COVER:271", "KITE_COVER:39", "COMBAT:26"]
+vanguard-v3 initialized (slot=8, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 47.1ms
+  seed=634520 place= 1 pts=15 k=6 t=480.0s c=10 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 6289 taken=  751 st=["ROOF_HOLD^:564", "CUBE:369", "PATROL:363", "COMBAT:236", "LOOT_WPN:204"]
+vanguard-v3 initialized (slot=1, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 53.4ms
+  seed=642439 place= 1 pts=15 k=5 t=480.0s c=15 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 7079 taken=  945 st=["PATROL:600", "ROOF_HOLD^:511", "CUBE:353", "COMBAT:265", "ROOF_CLIMB:257"]
+vanguard-v3 initialized (slot=3, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.5ms
+  seed=650358 place= 1 pts=15 k=5 t=480.0s c=8 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 5295 taken= 2201 st=["ROOF_HOLD^:501", "PATROL:458", "CUBE:346", "REGEN_COVER:227", "COMBAT:159"]
+vanguard-v3 initialized (slot=14, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 50.3ms
+  seed=658277 place= 4 pts=12 k=1 t= 87.7s c=3 lo=gun+lightning by=laser     rear=0 thr=1 dealt= 2553 taken= 2173 st=["PATROL:345", "LOOT_WPN:212", "COMBAT:186", "REGEN_COVER:78", "CUBE:48"]
+vanguard-v3 initialized (slot=13, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 42.7ms
+  seed=666196 place= 1 pts=15 k=5 t=480.0s c=21 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 4767 taken=  978 st=["PATROL:725", "CUBE:331", "DROP:227", "LOOT_WPN:201", "ROOF_HOLD^:198"]
+vanguard-v3 initialized (slot=12, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 46.7ms
+  seed=674115 place= 1 pts=15 k=3 t=480.0s c=11 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 3927 taken=  632 st=["ROOF_HOLD^:761", "PATROL:561", "CUBE:331", "ROOF_CLIMB:314", "COMBAT:156"]
+vanguard-v3 initialized (slot=15, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 50.2ms
+  seed=682034 place= 1 pts=15 k=3 t=480.0s c=14 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 4561 taken= 1170 st=["ROOF_HOLD^:823", "CUBE:516", "DROP:391", "PATROL:328", "COMBAT:266"]
+vanguard-v3 initialized (slot=2, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.3ms
+  seed=689953 place= 1 pts=15 k=2 t=480.0s c=8 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 3257 taken=  360 st=["ROOF_HOLD^:1837", "CUBE:247", "DROP:156", "ROOF_CLIMB:111", "COMBAT:77"]
+vanguard-v3 initialized (slot=1, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 47.0ms
+  seed=697872 place= 1 pts=15 k=3 t=480.0s c=6 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 6844 taken= 2517 st=["COMBAT:382", "PATROL:364", "CUBE:354", "ROOF_CLIMB:258", "REGEN_COVER:170"]
+vanguard-v3 initialized (slot=11, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 53.4ms
+  seed=705791 place= 1 pts=15 k=4 t=480.0s c=18 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 3591 taken=  863 st=["ROOF_HOLD^:960", "CUBE:305", "COMBAT:223", "LOOT_WPN:133", "DROP:125"]
+vanguard-v3 initialized (slot=4, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 45.8ms
+  seed=713710 place= 6 pts=10 k=2 t= 67.7s c=0 lo=gun+lightning by=gun       rear=0 thr=1 dealt= 4792 taken= 2385 st=["REGEN_COVER:289", "COMBAT:227", "KITE_COVER:66", "PATROL:50", "LOOT_WPN:42"]
+vanguard-v3 initialized (slot=5, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 46.3ms
+  seed=721629 place= 1 pts=15 k=5 t=480.0s c=6 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 7619 taken= 3641 st=["ROOF_HOLD^:958", "REGEN_COVER:340", "COMBAT:247", "PATROL:231", "CUBE:223"]
+vanguard-v3 initialized (slot=2, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 49.2ms
+  seed=729548 place= 1 pts=15 k=4 t=480.0s c=7 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 5172 taken= 1530 st=["ROOF_HOLD^:681", "CUBE:289", "COMBAT:218", "ROOF_CLIMB:133", "PATROL:104"]
+vanguard-v3 initialized (slot=7, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 47.1ms
+  seed=737467 place= 1 pts=15 k=4 t=480.0s c=13 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 4363 taken=  381 st=["ROOF_HOLD^:631", "PATROL:375", "COMBAT:197", "CUBE:155", "ROOF_CLIMB:120"]
+vanguard-v3 initialized (slot=8, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 48.7ms
+  seed=745386 place= 6 pts=10 k=1 t= 42.0s c=1 lo=gun           by=laser     rear=0 thr=0 dealt= 1039 taken= 1586 st=["REGEN_COVER:246", "COMBAT:115", "LOOT_WPN:48", "CUBE:12"]
+vanguard-v3 initialized (slot=9, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 48.4ms
+  seed=753305 place= 1 pts=15 k=4 t=480.0s c=12 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 6351 taken=  405 st=["COMBAT:569", "PATROL:452", "ROOF_HOLD^:291", "CUBE:274", "ROOF_CLIMB:251"]
+vanguard-v3 initialized (slot=14, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 44.0ms
+  seed=761224 place= 1 pts=15 k=4 t=480.0s c=10 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 6994 taken= 1265 st=["ROOF_HOLD^:865", "PATROL:549", "COMBAT:350", "CUBE:311", "ROOF_CLIMB:160"]
+vanguard-v3 initialized (slot=2, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 53.4ms
+  seed=769143 place= 1 pts=15 k=1 t=480.0s c=5 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 2176 taken=  462 st=["ROOF_HOLD^:1869", "CUBE:215", "LOOT_WPN:105", "COMBAT:82", "ROOF_CLIMB:51"]
+vanguard-v3 initialized (slot=13, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 61.0ms
+  seed=777062 place= 1 pts=15 k=4 t=480.0s c=10 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 6763 taken= 2113 st=["PATROL:478", "CUBE:314", "COMBAT:276", "REGEN_COVER:160", "DROP:38"]
+vanguard-v3 initialized (slot=12, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 49.3ms
+  seed=784981 place= 1 pts=15 k=5 t=480.0s c=10 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 7499 taken= 1961 st=["ROOF_HOLD^:972", "COMBAT:604", "PATROL:282", "CUBE:262", "REGEN_COVER:205"]
+vanguard-v3 initialized (slot=11, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 48.0ms
+  seed=792900 place= 1 pts=15 k=4 t=480.0s c=15 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 4615 taken=  923 st=["PATROL:749", "ROOF_HOLD^:538", "ROOF_CLIMB:460", "CUBE:321", "ROOF_APPROACH:255"]
+vanguard-v3 initialized (slot=14, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.5ms
+  seed=800819 place= 6 pts=10 k=1 t= 57.2s c=1 lo=gun+lightning by=gun       rear=0 thr=2 dealt= 2952 taken= 2055 st=["COMBAT:226", "REGEN_COVER:189", "FLANK:61", "CUBE:44", "SLICE_PIE:24"]
+vanguard-v3 initialized (slot=1, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 60.1ms
+  seed=808738 place= 1 pts=15 k=2 t=480.0s c=15 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 4088 taken= 1263 st=["CUBE:549", "PATROL:522", "DROP:279", "REGEN_COVER:260", "ROOF_HOLD^:253"]
+vanguard-v3 initialized (slot=0, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 45.5ms
+  seed=816657 place= 1 pts=15 k=5 t=480.0s c=18 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 5423 taken=  362 st=["ROOF_HOLD^:602", "PATROL:500", "CUBE:450", "DROP:378", "ROOF_CLIMB:194"]
+vanguard-v3 initialized (slot=7, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 50.1ms
+  seed=824576 place= 1 pts=15 k=6 t=480.0s c=21 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 7636 taken= 1143 st=["PATROL:505", "CUBE:505", "DROP:473", "ROOF_HOLD^:316", "ROOF_CLIMB:237"]
+vanguard-v3 initialized (slot=5, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 50.7ms
+  seed=832495 place=12 pts= 4 k=1 t= 19.4s c=0 lo=gun           by=gun       rear=0 thr=3 dealt= 1980 taken= 1418 st=["COMBAT:113", "REGEN_KITE:63", "LOOT_WPN:15", "KILL_LOOT:4"]
+vanguard-v3 initialized (slot=6, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 42.6ms
+  seed=840414 place= 1 pts=15 k=5 t=480.0s c=10 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 6439 taken=  928 st=["COMBAT:276", "CUBE:253", "PATROL:204", "LOOT_WPN:187", "ROOF_CLIMB:124"]
+vanguard-v3 initialized (slot=3, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 50.5ms
+  seed=848333 place= 1 pts=15 k=4 t=480.0s c=16 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 4674 taken= 2178 st=["CUBE:381", "PATROL:361", "REGEN_COVER:320", "COMBAT:282", "DROP:251"]
+vanguard-v3 initialized (slot=0, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.5ms
+  seed=856252 place=12 pts= 4 k=1 t= 20.4s c=0 lo=gun+mortar    by=laser     rear=0 thr=1 dealt= 2424 taken= 1782 st=["COMBAT:80", "SLICE_PIE:38", "LOOT_WPN:27", "KITE_COVER:24", "LASER_DUCK:19"]
+vanguard-v3 initialized (slot=9, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 53.1ms
+  seed=864171 place= 1 pts=15 k=1 t=480.0s c=6 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 1440 taken=  810 st=["ROOF_HOLD^:1628", "PATROL:238", "COMBAT:219", "CUBE:164", "REGEN_COVER:149"]
+vanguard-v3 initialized (slot=10, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 47.2ms
+  seed=872090 place= 1 pts=15 k=2 t=480.0s c=8 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 4855 taken= 2265 st=["COMBAT:574", "PATROL:395", "LOOT_WPN:199", "CUBE:173", "ROOF_CLIMB:100"]
+vanguard-v3 initialized (slot=15, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 45.2ms
+  seed=880009 place=12 pts= 4 k=0 t= 21.7s c=0 lo=gun+mortar    by=gun       rear=0 thr=1 dealt= 1170 taken= 1422 st=["REGEN_COVER:128", "COMBAT:61", "LOOT_WPN:16", "FARM_FIGHT:8", "KITE_COVER:5"]
+vanguard-v3 initialized (slot=13, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.7ms
+  seed=887928 place= 1 pts=15 k=3 t=480.0s c=8 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 5202 taken=   45 st=["ROOF_HOLD^:1090", "PATROL:352", "CUBE:352", "COMBAT:146", "ROOF_CLIMB:73"]
+vanguard-v3 initialized (slot=12, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 60.8ms
+  seed=895847 place= 1 pts=15 k=3 t=480.0s c=10 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 4381 taken= 1645 st=["PATROL:808", "CUBE:338", "COMBAT:234", "ROOF_CLIMB:231", "ROOF_APPROACH:156"]
+vanguard-v3 initialized (slot=15, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 58.5ms
+  seed=903766 place= 1 pts=15 k=4 t=480.0s c=9 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 6149 taken= 2002 st=["ROOF_HOLD^:558", "REGEN_COVER:190", "LOOT_WPN:175", "COMBAT:172", "CUBE:154"]
+vanguard-v3 initialized (slot=10, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 50.1ms
+  seed=911685 place= 1 pts=15 k=4 t=480.0s c=7 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 4949 taken= 1035 st=["ROOF_HOLD^:559", "CUBE:221", "PATROL:73", "ROOF_CLIMB:72", "COMBAT:63"]
+vanguard-v3 initialized (slot=9, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 46.3ms
+  seed=919604 place= 1 pts=15 k=3 t=480.0s c=10 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 3986 taken= 1013 st=["PATROL:854", "COMBAT:440", "CUBE:366", "ROOF_HOLD^:260", "LOOT_WPN:222"]
+vanguard-v3 initialized (slot=0, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 48.4ms
+  seed=927523 place= 1 pts=15 k=3 t=480.0s c=15 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 4293 taken= 2532 st=["CUBE:454", "PATROL:397", "DROP:320", "REGEN_COVER:287", "COMBAT:250"]
+vanguard-v3 initialized (slot=3, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.6ms
+  seed=935442 place= 1 pts=15 k=4 t=480.0s c=15 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 6981 taken= 1447 st=["CUBE:562", "PATROL:452", "ROOF_APPROACH:272", "REGEN_COVER:263", "ROOF_CLIMB:253"]
+vanguard-v3 initialized (slot=6, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 49.4ms
+  seed=943361 place= 1 pts=15 k=3 t=480.0s c=10 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 3349 taken= 2147 st=["ROOF_HOLD^:937", "CUBE:321", "COMBAT:157", "LOOT_WPN:126", "REGEN_COVER:121"]
+vanguard-v3 initialized (slot=10, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 58.5ms
+  seed=951280 place= 1 pts=15 k=3 t=480.0s c=15 lo=gun+lightning by=WIN       rear=0 thr=0 dealt= 3544 taken= 1173 st=["PATROL:909", "COMBAT:268", "SEEK_CRATE:256", "FARM_FIGHT:240", "CUBE:227"]
+vanguard-v3 initialized (slot=7, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 50.2ms
+  seed=959199 place= 1 pts=15 k=4 t=480.0s c=7 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 4551 taken= 1755 st=["ROOF_HOLD^:602", "COMBAT:568", "CUBE:181", "PATROL:171", "REGEN_COVER:160"]
+vanguard-v3 initialized (slot=0, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 47.8ms
+  seed=967118 place= 5 pts=11 k=2 t= 41.8s c=2 lo=gun+mortar    by=gun       rear=0 thr=1 dealt= 2448 taken= 1777 st=["REGEN_COVER:173", "COMBAT:132", "LOOT_WPN:46", "KITE_COVER:29", "CUBE:23"]
+vanguard-v3 initialized (slot=1, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 50.2ms
+  seed=975037 place= 1 pts=15 k=2 t=480.0s c=18 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 3070 taken=  570 st=["ROOF_HOLD^:454", "CUBE:384", "DROP:278", "PATROL:261", "ROOF_CLIMB:245"]
+vanguard-v3 initialized (slot=14, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 44.0ms
+  seed=982956 place= 1 pts=15 k=4 t=480.0s c=16 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 2795 taken=  830 st=["ROOF_HOLD^:1036", "CUBE:477", "PATROL:462", "COMBAT:142", "DROP:117"]
+vanguard-v3 initialized (slot=11, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 58.4ms
+  seed=990875 place= 1 pts=15 k=3 t=480.0s c=7 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 4462 taken= 2375 st=["ROOF_HOLD^:342", "CUBE:329", "LOOT_WPN:269", "PATROL:265", "REGEN_COVER:235"]
+vanguard-v3 initialized (slot=12, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 45.4ms
+  seed=998794 place= 1 pts=15 k=4 t=480.0s c=15 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 6505 taken= 1082 st=["DROP:291", "COMBAT:285", "CUBE:274", "REGEN_COVER:268", "PATROL:258"]
+vanguard-v3 initialized (slot=12, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 51.3ms
+  seed=1006713 place= 1 pts=15 k=4 t=480.0s c=10 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 3228 taken=  935 st=["ROOF_HOLD^:728", "PATROL:304", "CUBE:245", "REGEN_COVER:213", "LOOT_WPN:161"]
+vanguard-v3 initialized (slot=3, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 45.8ms
+  seed=1014632 place=10 pts= 6 k=1 t= 23.2s c=0 lo=gun           by=gun       rear=0 thr=1 dealt= 2115 taken= 1418 st=["COMBAT:162", "REGEN_COVER:70", "LOOT_WPN:1"]
+vanguard-v3 initialized (slot=14, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 46.0ms
+  seed=1022551 place= 1 pts=15 k=4 t=480.0s c=10 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 6691 taken= 1125 st=["PATROL:533", "ROOF_HOLD^:378", "DROP:332", "COMBAT:328", "ROOF_CLIMB:302"]
+vanguard-v3 initialized (slot=9, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 49.6ms
+  seed=1030470 place= 1 pts=15 k=4 t=480.0s c=15 lo=gun+lightning by=WIN       rear=0 thr=1 dealt= 5720 taken= 3374 st=["COMBAT:395", "SEEK_CRATE:372", "CUBE:344", "PATROL:324", "REGEN_COVER:323"]
+vanguard-v3 initialized (slot=8, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 43.7ms
+  seed=1038389 place=13 pts= 3 k=2 t= 16.4s c=0 lo=gun+lightning by=gun       rear=1 thr=2 dealt=  922 taken= 1458 st=["COMBAT:92", "REGEN_KITE:55", "LOOT_WPN:18"]
+vanguard-v3 initialized (slot=7, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 50.1ms
+  seed=1046308 place= 1 pts=15 k=5 t=480.0s c=10 lo=gun+lightning by=WIN       rear=0 thr=1 dealt= 8813 taken= 5447 st=["COMBAT:941", "REGEN_COVER:679", "PATROL:296", "CUBE:267", "ZONE:152"]
+vanguard-v3 initialized (slot=2, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 50.0ms
+  seed=1054227 place= 1 pts=15 k=4 t=480.0s c=6 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 3710 taken= 1440 st=["ROOF_HOLD^:1077", "LOOT_WPN:230", "REGEN_COVER:152", "CUBE:140", "COMBAT:132"]
+vanguard-v3 initialized (slot=5, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 48.9ms
+  seed=1062146 place=11 pts= 5 k=1 t= 22.0s c=0 lo=gun+lightning by=gun       rear=0 thr=3 dealt= 2115 taken= 1442 st=["COMBAT:156", "CUBE:20", "REGEN_KITE:17", "LOOT_WPN:15", "KITE_COVER:13"]
+vanguard-v3 initialized (slot=11, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 44.7ms
+  seed=1070065 place= 7 pts= 9 k=1 t=101.6s c=3 lo=gun+laser     by=laser     rear=0 thr=1 dealt= 4798 taken= 3229 st=["REGEN_COVER:427", "COMBAT:118", "LOOT_WPN:105", "DROP:96", "PATROL:83"]
+vanguard-v3 initialized (slot=8, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 45.5ms
+  seed=1077984 place= 1 pts=15 k=5 t=480.0s c=18 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 8288 taken=  975 st=["PATROL:892", "CUBE:378", "ROOF_HOLD^:302", "ROOF_CLIMB:294", "COMBAT:260"]
+vanguard-v3 initialized (slot=1, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 48.8ms
+  seed=1085903 place= 2 pts=14 k=3 t=273.9s c=10 lo=gun+laser     by=laser     rear=0 thr=1 dealt= 5583 taken= 2859 st=["COMBAT:1848", "ROOF_HOLD^:249", "ZONE:192", "CUBE:159", "LOOT_WPN:89"]
+vanguard-v3 initialized (slot=2, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 42.3ms
+  seed=1093822 place= 1 pts=15 k=8 t=480.0s c=10 lo=gun+laser     by=WIN       rear=0 thr=1 dealt=10000 taken= 1270 st=["PATROL:850", "ROOF_CLIMB:447", "COMBAT:421", "CUBE:256", "ROOF_APPROACH:243"]
+vanguard-v3 initialized (slot=15, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 41.5ms
+  seed=1101741 place= 1 pts=15 k=4 t=480.0s c=14 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 5089 taken=  722 st=["ROOF_HOLD^:608", "PATROL:508", "ROOF_CLIMB:381", "CUBE:361", "DROP:270"]
+vanguard-v3 initialized (slot=12, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 45.7ms
+  seed=1109660 place= 8 pts= 8 k=1 t= 22.0s c=0 lo=gun           by=npc       rear=0 thr=1 dealt= 2002 taken= 1405 st=["COMBAT:114", "REGEN_COVER:86", "LOOT_WPN:17", "FARM_FIGHT:4"]
+vanguard-v3 initialized (slot=13, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 49.9ms
+  seed=1117579 place= 2 pts=14 k=3 t=311.0s c=18 lo=gun+laser     by=zone      rear=0 thr=0 dealt= 4326 taken=  746 st=["ROOF_HOLD^:883", "CUBE:475", "DROP:471", "PATROL:408", "ROOF_CLIMB:239"]
+vanguard-v3 initialized (slot=15, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 46.3ms
+  seed=1125498 place= 1 pts=15 k=5 t=480.0s c=8 lo=gun+lightning by=WIN       rear=0 thr=1 dealt= 9933 taken= 4580 st=["REGEN_COVER:1148", "COMBAT:599", "PATROL:277", "CUBE:162", "FLANK:145"]
+vanguard-v3 initialized (slot=2, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 44.0ms
+  seed=1133417 place= 1 pts=15 k=2 t=480.0s c=12 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 1569 taken=  405 st=["ROOF_HOLD^:1203", "PATROL:307", "CUBE:208", "COMBAT:146", "LOOT_WPN:111"]
+vanguard-v3 initialized (slot=1, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 46.6ms
+  seed=1141336 place=14 pts= 2 k=1 t= 11.7s c=0 lo=gun+lightning by=gun       rear=0 thr=2 dealt= 1395 taken= 1418 st=["REGEN_KITE:61", "LOOT_WPN:36", "COMBAT:21"]
+vanguard-v3 initialized (slot=8, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 43.7ms
+  seed=1149255 place= 1 pts=15 k=2 t=480.0s c=10 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 3451 taken=  180 st=["ROOF_HOLD^:1231", "CUBE:337", "PATROL:207", "ROOF_CLIMB:155", "ROOF_APPROACH:81"]
+vanguard-v3 initialized (slot=11, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 47.1ms
+  seed=1157174 place= 1 pts=15 k=5 t=480.0s c=25 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 4686 taken=  883 st=["ROOF_HOLD^:683", "COMBAT:619", "DROP:293", "LOOT_WPN:290", "CUBE:249"]
+vanguard-v3 initialized (slot=6, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 45.9ms
+  seed=1165093 place= 2 pts=14 k=2 t=244.4s c=11 lo=gun+lightning by=laser     rear=0 thr=1 dealt= 4344 taken= 5128 st=["REGEN_COVER:638", "PATROL:506", "CUBE:282", "FARM_FIGHT:266", "SEEK_CRATE:259"]
+vanguard-v3 initialized (slot=5, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 49.5ms
+  seed=1173012 place=14 pts= 2 k=0 t= 16.6s c=2 lo=gun           by=gun       rear=0 thr=2 dealt= 1021 taken= 1512 st=["REGEN_COVER:86", "COMBAT:48", "FARM_FIGHT:23", "CUBE:6", "SEEK_CRATE:3"]
+vanguard-v3 initialized (slot=4, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 48.5ms
+  seed=1180931 place=11 pts= 5 k=1 t= 19.7s c=0 lo=gun+laser     by=gun       rear=0 thr=2 dealt= 3240 taken= 1440 st=["COMBAT:74", "REGEN_COVER:58", "LOOT_WPN:27", "LASER_PRECHG:15", "SLICE_PIE:13"]
+vanguard-v3 initialized (slot=8, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 42.1ms
+  seed=1188850 place= 1 pts=15 k=3 t=480.0s c=14 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 4807 taken= 1491 st=["CUBE:538", "REGEN_COVER:367", "PATROL:351", "ROOF_CLIMB:240", "DROP:193"]
+vanguard-v3 initialized (slot=9, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 47.8ms
+  seed=1196769 place= 1 pts=15 k=3 t=480.0s c=17 lo=gun+laser     by=WIN       rear=1 thr=0 dealt= 5299 taken= 3459 st=["REGEN_COVER:511", "CUBE:326", "COMBAT:303", "DROP:192", "PATROL:181"]
+vanguard-v3 initialized (slot=14, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 47.8ms
+  seed=1204688 place= 1 pts=15 k=3 t=480.0s c=3 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 3771 taken=  362 st=["ROOF_HOLD^:538", "ROOF_CLIMB:229", "PATROL:202", "ROOF_APPROACH:134", "CUBE:96"]
+vanguard-v3 initialized (slot=3, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 44.6ms
+  seed=1212607 place= 1 pts=15 k=1 t=480.0s c=2 lo=gun+laser     by=WIN       rear=1 thr=0 dealt= 2532 taken= 1532 st=["ROOF_HOLD^:1066", "COMBAT:247", "PATROL:238", "ROOF_CLIMB:175", "LOOT_WPN:169"]
+vanguard-v3 initialized (slot=12, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 46.3ms
+  seed=1220526 place=14 pts= 2 k=0 t= 11.2s c=0 lo=gun+laser     by=lightning rear=0 thr=4 dealt= 1563 taken= 1438 st=["KITE_COVER:41", "LOOT_WPN:40", "REGEN_COVER:21", "COMBAT:11"]
+vanguard-v3 initialized (slot=13, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 44.7ms
+  seed=1228445 place= 1 pts=15 k=2 t=480.0s c=17 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 2340 taken= 1347 st=["PATROL:694", "ROOF_HOLD^:538", "CUBE:436", "DROP:378", "ROOF_CLIMB:294"]
+vanguard-v3 initialized (slot=10, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 42.9ms
+  seed=1236364 place= 1 pts=15 k=4 t=480.0s c=18 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 3321 taken= 1880 st=["ROOF_HOLD^:1111", "PATROL:504", "CUBE:439", "REGEN_COVER:310", "ROOF_CLIMB:235"]
+vanguard-v3 initialized (slot=14, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 41.4ms
+  seed=1244283 place= 1 pts=15 k=3 t=480.0s c=18 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 5078 taken=  549 st=["ROOF_HOLD^:466", "PATROL:422", "COMBAT:326", "DROP:293", "CUBE:231"]
+vanguard-v3 initialized (slot=1, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 50.3ms
+  seed=1252202 place= 1 pts=15 k=3 t=480.0s c=7 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 4941 taken= 2284 st=["ROOF_HOLD^:1028", "REGEN_COVER:685", "COMBAT:366", "DROP:204", "CUBE:163"]
+vanguard-v3 initialized (slot=0, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 44.9ms
+  seed=1260121 place= 6 pts=10 k=2 t= 72.5s c=0 lo=gun           by=laser     rear=0 thr=1 dealt= 2700 taken= 3015 st=["REGEN_COVER:548", "LOOT_WPN:57", "COMBAT:47", "PATROL:22", "LASER_DUCK:21"]
+vanguard-v3 initialized (slot=7, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 48.2ms
+  seed=1268040 place= 9 pts= 7 k=0 t= 36.1s c=1 lo=gun+lightning by=gun       rear=0 thr=1 dealt= 2820 taken= 1772 st=["REGEN_COVER:243", "KITE_COVER:31", "SLICE_PIE:31", "LOOT_WPN:22", "COMBAT:20"]
+vanguard-v3 initialized (slot=10, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 43.7ms
+  seed=1275959 place= 7 pts= 9 k=1 t= 21.0s c=0 lo=gun+mortar    by=laser     rear=0 thr=1 dealt= 1440 taken= 1449 st=["COMBAT:153", "REGEN_COVER:28", "LOOT_WPN:25", "LASER_DUCK:5"]
+vanguard-v3 initialized (slot=5, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 47.1ms
+  seed=1283878 place= 1 pts=15 k=3 t=480.0s c=19 lo=gun+lightning by=WIN       rear=0 thr=0 dealt= 4297 taken= 2494 st=["PATROL:1149", "COMBAT:528", "DROP:520", "CUBE:372", "REGEN_COVER:336"]
+vanguard-v3 initialized (slot=4, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 44.0ms
+  seed=1291797 place= 1 pts=15 k=3 t=480.0s c=15 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 3160 taken= 1455 st=["ROOF_HOLD^:558", "PATROL:330", "CUBE:259", "LOOT_WPN:250", "DROP:249"]
+vanguard-v3 initialized (slot=3, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 48.2ms
+  seed=1299716 place= 1 pts=15 k=1 t=480.0s c=4 lo=gun+laser     by=WIN       rear=0 thr=0 dealt= 2473 taken= 1175 st=["REGEN_COVER:291", "ROOF_HOLD^:261", "CUBE:235", "COMBAT:82", "PATROL:64"]
+vanguard-v3 initialized (slot=9, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 48.7ms
+  seed=1307635 place= 1 pts=15 k=7 t=480.0s c=4 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 8969 taken= 2700 st=["ROOF_HOLD^:1360", "COMBAT:406", "REGEN_COVER:189", "CUBE:128", "PATROL:96"]
+vanguard-v3 initialized (slot=10, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 55.2ms
+  seed=1315554 place= 1 pts=15 k=4 t=480.0s c=12 lo=gun+laser     by=WIN       rear=0 thr=1 dealt= 4427 taken=  829 st=["ROOF_HOLD^:690", "DROP:450", "ROOF_CLIMB:357", "CUBE:286", "PATROL:276"]
+vanguard-v3 initialized (slot=15, map_loaded=true, prisms=259, roofs=252, nav=267x181) in 44.2ms
+  seed=1323473 place= 1 pts=15 k=4 t=480.0s c=8 lo=gun+lightning by=WIN       rear=0 thr=0 dealt= 7571 taken= 6199 st=["REGEN_COVER:1233", "COMBAT:602", "DROP:229", "CUBE:190", "PATROL:188"]
+EXPERIMENT_RESULT {"gun_hits":61,"gun_shots":142,"killed_by":"SURVIVED","kills":5,"laser_hits":7,"laser_shots":9,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":571168}
+EXPERIMENT_RESULT {"gun_hits":8,"gun_shots":39,"killed_by":"SURVIVED","kills":1,"laser_hits":3,"laser_shots":9,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":579087}
+EXPERIMENT_RESULT {"gun_hits":62,"gun_shots":123,"killed_by":"SURVIVED","kills":4,"laser_hits":4,"laser_shots":8,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":587006}
+EXPERIMENT_RESULT {"gun_hits":27,"gun_shots":89,"killed_by":"SURVIVED","kills":3,"laser_hits":10,"laser_shots":24,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":594925}
+EXPERIMENT_RESULT {"gun_hits":28,"gun_shots":48,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"ffa","place":12,"points":4.0,"seed":602844}
+EXPERIMENT_RESULT {"gun_hits":31,"gun_shots":87,"killed_by":"SURVIVED","kills":3,"laser_hits":7,"laser_shots":10,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":610763}
+EXPERIMENT_RESULT {"gun_hits":87,"gun_shots":113,"killed_by":"laser","kills":2,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"ffa","place":3,"points":13.0,"seed":618682}
+EXPERIMENT_RESULT {"gun_hits":50,"gun_shots":64,"killed_by":"gun","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"ffa","place":6,"points":10.0,"seed":626601}
+EXPERIMENT_RESULT {"gun_hits":69,"gun_shots":140,"killed_by":"SURVIVED","kills":6,"laser_hits":4,"laser_shots":9,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":634520}
+EXPERIMENT_RESULT {"gun_hits":47,"gun_shots":110,"killed_by":"SURVIVED","kills":5,"laser_hits":10,"laser_shots":26,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":642439}
+EXPERIMENT_RESULT {"gun_hits":43,"gun_shots":95,"killed_by":"SURVIVED","kills":5,"laser_hits":9,"laser_shots":16,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":650358}
+EXPERIMENT_RESULT {"gun_hits":56,"gun_shots":70,"killed_by":"laser","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"ffa","place":4,"points":12.0,"seed":658277}
+EXPERIMENT_RESULT {"gun_hits":39,"gun_shots":104,"killed_by":"SURVIVED","kills":5,"laser_hits":4,"laser_shots":15,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":666196}
+EXPERIMENT_RESULT {"gun_hits":19,"gun_shots":81,"killed_by":"SURVIVED","kills":3,"laser_hits":7,"laser_shots":18,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":674115}
+EXPERIMENT_RESULT {"gun_hits":50,"gun_shots":125,"killed_by":"SURVIVED","kills":3,"laser_hits":5,"laser_shots":19,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":682034}
+EXPERIMENT_RESULT {"gun_hits":28,"gun_shots":59,"killed_by":"SURVIVED","kills":2,"laser_hits":7,"laser_shots":11,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":689953}
+EXPERIMENT_RESULT {"gun_hits":64,"gun_shots":112,"killed_by":"SURVIVED","kills":3,"laser_hits":12,"laser_shots":23,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":697872}
+EXPERIMENT_RESULT {"gun_hits":44,"gun_shots":113,"killed_by":"SURVIVED","kills":4,"laser_hits":3,"laser_shots":9,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":705791}
+EXPERIMENT_RESULT {"gun_hits":91,"gun_shots":98,"killed_by":"gun","kills":2,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"ffa","place":6,"points":10.0,"seed":713710}
+EXPERIMENT_RESULT {"gun_hits":62,"gun_shots":104,"killed_by":"SURVIVED","kills":5,"laser_hits":14,"laser_shots":21,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":721629}
+EXPERIMENT_RESULT {"gun_hits":49,"gun_shots":78,"killed_by":"SURVIVED","kills":4,"laser_hits":6,"laser_shots":11,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":729548}
+EXPERIMENT_RESULT {"gun_hits":28,"gun_shots":80,"killed_by":"SURVIVED","kills":4,"laser_hits":6,"laser_shots":14,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":737467}
+EXPERIMENT_RESULT {"gun_hits":21,"gun_shots":47,"killed_by":"laser","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"ffa","place":6,"points":10.0,"seed":745386}
+EXPERIMENT_RESULT {"gun_hits":31,"gun_shots":97,"killed_by":"SURVIVED","kills":4,"laser_hits":10,"laser_shots":17,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":753305}
+EXPERIMENT_RESULT {"gun_hits":69,"gun_shots":106,"killed_by":"SURVIVED","kills":4,"laser_hits":8,"laser_shots":19,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":761224}
+EXPERIMENT_RESULT {"gun_hits":14,"gun_shots":54,"killed_by":"SURVIVED","kills":1,"laser_hits":5,"laser_shots":7,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":769143}
+EXPERIMENT_RESULT {"gun_hits":39,"gun_shots":79,"killed_by":"SURVIVED","kills":4,"laser_hits":9,"laser_shots":18,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":777062}
+EXPERIMENT_RESULT {"gun_hits":62,"gun_shots":107,"killed_by":"SURVIVED","kills":5,"laser_hits":13,"laser_shots":23,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":784981}
+EXPERIMENT_RESULT {"gun_hits":39,"gun_shots":74,"killed_by":"SURVIVED","kills":4,"laser_hits":8,"laser_shots":14,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":792900}
+EXPERIMENT_RESULT {"gun_hits":50,"gun_shots":55,"killed_by":"gun","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"ffa","place":6,"points":10.0,"seed":800819}
+EXPERIMENT_RESULT {"gun_hits":52,"gun_shots":128,"killed_by":"SURVIVED","kills":2,"laser_hits":3,"laser_shots":17,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":808738}
+EXPERIMENT_RESULT {"gun_hits":35,"gun_shots":124,"killed_by":"SURVIVED","kills":5,"laser_hits":9,"laser_shots":24,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":816657}
+EXPERIMENT_RESULT {"gun_hits":43,"gun_shots":123,"killed_by":"SURVIVED","kills":6,"laser_hits":12,"laser_shots":27,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":824576}
+EXPERIMENT_RESULT {"gun_hits":42,"gun_shots":43,"killed_by":"gun","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"ffa","place":12,"points":4.0,"seed":832495}
+EXPERIMENT_RESULT {"gun_hits":60,"gun_shots":125,"killed_by":"SURVIVED","kills":5,"laser_hits":7,"laser_shots":9,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":840414}
+EXPERIMENT_RESULT {"gun_hits":62,"gun_shots":136,"killed_by":"SURVIVED","kills":4,"laser_hits":3,"laser_shots":9,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":848333}
+EXPERIMENT_RESULT {"gun_hits":43,"gun_shots":48,"killed_by":"laser","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun+mortar","mode":"ffa","place":12,"points":4.0,"seed":856252}
+EXPERIMENT_RESULT {"gun_hits":32,"gun_shots":47,"killed_by":"SURVIVED","kills":1,"laser_hits":0,"laser_shots":4,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":864171}
+EXPERIMENT_RESULT {"gun_hits":45,"gun_shots":80,"killed_by":"SURVIVED","kills":2,"laser_hits":4,"laser_shots":13,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":872090}
+EXPERIMENT_RESULT {"gun_hits":26,"gun_shots":49,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun+mortar","mode":"ffa","place":12,"points":4.0,"seed":880009}
+EXPERIMENT_RESULT {"gun_hits":12,"gun_shots":77,"killed_by":"SURVIVED","kills":3,"laser_hits":7,"laser_shots":12,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":887928}
+EXPERIMENT_RESULT {"gun_hits":40,"gun_shots":125,"killed_by":"SURVIVED","kills":3,"laser_hits":6,"laser_shots":15,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":895847}
+EXPERIMENT_RESULT {"gun_hits":56,"gun_shots":100,"killed_by":"SURVIVED","kills":4,"laser_hits":8,"laser_shots":11,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":903766}
+EXPERIMENT_RESULT {"gun_hits":41,"gun_shots":71,"killed_by":"SURVIVED","kills":4,"laser_hits":10,"laser_shots":13,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":911685}
+EXPERIMENT_RESULT {"gun_hits":73,"gun_shots":140,"killed_by":"SURVIVED","kills":3,"laser_hits":1,"laser_shots":6,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":919604}
+EXPERIMENT_RESULT {"gun_hits":40,"gun_shots":85,"killed_by":"SURVIVED","kills":3,"laser_hits":7,"laser_shots":19,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":927523}
+EXPERIMENT_RESULT {"gun_hits":52,"gun_shots":131,"killed_by":"SURVIVED","kills":4,"laser_hits":13,"laser_shots":28,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":935442}
+EXPERIMENT_RESULT {"gun_hits":40,"gun_shots":111,"killed_by":"SURVIVED","kills":3,"laser_hits":3,"laser_shots":7,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":943361}
+EXPERIMENT_RESULT {"gun_hits":57,"gun_shots":177,"killed_by":"SURVIVED","kills":3,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"ffa","place":1,"points":15.0,"seed":951280}
+EXPERIMENT_RESULT {"gun_hits":68,"gun_shots":124,"killed_by":"SURVIVED","kills":4,"laser_hits":4,"laser_shots":11,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":959199}
+EXPERIMENT_RESULT {"gun_hits":52,"gun_shots":71,"killed_by":"gun","kills":2,"laser_hits":0,"laser_shots":0,"loadout":"gun+mortar","mode":"ffa","place":5,"points":11.0,"seed":967118}
+EXPERIMENT_RESULT {"gun_hits":19,"gun_shots":75,"killed_by":"SURVIVED","kills":2,"laser_hits":7,"laser_shots":17,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":975037}
+EXPERIMENT_RESULT {"gun_hits":27,"gun_shots":64,"killed_by":"SURVIVED","kills":4,"laser_hits":3,"laser_shots":11,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":982956}
+EXPERIMENT_RESULT {"gun_hits":42,"gun_shots":99,"killed_by":"SURVIVED","kills":3,"laser_hits":5,"laser_shots":7,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":990875}
+EXPERIMENT_RESULT {"gun_hits":32,"gun_shots":93,"killed_by":"SURVIVED","kills":4,"laser_hits":9,"laser_shots":17,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":998794}
+EXPERIMENT_RESULT {"gun_hits":43,"gun_shots":98,"killed_by":"SURVIVED","kills":4,"laser_hits":2,"laser_shots":4,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":1006713}
+EXPERIMENT_RESULT {"gun_hits":47,"gun_shots":54,"killed_by":"gun","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"ffa","place":10,"points":6.0,"seed":1014632}
+EXPERIMENT_RESULT {"gun_hits":50,"gun_shots":94,"killed_by":"SURVIVED","kills":4,"laser_hits":12,"laser_shots":19,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":1022551}
+EXPERIMENT_RESULT {"gun_hits":86,"gun_shots":211,"killed_by":"SURVIVED","kills":4,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"ffa","place":1,"points":15.0,"seed":1030470}
+EXPERIMENT_RESULT {"gun_hits":20,"gun_shots":36,"killed_by":"gun","kills":2,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"ffa","place":13,"points":3.0,"seed":1038389}
+EXPERIMENT_RESULT {"gun_hits":142,"gun_shots":228,"killed_by":"SURVIVED","kills":5,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"ffa","place":1,"points":15.0,"seed":1046308}
+EXPERIMENT_RESULT {"gun_hits":36,"gun_shots":80,"killed_by":"SURVIVED","kills":4,"laser_hits":3,"laser_shots":6,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":1054227}
+EXPERIMENT_RESULT {"gun_hits":46,"gun_shots":51,"killed_by":"gun","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"ffa","place":11,"points":5.0,"seed":1062146}
+EXPERIMENT_RESULT {"gun_hits":37,"gun_shots":72,"killed_by":"laser","kills":1,"laser_hits":8,"laser_shots":11,"loadout":"gun+laser","mode":"ffa","place":7,"points":9.0,"seed":1070065}
+EXPERIMENT_RESULT {"gun_hits":34,"gun_shots":92,"killed_by":"SURVIVED","kills":5,"laser_hits":11,"laser_shots":18,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":1077984}
+EXPERIMENT_RESULT {"gun_hits":34,"gun_shots":75,"killed_by":"laser","kills":3,"laser_hits":8,"laser_shots":12,"loadout":"gun+laser","mode":"ffa","place":2,"points":14.0,"seed":1085903}
+EXPERIMENT_RESULT {"gun_hits":75,"gun_shots":113,"killed_by":"SURVIVED","kills":8,"laser_hits":16,"laser_shots":21,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":1093822}
+EXPERIMENT_RESULT {"gun_hits":39,"gun_shots":90,"killed_by":"SURVIVED","kills":4,"laser_hits":10,"laser_shots":15,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":1101741}
+EXPERIMENT_RESULT {"gun_hits":37,"gun_shots":48,"killed_by":"npc","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"ffa","place":8,"points":8.0,"seed":1109660}
+EXPERIMENT_RESULT {"gun_hits":26,"gun_shots":86,"killed_by":"zone","kills":3,"laser_hits":6,"laser_shots":20,"loadout":"gun+laser","mode":"ffa","place":2,"points":14.0,"seed":1117579}
+EXPERIMENT_RESULT {"gun_hits":178,"gun_shots":267,"killed_by":"SURVIVED","kills":5,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"ffa","place":1,"points":15.0,"seed":1125498}
+EXPERIMENT_RESULT {"gun_hits":2,"gun_shots":42,"killed_by":"SURVIVED","kills":2,"laser_hits":4,"laser_shots":6,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":1133417}
+EXPERIMENT_RESULT {"gun_hits":23,"gun_shots":29,"killed_by":"gun","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"ffa","place":14,"points":2.0,"seed":1141336}
+EXPERIMENT_RESULT {"gun_hits":14,"gun_shots":66,"killed_by":"SURVIVED","kills":2,"laser_hits":5,"laser_shots":15,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":1149255}
+EXPERIMENT_RESULT {"gun_hits":52,"gun_shots":158,"killed_by":"SURVIVED","kills":5,"laser_hits":3,"laser_shots":5,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":1157174}
+EXPERIMENT_RESULT {"gun_hits":70,"gun_shots":192,"killed_by":"laser","kills":2,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"ffa","place":2,"points":14.0,"seed":1165093}
+EXPERIMENT_RESULT {"gun_hits":21,"gun_shots":32,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"ffa","place":14,"points":2.0,"seed":1173012}
+EXPERIMENT_RESULT {"gun_hits":30,"gun_shots":46,"killed_by":"gun","kills":1,"laser_hits":6,"laser_shots":7,"loadout":"gun+laser","mode":"ffa","place":11,"points":5.0,"seed":1180931}
+EXPERIMENT_RESULT {"gun_hits":53,"gun_shots":108,"killed_by":"SURVIVED","kills":3,"laser_hits":4,"laser_shots":15,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":1188850}
+EXPERIMENT_RESULT {"gun_hits":52,"gun_shots":130,"killed_by":"SURVIVED","kills":3,"laser_hits":7,"laser_shots":17,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":1196769}
+EXPERIMENT_RESULT {"gun_hits":32,"gun_shots":49,"killed_by":"SURVIVED","kills":3,"laser_hits":5,"laser_shots":6,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":1204688}
+EXPERIMENT_RESULT {"gun_hits":50,"gun_shots":86,"killed_by":"SURVIVED","kills":1,"laser_hits":0,"laser_shots":4,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":1212607}
+EXPERIMENT_RESULT {"gun_hits":15,"gun_shots":26,"killed_by":"lightning","kills":0,"laser_hits":2,"laser_shots":2,"loadout":"gun+laser","mode":"ffa","place":14,"points":2.0,"seed":1220526}
+EXPERIMENT_RESULT {"gun_hits":52,"gun_shots":113,"killed_by":"SURVIVED","kills":2,"laser_hits":0,"laser_shots":6,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":1228445}
+EXPERIMENT_RESULT {"gun_hits":45,"gun_shots":118,"killed_by":"SURVIVED","kills":4,"laser_hits":3,"laser_shots":14,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":1236364}
+EXPERIMENT_RESULT {"gun_hits":44,"gun_shots":102,"killed_by":"SURVIVED","kills":3,"laser_hits":3,"laser_shots":6,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":1244283}
+EXPERIMENT_RESULT {"gun_hits":53,"gun_shots":100,"killed_by":"SURVIVED","kills":3,"laser_hits":3,"laser_shots":7,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":1252202}
+EXPERIMENT_RESULT {"gun_hits":60,"gun_shots":70,"killed_by":"laser","kills":2,"laser_hits":0,"laser_shots":0,"loadout":"gun","mode":"ffa","place":6,"points":10.0,"seed":1260121}
+EXPERIMENT_RESULT {"gun_hits":50,"gun_shots":58,"killed_by":"gun","kills":0,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"ffa","place":9,"points":7.0,"seed":1268040}
+EXPERIMENT_RESULT {"gun_hits":32,"gun_shots":43,"killed_by":"laser","kills":1,"laser_hits":0,"laser_shots":0,"loadout":"gun+mortar","mode":"ffa","place":7,"points":9.0,"seed":1275959}
+EXPERIMENT_RESULT {"gun_hits":80,"gun_shots":153,"killed_by":"SURVIVED","kills":3,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"ffa","place":1,"points":15.0,"seed":1283878}
+EXPERIMENT_RESULT {"gun_hits":47,"gun_shots":106,"killed_by":"SURVIVED","kills":3,"laser_hits":3,"laser_shots":14,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":1291797}
+EXPERIMENT_RESULT {"gun_hits":16,"gun_shots":54,"killed_by":"SURVIVED","kills":1,"laser_hits":6,"laser_shots":13,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":1299716}
+EXPERIMENT_RESULT {"gun_hits":61,"gun_shots":116,"killed_by":"SURVIVED","kills":7,"laser_hits":18,"laser_shots":24,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":1307635}
+EXPERIMENT_RESULT {"gun_hits":38,"gun_shots":78,"killed_by":"SURVIVED","kills":4,"laser_hits":8,"laser_shots":19,"loadout":"gun+laser","mode":"ffa","place":1,"points":15.0,"seed":1315554}
+EXPERIMENT_RESULT {"gun_hits":131,"gun_shots":192,"killed_by":"SURVIVED","kills":4,"laser_hits":0,"laser_shots":0,"loadout":"gun+lightning","mode":"ffa","place":1,"points":15.0,"seed":1323473}
+=== MECHSIM (FFA, 96 matches in 15.26s) ===
+MEAN SCORE: 13.04 / 15.00  |  Wins: 70  |  Early deaths (<=2 pts): 3/96
+Avg kills: 2.98  |  Avg survival: 368.9s  |  Avg cubes: 9.1  |  Avg threats@death: 0.7
+Accuracy: Gun 4512/9101 (49.6%)  |  Laser 448/933 (48.0%)
+Rear-hit deaths: 3/96  |  On-roof deaths: 19/96
+Killed by weapon: {"npc": 1, "zone": 1, "lightning": 1, "gun": 14, "laser": 9, "SURVIVED": 70}  |  by tier: {"Npc": 1, "Zone": 1, "SURVIVED": 70, "Easy": 1, "Hard": 8, "Medium": 5, "Expert": 10}
+Score by loadout: ["gun+laser(69): 14.55", "gun+lightning(14): 10.93", "gun(9): 7.44", "gun+mortar(4): 7.00"]
+Bot act() ms: p50 0.006  p99 0.609  max 3.087

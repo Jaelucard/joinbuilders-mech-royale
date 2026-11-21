@@ -1,0 +1,30 @@
+
+running 12 tests
+test combat::tests::charged_laser_does_not_release_at_an_occluded_corner ... ok
+test combat::tests::close_pressure_keeps_gun_and_arc_return_fire ... ok
+test combat::tests::conflicting_mortar_does_not_fire_along_gun_pitch ... ok
+test combat::tests::cooldown_on_second_tick_uses_second_tick_slew ... ok
+test combat::tests::gun_only_preserves_legacy_aim_fire_reload_and_urgent_behavior ... ok
+test combat::tests::gun_tracks_its_lead_during_charge_in_either_slot ... ok
+test combat::tests::lost_target_releases_at_current_aim_without_prolonging_slowdown ... ok
+test combat::tests::misaligned_laser_holds_while_turning_for_release ... ok
+test combat::tests::mortar_uses_gun_cooldown_and_reload_windows ... ok
+test combat::tests::release_owns_aim_and_only_compatible_gun_shots_fire ... ok
+test combat::tests::shorted_laser_does_not_start_or_steal_gun_aim ... ok
+test combat::tests::urgent_escape_requests_release_even_before_minimum_charge ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling syn v2.0.119
+   Compiling serde v1.0.219
+   Compiling serde_derive v1.0.219
+   Compiling serde_json v1.0.140
+   Compiling memchr v2.8.3
+   Compiling ryu v1.0.23
+   Compiling itoa v1.0.19
+   Compiling mechbot v0.1.0 (/build)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.72s
+     Running unittests src/lib.rs (target/debug/deps/mechbot-b67f5ad20cd0adcf)

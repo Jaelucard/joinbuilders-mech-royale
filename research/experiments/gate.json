@@ -1,0 +1,71 @@
+{
+  "candidate": "n-safe_c-window_b-drop_threat",
+  "repeats": {
+    "validation": {
+      "practice": {
+        "n": 96,
+        "baseline_mean": 3.1354166666666665,
+        "candidate_mean": 3.46875,
+        "delta": 0.3333333333333333,
+        "paired_bootstrap_95": [
+          -0.3229166666666667,
+          1.0
+        ],
+        "better": 30,
+        "equal": 48,
+        "worse": 18
+      },
+      "ffa": {
+        "n": 96,
+        "baseline_mean": 13.03125,
+        "candidate_mean": 13.364583333333334,
+        "delta": 0.3333333333333333,
+        "paired_bootstrap_95": [
+          -0.19791666666666666,
+          0.90625
+        ],
+        "better": 14,
+        "equal": 74,
+        "worse": 8
+      },
+      "score_gate_pass": false
+    },
+    "repeat": {
+      "practice": {
+        "n": 96,
+        "baseline_mean": 3.0520833333333335,
+        "candidate_mean": 3.4479166666666665,
+        "delta": 0.3958333333333333,
+        "paired_bootstrap_95": [
+          -0.2708333333333333,
+          1.0520833333333333
+        ],
+        "better": 30,
+        "equal": 48,
+        "worse": 18
+      },
+      "ffa": {
+        "n": 96,
+        "baseline_mean": 13.041666666666666,
+        "candidate_mean": 13.364583333333334,
+        "delta": 0.3229166666666667,
+        "paired_bootstrap_95": [
+          -0.20833333333333334,
+          0.8958333333333334
+        ],
+        "better": 13,
+        "equal": 75,
+        "worse": 8
+      },
+      "score_gate_pass": false
+    }
+  },
+  "score_gate_pass": false,
+  "remaining_gate": null,
+  "official_candidate_score": null,
+  "regression_tests_pass": true,
+  "conformance_pass": true,
+  "promotion_gate_pass": false,
+  "publication_decision": "Do not push; practice gains and confidence intervals fail the predeclared threshold in both repeats.",
+  "verification_status": "Regression tests and Docker conformance completed successfully; score gate failed in both runs."
+}
