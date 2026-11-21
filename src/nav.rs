@@ -151,9 +151,18 @@ impl Navigator {
     /// Compute the next 2D waypoint toward `goal`, using cached smoothed A* paths.
     pub fn next_waypoint(&mut self, map: &ArenaMap, tick: u64, pos: Vec3, goal: Vec2) -> Vec2 {
         let cur2 = [pos[0], pos[1]];
-        if !map.loaded || dist2d(cur2, goal) < 6.0 {
+        if !map.loaded {
             self.path.clear();
             return goal;
+        }
+
+        let current_cell = map.world_to_nav(cur2[0], cur2[1]);
+        if !map.can_traverse_nav_step(current_cell, current_cell) {
+            self.path.clear();
+            self.cached_goal = None;
+            // Conservative rasterization may exclude the current body position
+            // even though a short physically clear route reaches a valid cell.
+            return map.nearby_nav_recovery(pos).unwrap_or(cur2);
         }
 
         // Fast direct-line shortcut if completely clear!
@@ -166,7 +175,10 @@ impl Navigator {
         }
 
         // Advance along existing path
-        while self.path_idx < self.path.len() && dist2d(cur2, self.path[self.path_idx]) < 5.5 {
+        while self.path_idx + 1 < self.path.len()
+            && dist2d(cur2, self.path[self.path_idx]) < 5.5
+            && map.line_walkable(cur2, self.path[self.path_idx + 1])
+        {
             self.path_idx += 1;
         }
 
@@ -177,7 +189,9 @@ impl Navigator {
             || goal_moved
             || tick.saturating_sub(self.last_plan_tick) >= 12
             || self.stuck_ticks >= 2
-            || (self.path_idx < self.path.len() && dist2d(cur2, self.path[self.path_idx]) > 35.0);
+            || (self.path_idx < self.path.len()
+                && (dist2d(cur2, self.path[self.path_idx]) > 35.0
+                    || !map.line_walkable(cur2, self.path[self.path_idx])));
 
         if need_replan {
             self.replan(map, cur2, goal);
@@ -192,7 +206,7 @@ impl Navigator {
             self.path_idx += 1;
         }
 
-        self.path.get(self.path_idx).copied().unwrap_or(goal)
+        self.path.get(self.path_idx).copied().unwrap_or(cur2)
     }
 
     fn replan(&mut self, map: &ArenaMap, start: Vec2, goal: Vec2) {
@@ -200,15 +214,15 @@ impl Navigator {
         self.path_idx = 0;
 
         let Some((sx, sy)) = map.nearest_walkable_cell(start[0], start[1], 12) else {
-            self.path.push(goal);
+            self.path.push(start);
             return;
         };
         let Some((gx, gy)) = map.nearest_walkable_cell(goal[0], goal[1], 12) else {
-            self.path.push(goal);
+            self.path.push(start);
             return;
         };
         if sx == gx && sy == gy {
-            self.path.push(goal);
+            self.path.push(if map.line_walkable(start, goal) { goal } else { start });
             return;
         }
 
@@ -271,7 +285,6 @@ impl Navigator {
             let cx = cur % nx;
             let cy = cur / nx;
             let cg = self.g_score[cur];
-            let cur_tz = map.nav_z[cur];
 
             let ch = octile(cx, cy, gx, gy);
             if ch < best_fallback_h {
@@ -288,19 +301,8 @@ impl Navigator {
                 let nxu = nxi as usize;
                 let nyu = nyi as usize;
                 let nidx = nyu * nx + nxu;
-                if !map.walkable[nidx] {
+                if !map.can_traverse_nav_step((cx, cy), (nxu, nyu)) {
                     continue;
-                }
-                // O(1) cliff check: prevent routing straight up steep (> 46 deg) riverbank/bridge cliffs!
-                let climb_dz = map.nav_z[nidx] - cur_tz;
-                if climb_dz > base_cost * NAV_STEP * 1.05 && climb_dz > 1.2 {
-                    continue;
-                }
-                // Prevent diagonal corner cutting through solid walls
-                if dx != 0 && dy != 0 {
-                    if !map.walkable[cy * nx + nxu] || !map.walkable[nyu * nx + cx] {
-                        continue;
-                    }
                 }
                 let wd = map.wall_dist[nidx];
                 let penalty = match wd {
@@ -330,7 +332,9 @@ impl Navigator {
 
         let end_idx = if found { goal_idx } else { best_fallback_idx };
         if end_idx == start_idx {
-            self.path.push(goal);
+            // No reachable progress: let the caller's stuck/jet recovery act,
+            // rather than steering directly into the edge A* just rejected.
+            self.path.push(start);
             return;
         }
 
@@ -351,6 +355,18 @@ impl Navigator {
         // String-pull / thin out collinear points
         let mut smoothed = Vec::with_capacity(rev.len() + 1);
         let mut anchor = start;
+        // A* starts at the cell center. From an off-center position, its first
+        // diagonal can cut a different (forbidden) edge. Re-center safely before
+        // following that edge rather than assuming its world-space segment fits.
+        if !map.line_walkable(start, rev[0]) {
+            let center = map.nav_to_world(sx, sy);
+            if !map.line_walkable(start, center) {
+                self.path.push(start);
+                return;
+            }
+            smoothed.push(center);
+            anchor = center;
+        }
         let mut i = 0;
         while i < rev.len() {
             let mut furthest = i;
@@ -365,7 +381,10 @@ impl Navigator {
             anchor = rev[furthest];
             i = furthest + 1;
         }
-        if found && smoothed.last().is_none_or(|p| dist2d(*p, goal) > NAV_STEP as f64) {
+        if found
+            && smoothed.last().is_none_or(|p| dist2d(*p, goal) > NAV_STEP as f64)
+            && map.line_walkable(anchor, goal)
+        {
             smoothed.push(goal);
         }
         self.path = smoothed;
@@ -379,4 +398,88 @@ fn octile(ax: usize, ay: usize, bx: usize, by: usize) -> f32 {
     let dy = (ay as isize - by as isize).unsigned_abs() as f32;
     let (mn, mx) = if dx < dy { (dx, dy) } else { (dy, dx) };
     mx + 0.414_213_5 * mn
+}
+
+#[cfg(test)]
+mod navigation_tests {
+    use super::*;
+
+    fn grid(nx: usize, ny: usize, heights: Vec<f32>) -> ArenaMap {
+        let mut map = ArenaMap::empty();
+        map.loaded = true;
+        map.min_x = 0.0;
+        map.min_y = 0.0;
+        map.nav_nx = nx;
+        map.nav_ny = ny;
+        map.walkable = vec![true; nx * ny];
+        map.wall_dist = vec![10; nx * ny];
+        map.nav_z = heights;
+        map
+    }
+
+    #[test]
+    fn close_unreachable_goal_does_not_restore_rejected_cliff_shortcut() {
+        let map = grid(2, 1, vec![0.0, 6.0]);
+        let mut nav = Navigator::new(&map);
+        assert_eq!(nav.next_waypoint(&map, 1, [2.0, 2.0, 0.0], [6.0, 2.0]), [2.0, 2.0]);
+        assert_eq!(nav.next_waypoint(&map, 2, [6.0, 2.0, 6.0], [2.0, 2.0]), [2.0, 2.0]);
+    }
+
+    #[test]
+    fn conservative_raster_start_can_recover_to_a_physically_clear_cell() {
+        let mut map = grid(4, 3, vec![0.0; 12]);
+        map.walkable[4] = false;
+        map.wall_dist[4] = 0;
+        let mut nav = Navigator::new(&map);
+        let start = [3.5, 6.0, 0.0];
+        let waypoint = nav.next_waypoint(&map, 1, start, [14.0, 6.0]);
+        assert_eq!(waypoint, [6.0, 6.0]);
+        assert!(!map.line_walkable([start[0], start[1]], waypoint));
+        assert!(map.is_walkable_cell(1, 1));
+    }
+
+    #[test]
+    fn smoothing_and_waypoint_advancement_keep_a_valid_detour() {
+        let map = grid(3, 3, vec![0.0, 3.0, 6.0, 0.0, 6.0, 6.0, 0.0, 3.0, 6.0]);
+        let mut nav = Navigator::new(&map);
+        let goal = [10.0, 6.0];
+        let first = nav.next_waypoint(&map, 1, [2.0, 6.0, 0.0], goal);
+        assert_ne!(first, goal);
+        let mut previous = [2.0, 6.0];
+        for &point in nav.remaining_path() {
+            assert!(map.line_walkable(previous, point));
+            previous = point;
+        }
+        assert_eq!(previous, goal);
+        // Being within the old 5.5 m waypoint radius cannot skip this bend.
+        let next = nav.next_waypoint(&map, 2, [3.0, 6.0, 0.0], goal);
+        assert_ne!(next, goal);
+        assert!(map.line_walkable([3.0, 6.0], next));
+    }
+
+    #[test]
+    fn real_arena_cliff_witness_is_not_a_direct_route() {
+        let path = "kit/arena/v2/world.json";
+        if !std::path::Path::new(path).exists() {
+            return;
+        }
+        let map = ArenaMap::load(&crate::protocol::HelloMap {
+            dir: "kit/arena".into(), files: vec![],
+        });
+        assert!(map.loaded);
+        let a = [-242.38, 48.91];
+        let b = [-238.38, 48.91];
+        let ac = map.world_to_nav(a[0], a[1]);
+        let bc = map.world_to_nav(b[0], b[1]);
+        assert!(map.is_walkable_cell(ac.0, ac.1));
+        assert!(map.is_walkable_cell(bc.0, bc.1));
+        assert!(!map.can_traverse_nav_step(ac, bc));
+        assert!(!map.line_walkable(a, b));
+        assert!(map.line_walkable(b, a));
+        let mut nav = Navigator::new(&map);
+        let start = [-246.38, 48.91];
+        let waypoint = nav.next_waypoint(&map, 1, [start[0], start[1], -6.7], b);
+        assert_ne!(waypoint, b);
+        assert!(map.line_walkable(start, waypoint));
+    }
 }

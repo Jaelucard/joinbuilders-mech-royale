@@ -1433,17 +1433,140 @@ impl ArenaMap {
         None
     }
 
+    /// Escape a conservative raster boundary only when the existing physical
+    /// collision model admits the entire short segment. This is separate from
+    /// line_walkable: ordinary shortcuts must never accept blocked nav cells.
+    pub fn nearby_nav_recovery(&self, pos: Vec3) -> Option<Vec2> {
+        let (sx, sy) = self.world_to_nav(pos[0], pos[1]);
+        let start_ground = self.terrain_z(pos[0] as f32, pos[1] as f32) as f64;
+        let mut best: Option<(f64, Vec2)> = None;
+        for dy in -2isize..=2 {
+            for dx in -2isize..=2 {
+                let x = sx as isize + dx;
+                let y = sy as isize + dy;
+                if x < 0 || y < 0 {
+                    continue;
+                }
+                let cell = (x as usize, y as usize);
+                if !self.can_traverse_nav_step(cell, cell) {
+                    continue;
+                }
+                let goal = self.nav_to_world(cell.0, cell.1);
+                let distance = dist2d([pos[0], pos[1]], goal);
+                if distance > 10.0 || best.is_some_and(|(d, _)| d <= distance) {
+                    continue;
+                }
+                let steps = (distance / 0.5).ceil().max(1.0) as usize;
+                let mut previous_z = pos[2];
+                let mut clear = true;
+                for i in 0..=steps {
+                    let t = i as f64 / steps as f64;
+                    let px = pos[0] + (goal[0] - pos[0]) * t;
+                    let py = pos[1] + (goal[1] - pos[1]) * t;
+                    let z = pos[2] + self.terrain_z(px as f32, py as f32) as f64 - start_ground;
+                    let rise = z - previous_z;
+                    if (rise > distance / steps as f64 * 1.05 && rise > MECH_STEP_UP as f64)
+                        || self.is_blocked_at(px, py, z, MECH_CLEAR_RADIUS as f64)
+                    {
+                        clear = false;
+                        break;
+                    }
+                    previous_z = z;
+                }
+                if clear {
+                    best = Some((distance, goal));
+                }
+            }
+        }
+        best.map(|(_, point)| point)
+    }
+
+    /// Directed transition used by both A* and line-of-travel shortcuts.
+    /// Walkability already includes the navigation grid's body-clearance checks.
+    /// Uphill cliffs are forbidden; descending the same edge remains allowed.
+    #[inline]
+    pub fn can_traverse_nav_step(&self, from: (usize, usize), to: (usize, usize)) -> bool {
+        let passable = |(x, y)| self.is_walkable_cell(x, y) && self.wall_dist_cell(x, y) > 0;
+        if !passable(from) || !passable(to) {
+            return false;
+        }
+        let dx = from.0.abs_diff(to.0);
+        let dy = from.1.abs_diff(to.1);
+        if dx > 1 || dy > 1 {
+            return false;
+        }
+        if dx == 0 && dy == 0 {
+            return true;
+        }
+        if dx != 0 && dy != 0
+            && (!passable((to.0, from.1)) || !passable((from.0, to.1)))
+        {
+            return false;
+        }
+        let rise = self.nav_z[to.1 * self.nav_nx + to.0]
+            - self.nav_z[from.1 * self.nav_nx + from.0];
+        let step_length = if dx != 0 && dy != 0 { std::f32::consts::SQRT_2 } else { 1.0 };
+        rise.is_finite() && !(rise > step_length * NAV_STEP * 1.05 && rise > MECH_STEP_UP)
+    }
+
     pub fn line_walkable(&self, a: [f64; 2], b: [f64; 2]) -> bool {
-        let dx = b[0] - a[0];
-        let dy = b[1] - a[1];
-        let d = (dx * dx + dy * dy).sqrt();
-        let steps = ((d / (NAV_STEP as f64 * 0.5)).ceil() as usize).max(1);
-        for i in 1..=steps {
-            let t = i as f64 / steps as f64;
-            let (gx, gy) = self.world_to_nav(a[0] + dx * t, a[1] + dy * t);
-            if !self.is_walkable_cell(gx, gy) {
+        // Visit every crossed cell boundary. Fixed-distance sampling can miss a
+        // corner cell, and checking endpoints alone loses directed cliff rules.
+        if a.iter().chain(b.iter()).any(|v| !v.is_finite()) {
+            return false;
+        }
+        let grid_pos = |p: [f64; 2]| [
+            ((p[0] as f32 - self.min_x) / NAV_STEP) as f64,
+            ((p[1] as f32 - self.min_y) / NAV_STEP) as f64,
+        ];
+        let start = grid_pos(a);
+        let end = grid_pos(b);
+        if [start, end].iter().any(|p| {
+            p[0] < 0.0 || p[1] < 0.0 || p[0] >= self.nav_nx as f64 || p[1] >= self.nav_ny as f64
+        }) {
+            return false;
+        }
+        let mut cell = (start[0].floor() as usize, start[1].floor() as usize);
+        let last = (end[0].floor() as usize, end[1].floor() as usize);
+        if !self.can_traverse_nav_step(cell, cell) {
+            return false;
+        }
+        let delta = [end[0] - start[0], end[1] - start[1]];
+        let sx = if delta[0] > 0.0 { 1isize } else { -1 };
+        let sy = if delta[1] > 0.0 { 1isize } else { -1 };
+        let boundary_t = |axis: usize, c: usize| {
+            if delta[axis] == 0.0 {
+                f64::INFINITY
+            } else {
+                let edge = c as f64 + if delta[axis] > 0.0 { 1.0 } else { 0.0 };
+                (edge - start[axis]) / delta[axis]
+            }
+        };
+        let mut tx = boundary_t(0, cell.0);
+        let mut ty = boundary_t(1, cell.1);
+        let step_tx = if delta[0] == 0.0 { f64::INFINITY } else { 1.0 / delta[0].abs() };
+        let step_ty = if delta[1] == 0.0 { f64::INFINITY } else { 1.0 / delta[1].abs() };
+
+        while cell != last {
+            let mut next = cell;
+            // An endpoint exactly on a grid boundary belongs to its floor cell.
+            // Do not step past that cell on a negative-going axis at t == 1.
+            let next_tx = if cell.0 == last.0 { f64::INFINITY } else { tx };
+            let next_ty = if cell.1 == last.1 { f64::INFINITY } else { ty };
+            // At an exact corner, use the same no-corner-cutting diagonal edge
+            // as A*. Otherwise preserve each individual cardinal transition.
+            if next_tx <= next_ty {
+                next.0 = (cell.0 as isize + sx) as usize;
+            }
+            if next_ty <= next_tx {
+                next.1 = (cell.1 as isize + sy) as usize;
+            }
+            if !self.can_traverse_nav_step(cell, next) {
                 return false;
             }
+            if next.0 != cell.0 { tx += step_tx; }
+            if next.1 != cell.1 { ty += step_ty; }
+            cell = next;
         }
         true
     }
@@ -1459,4 +1582,83 @@ fn find_map_file(dir: &Path, files: &[String], suffix: &str, fallback: &str) -> 
         }
     }
     dir.join(fallback)
+}
+
+#[cfg(test)]
+mod navigation_tests {
+    use super::*;
+
+    fn grid(nx: usize, ny: usize, heights: Vec<f32>) -> ArenaMap {
+        let mut map = ArenaMap::empty();
+        map.loaded = true;
+        map.min_x = 0.0;
+        map.min_y = 0.0;
+        map.nav_nx = nx;
+        map.nav_ny = ny;
+        map.walkable = vec![true; nx * ny];
+        map.wall_dist = vec![10; nx * ny];
+        map.nav_z = heights;
+        map
+    }
+
+    #[test]
+    fn uphill_cliff_is_directional_but_gradual_ramp_is_valid() {
+        let map = grid(3, 1, vec![0.0, 6.0, 6.0]);
+        assert!(!map.line_walkable([2.0, 2.0], [10.0, 2.0]));
+        assert!(map.line_walkable([10.0, 2.0], [2.0, 2.0]));
+        let ramp = grid(3, 1, vec![0.0, 4.0, 8.0]);
+        assert!(ramp.line_walkable([2.0, 2.0], [10.0, 2.0]));
+    }
+
+    #[test]
+    fn diagonal_shortcut_preserves_corner_clearance() {
+        let mut map = grid(2, 2, vec![0.0; 4]);
+        assert!(map.line_walkable([2.0, 2.0], [6.0, 6.0]));
+        map.walkable[1] = false;
+        map.wall_dist[1] = 0;
+        assert!(!map.can_traverse_nav_step((0, 0), (1, 1)));
+        assert!(!map.line_walkable([2.0, 2.0], [6.0, 6.0]));
+        assert!(!map.line_walkable([6.0, 6.0], [2.0, 2.0]));
+    }
+
+    #[test]
+    fn traversal_checks_briefly_crossed_cells_and_does_not_clamp_outside_goals() {
+        let mut map = grid(3, 3, vec![0.0; 9]);
+        // The segment passes briefly through (1,0) before entering (1,1).
+        // A short corner crossing must not disappear between sampling points.
+        map.walkable[1] = false;
+        map.wall_dist[1] = 0;
+        assert!(!map.line_walkable([3.9, 3.9], [8.1, 8.0]));
+        assert!(!map.line_walkable([2.0, 6.0], [-1.0, 6.0]));
+        assert!(!map.line_walkable([2.0, 6.0], [f64::NAN, 6.0]));
+        assert!(map.line_walkable([2.0, 6.0], [2.0, 6.0]));
+    }
+
+    #[test]
+    fn diagonal_ramp_retains_astar_distance_allowance() {
+        let map = grid(2, 2, vec![0.0, 3.0, 3.0, 5.5]);
+        assert!(map.can_traverse_nav_step((0, 0), (1, 1)));
+        assert!(map.line_walkable([2.0, 2.0], [6.0, 6.0]));
+    }
+
+    #[test]
+    fn recovery_does_not_ignore_physical_obstructions() {
+        let mut map = grid(4, 3, vec![0.0; 12]);
+        map.walkable[4] = false;
+        map.wall_dist[4] = 0;
+        assert_eq!(map.nearby_nav_recovery([3.5, 6.0, 0.0]), Some([6.0, 6.0]));
+        // The fallback may escape a conservative grid mask, not a real wall.
+        map.building_top[0] = 10.0;
+        assert!(map.nearby_nav_recovery([3.5, 6.0, 0.0]).is_none());
+    }
+
+    #[test]
+    fn open_grid_traversal_handles_all_directions_and_boundary_endpoints() {
+        let map = grid(4, 4, vec![0.0; 16]);
+        for a in [[0.0, 0.0], [4.0, 4.0], [15.9, 2.0], [2.0, 15.9]] {
+            for b in [[4.0, 4.0], [0.0, 0.0], [15.9, 15.9], [3.9, 4.0]] {
+                assert!(map.line_walkable(a, b), "{a:?} -> {b:?}");
+            }
+        }
+    }
 }
