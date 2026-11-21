@@ -4,7 +4,7 @@ use std::io::{self, BufRead, BufReader, Write};
 use std::sync::mpsc;
 use std::thread;
 
-const BOT_NAME: &str = "vanguard-v3";
+const BOT_NAME: &str = "vanguard-v4";
 
 fn main() {
     let (tx, rx) = mpsc::channel::<Option<Vec<String>>>();

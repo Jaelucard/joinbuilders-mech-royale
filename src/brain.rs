@@ -33,7 +33,7 @@ impl BotBrain {
         let initial_mechs = hello.config.r#match.get("mechs").copied().unwrap_or(16.0) as u64;
         let world = WorldState::new(initial_mechs);
         eprintln!(
-            "vanguard-v3 initialized (slot={}, map_loaded={}, prisms={}, roofs={}, nav={}x{}) in {:.1}ms",
+            "vanguard-v4 initialized (slot={}, map_loaded={}, prisms={}, roofs={}, nav={}x{}) in {:.1}ms",
             hello.slot,
             map.loaded,
             map.prisms.len(),
@@ -1163,7 +1163,7 @@ impl BotBrain {
                     let (gx, gy) = self.map.world_to_nav(nx, ny);
                     let wd = self.map.wall_dist_cell(gx, gy);
                     if wd == 0
-                        && pos[2] <= self.map.terrain_z(pos[0] as f32, pos[1] as f32) as f64 + 1.5
+                        && pos[2] <= self.map.terrain_z_fast(pos[0] as f32, pos[1] as f32) as f64 + 1.5
                     {
                         score -= 14.0;
                     }
