@@ -24,6 +24,8 @@ pub struct CombatDecision {
     pub fire: [bool; 2],
     pub reload: bool,
     pub charging_laser: bool,
+    pub laser_charge_s: f64,
+    pub laser_cooldown_s: f64,
     pub target_pos: Option<Vec3>,
     pub desired_range: f64,
     pub has_los_to_target: bool,
@@ -36,6 +38,8 @@ impl Default for CombatDecision {
             fire: [false, false],
             reload: false,
             charging_laser: false,
+            laser_charge_s: 0.0,
+            laser_cooldown_s: 0.0,
             target_pos: None,
             desired_range: 65.0,
             has_los_to_target: false,
@@ -74,7 +78,6 @@ pub fn solve_linear_intercept(
     } else {
         let disc = b * b - 4.0 * a * c;
         if disc < 0.0 {
-            // Target moving faster than projectile; fallback to simple distance/speed
             (c.sqrt() / proj_speed.max(1.0)).min(2.0)
         } else {
             let sq = disc.sqrt();
@@ -94,7 +97,7 @@ pub fn solve_linear_intercept(
         [
             target_pos[0] + vx * t,
             target_pos[1] + vy * t,
-            target_pos[2] + vz * t * 0.5, // damp vertical extrapolation (jumps/gravity)
+            target_pos[2] + vz * t * 0.45,
         ],
         t,
     ))
@@ -117,7 +120,6 @@ pub fn solve_mortar_pitches(d: f64, dz: f64, speed: f64, gravity: f64) -> Option
     Some((low, high))
 }
 
-/// Check if a mortar parabolic trajectory clears buildings/terrain.
 pub fn mortar_arc_clear(
     map: &ArenaMap,
     origin: Vec3,
@@ -172,7 +174,16 @@ pub fn aim_angles(from: Vec3, to: Vec3) -> [f64; 2] {
     [dy.atan2(dx), dz.atan2(horiz)]
 }
 
-/// Select the highest-value enemy mech target (or NPC/crate if `allow_farm` and no enemy threat).
+/// Predict actual torso aim after 1 sim tick (0.05 s) of slew toward `desired`.
+#[inline]
+fn slew_one_tick(cur: [f64; 2], desired: [f64; 2], turn_rate: f64, pitch_rate: f64) -> [f64; 2] {
+    let max_dy = turn_rate * 0.05;
+    let max_dp = pitch_rate * 0.05;
+    let dy = wrap_angle(desired[0] - cur[0]).clamp(-max_dy, max_dy);
+    let dp = (desired[1] - cur[1]).clamp(-max_dp, max_dp);
+    [wrap_angle(cur[0] + dy), cur[1] + dp]
+}
+
 pub fn select_target(
     obs: &Observation,
     cfg: &Config,
@@ -209,28 +220,25 @@ pub fn select_target(
 
         let los = map.has_los(muzzle, center);
         if !los && !has_mortar {
-            // Still consider visible enemies within 100m if we want to track them with torso
-            if !e.visible_now || d > 110.0 {
+            // Keep visible enemies (including 5s memory behind cover!) trackable for cover-peeking up to 190m
+            if !e.visible_now || d > 190.0 {
                 continue;
             }
         }
 
-        // If holding fire to finish regen, only engage very close pushing threats
-        if hold_fire_for_regen && d > 32.0 {
+        if hold_fire_for_regen && d > 55.0 && !e.aiming_at_me && obs.t - e.last_damaged_me_t > 2.5 {
             continue;
         }
 
         let mut score = 220.0 - d * 0.65;
         if los {
-            score += 90.0;
+            score += 95.0;
         }
-        // Finish low-HP enemies!
         let hp_frac = (e.hp / e.max_hp.max(1.0)).clamp(0.0, 1.0);
-        score += (1.0 - hp_frac) * 110.0;
-        if e.hp < 320.0 {
-            score += 65.0;
+        score += (1.0 - hp_frac) * 120.0;
+        if e.hp < 340.0 {
+            score += 75.0;
         }
-        // Threat priority: enemies aiming at us or who recently damaged us
         if e.aiming_at_me {
             score += 45.0;
         }
@@ -238,21 +246,18 @@ pub fn select_target(
             score += 55.0;
         }
         if e.charging {
-            score += 50.0;
+            score += 60.0;
         }
-        // Weapon triangle bonuses!
         if has_laser && e.has_weapon(WeaponKind::Mortar) {
-            score += 60.0; // +60% cookoff!
+            score += 65.0; // +60% cookoff!
         }
         if has_lightning && e.has_weapon(WeaponKind::Laser) && d < 65.0 {
-            score += 55.0; // short their laser!
+            score += 65.0; // short their laser!
         }
-        // Rear flank bonus
         let from_enemy_yaw = (me.pos[1] - epos[1]).atan2(me.pos[0] - epos[0]);
         if wrap_angle(from_enemy_yaw - e.aim[0]).abs() > std::f64::consts::FRAC_PI_2 {
             score += 25.0;
         }
-        // Slight penalty for stale non-visible memory target (mortar lob only)
         if !e.visible_now {
             score -= 80.0 + age * 20.0;
         }
@@ -278,21 +283,19 @@ pub fn select_target(
         return best_enemy;
     }
 
-    // If holding fire to regen, do NOT shoot NPCs or crates!
     if hold_fire_for_regen || !allow_farm {
         return None;
     }
 
-    // Consider NPC drones (2 cubes!) or nearby crates (1 cube + 50% weapon!)
     let mut best_farm: Option<CombatTarget> = None;
     for npc in &world.npcs {
         let center = [npc.pos[0], npc.pos[1], npc.pos[2] + 1.75];
         let d = dist3d(muzzle, center);
-        if d > 95.0 || !map.has_los(muzzle, center) {
+        if d > 110.0 || !map.has_los(muzzle, center) {
             continue;
         }
         let hp = npc.hp.unwrap_or(350.0);
-        let score = 140.0 - d + (350.0 - hp) * 0.25;
+        let score = 150.0 - d + (350.0 - hp) * 0.25;
         let cand = CombatTarget {
             is_mech: false,
             is_crate: false,
@@ -313,11 +316,11 @@ pub fn select_target(
     for cr in &obs.crates {
         let center = [cr.pos[0], cr.pos[1], cr.pos[2] + 1.2];
         let d = dist3d(muzzle, center);
-        if d > 85.0 || !map.has_los(muzzle, center) {
+        if d > 95.0 || !map.has_los(muzzle, center) {
             continue;
         }
         let hp = cr.hp.unwrap_or(300.0);
-        let score = 125.0 - d + (300.0 - hp) * 0.25 + if me.empty_slot().is_some() { 30.0 } else { 0.0 };
+        let score = 130.0 - d + (300.0 - hp) * 0.25 + if me.empty_slot().is_some() { 35.0 } else { 0.0 };
         let cand = CombatTarget {
             is_mech: false,
             is_crate: true,
@@ -338,7 +341,7 @@ pub fn select_target(
     best_farm
 }
 
-/// Evaluate aim, trigger control for both weapon slots, and reload timing.
+#[allow(clippy::too_many_arguments)]
 pub fn evaluate_combat(
     obs: &Observation,
     cfg: &Config,
@@ -347,14 +350,20 @@ pub fn evaluate_combat(
     target: Option<&CombatTarget>,
     urgent_move: bool,
     hold_fire_for_regen: bool,
+    allow_precharge_behind_cover: bool,
+    avoid_open_laser_slowdown: bool,
 ) -> CombatDecision {
     let me = &obs.self_obs;
     let mut out = CombatDecision::default();
-
-    // Compute desired combat range based on our loadout
     out.desired_range = preferred_range(me, target);
 
-    // Check proactive reload when no active firing target
+    for w in me.weapons.iter().flatten() {
+        if w.kind == WeaponKind::Laser {
+            out.laser_charge_s = w.charge.unwrap_or(0.0);
+            out.laser_cooldown_s = w.cooldown;
+        }
+    }
+
     let gun_needs_passive_reload = me.weapons.iter().any(|w| {
         if let Some(w) = w {
             if w.kind == WeaponKind::Gun {
@@ -381,9 +390,10 @@ pub fn evaluate_combat(
 
     let min_pitch = me.stat("min_pitch", -0.7);
     let max_pitch = me.stat("max_pitch", 1.3);
+    let turn_rate = me.stat("turn_rate", 4.0);
+    let pitch_rate = me.stat("pitch_rate", 3.0);
     let cube_mult = 1.0 + cfg.cubes.stat_cap.min(me.cubes as f64) * cfg.cubes.damage_per_cube;
 
-    // Track best desired aim with priority: Charging Laser > Lightning (close) > Ready Laser > Gun > Mortar
     let mut best_aim: Option<(i32, [f64; 2])> = None;
     let mut set_aim = |prio: i32, a: [f64; 2]| {
         if best_aim.is_none_or(|(p, _)| prio > p) {
@@ -391,11 +401,10 @@ pub fn evaluate_combat(
         }
     };
 
-    // Always at least face the target if visible
     let direct_aim = aim_angles(muzzle, t.pos);
     set_aim(1, direct_aim);
 
-    if hold_fire_for_regen && (!t.is_mech || dist > 32.0) {
+    if hold_fire_for_regen && !t.is_mech {
         out.aim = best_aim.map(|(_, a)| a);
         out.reload = gun_needs_passive_reload;
         return out;
@@ -413,7 +422,7 @@ pub fn evaluate_combat(
                 let max_dmg = w.stat("damage", 315.0);
                 let cur_charge = w.charge.unwrap_or(0.0);
 
-                // Slightly lead by 0.05s for 1-tick server slew/latency
+                // Lead by 0.05 s (1 tick until release executes)
                 let lead_pos = [
                     t.pos[0] + t.vel[0] * 0.05,
                     t.pos[1] + t.vel[1] * 0.05,
@@ -422,31 +431,36 @@ pub fn evaluate_combat(
                 let desired = aim_angles(muzzle, lead_pos);
 
                 if cur_charge > 0.0 {
-                    // Currently charging!
                     set_aim(100, desired);
-                    let yaw_err = wrap_angle(desired[0] - me.aim[0]).abs();
-                    let pitch_err = (desired[1] - me.aim[1]).abs();
-                    let yaw_tol = (t.radius * 0.80 / horiz_dist).atan().max(0.016);
-                    let pitch_tol = (t.half_height * 0.78 / dist.max(1.0)).atan().max(0.016);
+                    // Predict actual slewed aim after 1 tick (0.05 s)! Fixes v1's stuck-charging bug!
+                    let next_aim = slew_one_tick(me.aim, desired, turn_rate, pitch_rate);
+                    let yaw_err = wrap_angle(desired[0] - next_aim[0]).abs();
+                    let pitch_err = (desired[1] - next_aim[1]).abs();
+                    // Tight hitbox angular tolerance (no loose 0.016 floor that whiffs long-range shots!)
+                    let yaw_tol = ((t.radius * 0.85) / horiz_dist).atan().max(0.005);
+                    let pitch_tol = ((t.half_height * 0.80) / dist.max(1.0)).atan().max(0.005);
                     let aligned = yaw_err <= yaw_tol && pitch_err <= pitch_tol;
 
                     let frac = (cur_charge / full_charge.max(0.05)).clamp(0.0, 1.0);
                     let cookoff = if t.has_mortar { 1.6 } else { 1.0 };
-                    let est_dmg = max_dmg * (min_frac + (1.0 - min_frac) * frac) * cube_mult * cookoff;
+                    let est_dmg =
+                        max_dmg * (min_frac + (1.0 - min_frac) * frac) * cube_mult * cookoff;
 
                     let should_release = has_los
                         && dist <= range - 1.0
                         && aligned
                         && (cur_charge >= full_charge - 0.06
-                            || (cur_charge >= min_charge && est_dmg >= t.hp * 1.05)
-                            || cur_charge >= full_charge + hold_s - 0.35);
+                            || (cur_charge >= min_charge && est_dmg >= t.hp * 1.02)
+                            || cur_charge >= full_charge + hold_s - 0.30);
 
                     if should_release {
-                        // LET GO to fire hitscan beam!
+                        out.fire[slot] = false;
+                        out.charging_laser = false;
+                    } else if urgent_move && cur_charge >= min_charge && !has_los {
+                        // Dump charge if forced to sprint out of zone/laser duck
                         out.fire[slot] = false;
                         out.charging_laser = false;
                     } else {
-                        // Keep holding charge
                         out.fire[slot] = true;
                         out.charging_laser = true;
                     }
@@ -454,11 +468,14 @@ pub fn evaluate_combat(
                     && obs.t >= world.shorted_until_t
                     && !urgent_move
                     && dist <= range - 2.0
-                    && has_los
                 {
-                    // Don't waste laser cooldown on a tiny crate if an enemy is nearby, otherwise fire away
                     let ok_target = t.is_mech || (!t.is_crate) || t.hp >= 220.0;
-                    if ok_target {
+                    let can_start = if has_los {
+                        !avoid_open_laser_slowdown || t.hp <= max_dmg * 1.1
+                    } else {
+                        allow_precharge_behind_cover && t.is_mech
+                    };
+                    if ok_target && can_start {
                         set_aim(80, desired);
                         out.fire[slot] = true;
                         out.charging_laser = true;
@@ -472,15 +489,14 @@ pub fn evaluate_combat(
                 let e_cost = w.stat("energy", 3.0);
                 if dist <= range - 0.4 && has_los && w.cooldown <= 0.10 {
                     let yaw_err = wrap_angle(direct_aim[0] - me.aim[0]).abs();
-                    let min_energy = if t.is_mech && t.hp < 220.0 {
+                    let min_energy = if t.is_mech && (t.hp < 240.0 || t.has_laser) {
                         e_cost
                     } else if t.is_mech {
                         e_cost + 8.0
                     } else {
-                        e_cost + 25.0
+                        e_cost + 24.0
                     };
                     if me.energy >= min_energy {
-                        // Lower aim priority than gun lead if enemy is already safely inside lightning cone
                         let l_prio = if yaw_err <= cone_rad * 0.6 { 55 } else { 90 };
                         set_aim(l_prio, direct_aim);
                         if yaw_err <= cone_rad * 0.92 {
@@ -501,11 +517,12 @@ pub fn evaluate_combat(
                         let pred_los = has_los && map.has_los(muzzle, pred);
                         if pred_los {
                             let desired = aim_angles(muzzle, pred);
-                            set_aim(60, desired);
-                            let yaw_err = wrap_angle(desired[0] - me.aim[0]).abs();
-                            let pitch_err = (desired[1] - me.aim[1]).abs();
-                            let yaw_tol = ((t.radius * 1.35) / horiz_dist).atan().max(0.055);
-                            let pitch_tol = ((t.half_height * 1.4) / dist.max(1.0)).atan().max(0.055);
+                            set_aim(65, desired);
+                            let next_aim = slew_one_tick(me.aim, desired, turn_rate, pitch_rate);
+                            let yaw_err = wrap_angle(desired[0] - next_aim[0]).abs();
+                            let pitch_err = (desired[1] - next_aim[1]).abs();
+                            let yaw_tol = ((t.radius * 1.4) / horiz_dist).atan().max(0.04);
+                            let pitch_tol = ((t.half_height * 1.4) / dist.max(1.0)).atan().max(0.04);
                             if yaw_err <= yaw_tol && pitch_err <= pitch_tol {
                                 out.fire[slot] = true;
                             }
@@ -521,13 +538,14 @@ pub fn evaluate_combat(
                 let speed = w.stat("speed", 72.0);
                 let gravity = w.stat("gravity", 22.0);
                 let splash_r = w.stat("splash_radius", 7.0);
-                if w.cooldown <= 0.10 && horiz_dist >= (splash_r * 2.1).max(15.0) && horiz_dist <= 230.0 {
+                if w.cooldown <= 0.10
+                    && horiz_dist >= (splash_r * 2.2).max(16.0)
+                    && horiz_dist <= 230.0
+                {
                     let origin = mortar_origin_pos(me);
-                    // Aim at enemy feet so splash hits cleanly!
                     let mut aim_pt = [t.pos[0], t.pos[1], t.pos[2] - t.half_height + 0.5];
                     let mut chosen: Option<(f64, f64)> = None;
 
-                    // 2-step iterative lead
                     for _ in 0..2 {
                         let d_h = dist2d([origin[0], origin[1]], [aim_pt[0], aim_pt[1]]);
                         let dz = aim_pt[2] - origin[2];
@@ -538,7 +556,9 @@ pub fn evaluate_combat(
                             for p in [low_p, high_p] {
                                 if p >= min_pitch + 0.02 && p <= max_pitch - 0.02 {
                                     let tf = d_h / (speed * p.cos()).max(1.0);
-                                    if tf <= 6.8 && mortar_arc_clear(map, origin, yaw, p, speed, gravity, tf) {
+                                    if tf <= 6.8
+                                        && mortar_arc_clear(map, origin, yaw, p, speed, gravity, tf)
+                                    {
                                         picked = Some((yaw, p, tf));
                                         break;
                                     }
@@ -562,12 +582,12 @@ pub fn evaluate_combat(
                     }
 
                     if let Some((yaw, pitch)) = chosen {
-                        // Higher priority if we have no direct LoS (lobbing over buildings!)
                         let prio = if !has_los { 85 } else { 50 };
                         set_aim(prio, [yaw, pitch]);
-                        let yaw_err = wrap_angle(yaw - me.aim[0]).abs();
-                        let pitch_err = (pitch - me.aim[1]).abs();
-                        if yaw_err <= 0.09 && pitch_err <= 0.07 {
+                        let next_aim = slew_one_tick(me.aim, [yaw, pitch], turn_rate, pitch_rate);
+                        let yaw_err = wrap_angle(yaw - next_aim[0]).abs();
+                        let pitch_err = (pitch - next_aim[1]).abs();
+                        if yaw_err <= 0.08 && pitch_err <= 0.06 {
                             out.fire[slot] = true;
                         }
                     }
@@ -593,81 +613,110 @@ fn preferred_range(me: &SelfObs, target: Option<&CombatTarget>) -> f64 {
         .unwrap_or(45.0);
 
     if let Some(t) = target {
-        if has_lightning && t.has_laser && me.energy > 25.0 {
-            return (lightning_range * 0.75).max(20.0);
+        if has_lightning && t.has_laser && me.energy > 22.0 {
+            return (lightning_range * 0.72).max(20.0);
         }
         if has_laser && t.has_mortar {
-            return 95.0; // outrange mortar and cookoff!
+            return 95.0;
         }
     }
 
     if has_lightning && !has_laser && !has_gun {
         return lightning_range * 0.72;
     }
-    if has_lightning && me.energy > 35.0 {
-        // Hybrid: comfortable mid-close range if healthy
-        if me.hp / me.max_hp.max(1.0) > 0.65 {
-            return lightning_range * 0.80;
-        }
+    if has_lightning && has_gun && me.energy > 30.0 && me.hp / me.max_hp.max(1.0) > 0.55 {
+        // Gun + Lightning dual-fire = 427.5 DPS inside lightning range!
+        return lightning_range * 0.78;
     }
     if has_laser {
-        return 85.0;
+        return 80.0;
     }
     55.0
 }
 
-/// Rank weapon desirability given current upgrades.
-pub fn weapon_value(kind: WeaponKind, me: &SelfObs) -> f64 {
+/// Evaluate holistic 2-weapon loadout synergy (avoids mortar cookoff & dead range bands!).
+pub fn loadout_score(a: Option<WeaponKind>, b: Option<WeaponKind>, me: &SelfObs) -> f64 {
     let count_upg = |prefix: &str| -> f64 {
-        me.upgrades
-            .iter()
-            .filter(|u| u.starts_with(prefix))
-            .count() as f64
+        me.upgrades.iter().filter(|u| u.starts_with(prefix)).count() as f64
     };
-    match kind {
-        WeaponKind::Laser => 105.0 + count_upg("laser_") * 18.0,
-        WeaponKind::Lightning => {
-            98.0 + count_upg("lightning_") * 18.0
-                + if me.upgrades.iter().any(|u| u == "reactor" || u == "capacitor") {
-                    10.0
-                } else {
-                    0.0
-                }
+    let bonus = |k: WeaponKind| -> f64 {
+        match k {
+            WeaponKind::Laser => count_upg("laser_") * 22.0,
+            WeaponKind::Lightning => {
+                count_upg("lightning_") * 22.0
+                    + if me.upgrades.iter().any(|u| u == "reactor" || u == "capacitor") {
+                        10.0
+                    } else {
+                        0.0
+                    }
+            }
+            WeaponKind::Gun => count_upg("gun_") * 18.0,
+            WeaponKind::Mortar => count_upg("mortar_") * 14.0,
         }
-        WeaponKind::Gun => 78.0 + count_upg("gun_") * 16.0,
-        WeaponKind::Mortar => 58.0 + count_upg("mortar_") * 16.0,
-    }
+    };
+
+    let (Some(w0), Some(w1)) = (a, b) else {
+        let single = a.or(b);
+        return match single {
+            Some(WeaponKind::Laser) => 115.0 + bonus(WeaponKind::Laser),
+            Some(WeaponKind::Lightning) => 105.0 + bonus(WeaponKind::Lightning),
+            Some(WeaponKind::Gun) => 90.0 + bonus(WeaponKind::Gun),
+            Some(WeaponKind::Mortar) => 70.0 + bonus(WeaponKind::Mortar),
+            None => 0.0,
+        };
+    };
+
+    let pair_base = match (w0, w1) {
+        (WeaponKind::Gun, WeaponKind::Laser) | (WeaponKind::Laser, WeaponKind::Gun) => 212.0,
+        (WeaponKind::Gun, WeaponKind::Lightning) | (WeaponKind::Lightning, WeaponKind::Gun) => 206.0,
+        (WeaponKind::Laser, WeaponKind::Lightning) | (WeaponKind::Lightning, WeaponKind::Laser) => {
+            // Very strong once upgraded; slightly below Gun+Laser unupgraded due to 45-280m cooldown gap
+            204.0
+        }
+        (WeaponKind::Laser, WeaponKind::Mortar) | (WeaponKind::Mortar, WeaponKind::Laser) => 152.0,
+        (WeaponKind::Lightning, WeaponKind::Mortar) | (WeaponKind::Mortar, WeaponKind::Lightning) => {
+            148.0
+        }
+        (WeaponKind::Gun, WeaponKind::Mortar) | (WeaponKind::Mortar, WeaponKind::Gun) => 145.0,
+        _ => 100.0,
+    };
+    pair_base + bonus(w0) + bonus(w1)
 }
 
-/// Decide whether a visible pickup is worth walking over to grab.
+/// Decide whether a visible pickup improves our loadout; returns `Some(drop_slot_opt)`.
 pub fn is_pickup_desirable(kind: WeaponKind, me: &SelfObs) -> Option<Option<usize>> {
     if me.has_weapon(kind) {
         return None;
     }
     if me.empty_slot().is_some() {
-        // Don't bother picking up a gun if we already have one, otherwise fill empty slot!
         if kind == WeaponKind::Gun {
             return None;
         }
         return Some(None);
     }
-    // Check if swapping improves our loadout without dropping a charging laser
-    let new_val = weapon_value(kind, me);
+    let w0 = me.weapons[0].as_ref().map(|w| w.kind);
+    let w1 = me.weapons[1].as_ref().map(|w| w.kind);
+    let cur_score = loadout_score(w0, w1, me);
     let mut best_swap: Option<(f64, usize)> = None;
+
     for (slot, wopt) in me.weapons.iter().enumerate() {
         let Some(w) = wopt else { continue };
         if w.kind == WeaponKind::Laser && w.charge.unwrap_or(0.0) > 0.0 {
-            continue; // cannot swap while charging
+            continue;
         }
-        let gain = new_val - weapon_value(w.kind, me);
-        if gain >= 16.0 && best_swap.is_none_or(|(bg, _)| gain > bg) {
+        let new_score = if slot == 0 {
+            loadout_score(Some(kind), w1, me)
+        } else {
+            loadout_score(w0, Some(kind), me)
+        };
+        let gain = new_score - cur_score;
+        if gain >= 10.0 && best_swap.is_none_or(|(bg, _)| gain > bg) {
             best_swap = Some((gain, slot));
         }
     }
     best_swap.map(|(_, slot)| Some(slot))
 }
 
-/// Return `(take_id, drop_slot)` if a desirable pickup is within reach right now.
 pub fn choose_immediate_pickup(obs: &Observation, cfg: &Config) -> (Option<u64>, Option<usize>) {
     let me = &obs.self_obs;
     let reach = cfg.loot.pickup_radius;
@@ -680,7 +729,12 @@ pub fn choose_immediate_pickup(obs: &Observation, cfg: &Config) -> (Option<u64>,
             continue;
         }
         if let Some(drop_slot) = is_pickup_desirable(p.kind, me) {
-            let val = weapon_value(p.kind, me) - dh * 0.5;
+            let val = match p.kind {
+                WeaponKind::Laser => 110.0,
+                WeaponKind::Lightning => 104.0,
+                WeaponKind::Gun => 85.0,
+                WeaponKind::Mortar => 60.0,
+            } - dh * 0.5;
             if best.is_none_or(|(bv, _, _)| val > bv) {
                 best = Some((val, p.id, drop_slot));
             }
@@ -693,7 +747,6 @@ pub fn choose_immediate_pickup(obs: &Observation, cfg: &Config) -> (Option<u64>,
     }
 }
 
-/// Score and pick the strongest upgrade choice from an offer.
 pub fn choose_upgrade(offer: &Offer, obs: &Observation) -> usize {
     let me = &obs.self_obs;
     let hp_frac = me.hp / me.max_hp.max(1.0);
@@ -706,33 +759,35 @@ pub fn choose_upgrade(offer: &Offer, obs: &Observation) -> usize {
 
     for (i, ch) in offer.choices.iter().enumerate() {
         let mut s = match ch.id.as_str() {
-            "nanites" => 115.0 + if hp_frac < 0.75 { 20.0 } else { 0.0 },
-            "armor" => 104.0 + if late { 18.0 } else { 0.0 },
-            "plating" => 98.0 + if late { 22.0 } else { 0.0 } + if hp_frac < 0.65 { 12.0 } else { 0.0 },
-            "servos" => 92.0,
-            "laser_charge" => 106.0,
-            "laser_damage" => 96.0,
-            "lightning_range" => 108.0,
-            "lightning_efficiency" => 99.0,
-            "lightning_chain" => 90.0,
-            "gun_rate" => 88.0,
-            "gun_damage" => 86.0,
-            "gun_velocity" => 78.0,
-            "gun_mag" => 74.0,
-            "gyros" => 80.0 + if has_laser { 10.0 } else { 0.0 },
-            "reactor" => 78.0 + if has_lightning { 16.0 } else { 0.0 },
-            "jets" => 74.0,
-            "capacitor" => 72.0 + if has_lightning { 14.0 } else { 0.0 },
-            "sensors" => 70.0,
-            "mortar_reload" => 68.0,
-            "mortar_splash" => 66.0,
-            "mortar_velocity" => 62.0,
-            "laser_pierce" => 58.0,
+            "nanites" => 122.0 + if hp_frac < 0.80 { 22.0 } else { 0.0 },
+            "armor" => 108.0 + if late { 20.0 } else { 0.0 },
+            "plating" => {
+                100.0 + if late { 24.0 } else { 0.0 } + if hp_frac < 0.65 { 14.0 } else { 0.0 }
+            }
+            "laser_charge" => 112.0,
+            "lightning_range" => 110.0,
+            "laser_damage" => 102.0,
+            "lightning_efficiency" => 100.0,
+            "servos" => 96.0,
+            "gun_rate" => 94.0,
+            "gun_damage" => 92.0,
+            "lightning_chain" => 92.0,
+            "gun_velocity" => 82.0,
+            "gyros" => 82.0 + if has_laser { 10.0 } else { 0.0 },
+            "reactor" => 80.0 + if has_lightning { 16.0 } else { 0.0 },
+            "gun_mag" => 78.0,
+            "jets" => 78.0,
+            "capacitor" => 74.0 + if has_lightning { 14.0 } else { 0.0 },
+            "sensors" => 72.0,
+            "mortar_reload" => 65.0,
+            "mortar_splash" => 62.0,
+            "mortar_velocity" => 58.0,
+            "laser_pierce" => 56.0,
             _ => 50.0,
         };
-        // Slight preference for first nanites stack over 2nd, still very high either way
         if ch.id == "nanites" && me.upgrades.iter().any(|u| u == "nanites") {
-            s -= 5.0;
+            // 2nd nanites stack (2.0s delay, 115 HP/s!) is STILL S-tier!
+            s -= 3.0;
         }
         if s > best_score {
             best_score = s;
@@ -742,9 +797,9 @@ pub fn choose_upgrade(offer: &Offer, obs: &Observation) -> usize {
     best_idx
 }
 
-pub fn best_nearby_pickup<'a>(
+pub fn best_nearby_pickup(
     obs: &Observation,
-    world: &'a WorldState,
+    world: &WorldState,
     max_dist: f64,
     zone_center: [f64; 2],
     zone_radius: f64,
@@ -762,12 +817,17 @@ pub fn best_nearby_pickup<'a>(
         if dist2d([p.pos[0], p.pos[1]], zone_center) > (zone_radius - 5.0).max(5.0) {
             continue;
         }
-        // Avoid high rooftops we'd spend tons of energy climbing unless very close
         let dz = p.pos[2] - me.pos[2];
-        if dz > 28.0 {
+        if dz > 26.0 {
             continue;
         }
-        let score = weapon_value(p.kind, me) - d * 1.1 - dz.max(0.0) * 1.5;
+        let base_w = match p.kind {
+            WeaponKind::Laser => 115.0,
+            WeaponKind::Lightning => 108.0,
+            WeaponKind::Gun => 80.0,
+            WeaponKind::Mortar => 62.0,
+        };
+        let score = base_w - d * 1.0 - dz.max(0.0) * 1.4;
         if best.is_none_or(|(bs, _)| score > bs) {
             best = Some((score, p.pos));
         }

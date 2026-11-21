@@ -5,7 +5,6 @@ use std::collections::HashMap;
 
 #[derive(Debug, Clone)]
 pub struct TrackedEnemy {
-    pub id: u64,
     pub pos: Vec3,
     pub vel: Vec3,
     pub aim: Vec2,
@@ -14,6 +13,7 @@ pub struct TrackedEnemy {
     pub cubes: u64,
     pub weapons: Vec<WeaponKind>,
     pub charging: bool,
+    pub charge_start_t: Option<f64>,
     pub last_seen_t: f64,
     pub visible_now: bool,
     pub last_damaged_me_t: f64,
@@ -66,6 +66,8 @@ pub struct WorldState {
     pub pickups: HashMap<u64, RememberedPickup>,
     pub cubes: HashMap<u64, RememberedItem>,
     pub crates: HashMap<u64, RememberedItem>,
+    /// Locations where we killed a mech (guaranteed 2+ cubes & dropped weapons!)
+    pub kill_drops: Vec<(Vec3, f64)>,
     pub recent_sounds: Vec<TimedSound>,
     pub last_combat_t: f64,
     pub last_damaged_t: f64,
@@ -87,6 +89,7 @@ impl WorldState {
             pickups: HashMap::new(),
             cubes: HashMap::new(),
             crates: HashMap::new(),
+            kill_drops: Vec::new(),
             recent_sounds: Vec::new(),
             last_combat_t: -100.0,
             last_damaged_t: -100.0,
@@ -142,7 +145,9 @@ impl WorldState {
                     kills_this_tick += 1;
                     self.my_kills += 1;
                     if let Some(tid) = ev.get("target").and_then(|v| v.as_u64()) {
-                        self.enemies.remove(&tid);
+                        if let Some(dead) = self.enemies.remove(&tid) {
+                            self.kill_drops.push((dead.pos, now));
+                        }
                     }
                 }
                 "took" => {
@@ -162,6 +167,11 @@ impl WorldState {
             }
         }
 
+        // Prune visited or expired kill loot drops
+        self.kill_drops.retain(|(kp, kt)| {
+            now - *kt <= 25.0 && dist2d([my_pos[0], my_pos[1]], [kp[0], kp[1]]) > 8.0
+        });
+
         // Detect whether other mechs are fighting/killing each other (FFA vs Practice Squad)
         if obs.alive < self.prev_alive {
             let dropped = self.prev_alive - obs.alive;
@@ -171,10 +181,8 @@ impl WorldState {
         }
         self.prev_alive = obs.alive;
 
-        // Mark all tracked enemies unseen before updating visible list
         for e in self.enemies.values_mut() {
             e.visible_now = false;
-            e.charging = false;
             e.aiming_at_me = false;
         }
 
@@ -187,9 +195,8 @@ impl WorldState {
                     vis_mechs.push(a);
                     let to_me_yaw = (my_pos[1] - a.pos[1]).atan2(my_pos[0] - a.pos[0]);
                     let aim_err = wrap_angle(to_me_yaw - a.aim[0]).abs();
-                    let aiming_at_me = aim_err < 0.35;
+                    let aiming_at_me = aim_err < 0.40;
                     let entry = self.enemies.entry(a.id).or_insert_with(|| TrackedEnemy {
-                        id: a.id,
                         pos: a.pos,
                         vel: a.vel,
                         aim: a.aim,
@@ -198,6 +205,7 @@ impl WorldState {
                         cubes: a.cubes.unwrap_or(0),
                         weapons: a.weapons.clone(),
                         charging: a.charging,
+                        charge_start_t: if a.charging { Some(now) } else { None },
                         last_seen_t: now,
                         visible_now: true,
                         last_damaged_me_t: -100.0,
@@ -218,6 +226,13 @@ impl WorldState {
                     if !a.weapons.is_empty() {
                         entry.weapons = a.weapons.clone();
                     }
+                    if a.charging {
+                        if !entry.charging || entry.charge_start_t.is_none() {
+                            entry.charge_start_t = Some(now);
+                        }
+                    } else {
+                        entry.charge_start_t = None;
+                    }
                     entry.charging = a.charging;
                     entry.last_seen_t = now;
                     entry.visible_now = true;
@@ -226,7 +241,14 @@ impl WorldState {
             }
         }
 
-        // Check if visible mechs are shooting at each other (via beams)
+        // Clear charging flag on unseen enemies
+        for e in self.enemies.values_mut() {
+            if !e.visible_now {
+                e.charging = false;
+                e.charge_start_t = None;
+            }
+        }
+
         for b in &obs.beams {
             if b.path.len() >= 2 {
                 let end = b.path[b.path.len() - 1];
@@ -238,10 +260,8 @@ impl WorldState {
             }
         }
 
-        // Expire stale enemy memories after 10 s
         self.enemies.retain(|_, e| now - e.last_seen_t <= 10.0);
 
-        // Update remembered pickups (remove if we are right next to it and don't see it)
         let seen_pickup_ids: Vec<u64> = obs.pickups.iter().map(|p| p.id).collect();
         for p in &obs.pickups {
             self.pickups.insert(
@@ -263,7 +283,6 @@ impl WorldState {
             now - p.last_seen_t <= 25.0
         });
 
-        // Update remembered cubes
         let seen_cube_ids: Vec<u64> = obs.cubes.iter().map(|c| c.id).collect();
         for c in &obs.cubes {
             self.cubes.insert(
@@ -281,10 +300,9 @@ impl WorldState {
             if dist2d([my_pos[0], my_pos[1]], [c.pos[0], c.pos[1]]) < 22.0 {
                 return false;
             }
-            now - c.last_seen_t <= 15.0
+            now - c.last_seen_t <= 18.0
         });
 
-        // Update remembered crates
         let seen_crate_ids: Vec<u64> = obs.crates.iter().map(|c| c.id).collect();
         for c in &obs.crates {
             self.crates.insert(
@@ -305,7 +323,6 @@ impl WorldState {
             now - c.last_seen_t <= 20.0
         });
 
-        // Update recent sounds
         for s in &obs.sounds {
             self.recent_sounds.push(TimedSound {
                 kind: s.kind.clone(),
@@ -317,12 +334,10 @@ impl WorldState {
         self.recent_sounds.retain(|s| now - s.at_t <= 3.5);
     }
 
-    /// True if match behavior strongly looks like 1v15 Practice Squad (enemies never kill each other).
     pub fn looks_like_practice_squad(&self, now: f64) -> bool {
         if self.other_deaths >= 2 || self.saw_inter_mech_fight {
             return false;
         }
-        // Early/mid game with zero inter-bot deaths -> assume Practice squad unless proven FFA
         now < 120.0 || self.other_deaths == 0
     }
 
@@ -341,8 +356,8 @@ impl WorldState {
             .filter(|e| {
                 e.visible_now
                     && (e.aiming_at_me
-                        || now - e.last_damaged_me_t < 4.0
-                        || dist2d([my_pos[0], my_pos[1]], [e.pos[0], e.pos[1]]) < 75.0)
+                        || now - e.last_damaged_me_t < 4.5
+                        || dist2d([my_pos[0], my_pos[1]], [e.pos[0], e.pos[1]]) < 85.0)
             })
             .count()
     }

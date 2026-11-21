@@ -11,7 +11,7 @@ use std::io::{self, BufRead, BufReader, Write};
 use std::sync::mpsc;
 use std::thread;
 
-const BOT_NAME: &str = "vanguard-v1";
+const BOT_NAME: &str = "vanguard-v2";
 
 fn main() {
     let (tx, rx) = mpsc::channel::<Option<Vec<String>>>();
@@ -187,8 +187,25 @@ mod tests {
         });
         assert!(map.loaded);
         assert!(map.prisms.len() > 200);
+        assert!(!map.roof_anchors.is_empty());
         // High-altitude open sky LoS must be clear
         assert!(map.has_los([0.0, 0.0, 120.0], [100.0, 100.0, 120.0]));
+        // Benchmark 1000 LoS rays (should finish in well under 5 ms!)
+        let t0 = std::time::Instant::now();
+        let mut clear = 0usize;
+        for i in 0..1000 {
+            let a = [(i % 20) as f64 * 15.0 - 150.0, (i / 20) as f64 * 5.0 - 120.0, 8.0];
+            let b = [a[0] + 120.0, a[1] + 60.0, 8.0];
+            if map.has_los(a, b) {
+                clear += 1;
+            }
+        }
+        eprintln!(
+            "1000 LoS rays: clear={} in {:.2}ms (roof_anchors={})",
+            clear,
+            t0.elapsed().as_secs_f64() * 1000.0,
+            map.roof_anchors.len()
+        );
         // Pathfinding across campus should return a valid waypoint
         let mut nav = Navigator::new(&map);
         let wp = nav.next_waypoint(&map, 1, [0.0, 0.0, 0.0], [200.0, -100.0]);
