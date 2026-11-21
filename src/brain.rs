@@ -436,7 +436,11 @@ impl BotBrain {
         let waypoint = if on_roof || (target_is_higher && dist_to_goal <= 6.5) {
             goal2
         } else {
-            self.nav.next_waypoint(&self.map, obs.tick, pos, goal2)
+            let body_radius = me.stat("radius", 2.5)
+                * (1.0 + self.cfg.cubes.size_per_cube * me.cubes as f64);
+            self.nav.next_waypoint_with_radius(
+                &self.map, obs.tick, pos, goal2, body_radius,
+            )
         };
 
         // 8. 16-Direction Micro-Steering

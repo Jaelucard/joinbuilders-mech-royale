@@ -150,6 +150,14 @@ impl Navigator {
 
     /// Compute the next 2D waypoint toward `goal`, using cached smoothed A* paths.
     pub fn next_waypoint(&mut self, map: &ArenaMap, tick: u64, pos: Vec3, goal: Vec2) -> Vec2 {
+        self.next_waypoint_with_radius(map, tick, pos, goal, 2.5)
+    }
+
+    /// Use the observed, cube-scaled body radius for recovery from an excluded
+    /// start. Ordinary A* and shortcut clearance still use the fixed nav grid.
+    pub fn next_waypoint_with_radius(
+        &mut self, map: &ArenaMap, tick: u64, pos: Vec3, goal: Vec2, body_radius: f64,
+    ) -> Vec2 {
         let cur2 = [pos[0], pos[1]];
         if !map.loaded {
             self.path.clear();
@@ -162,7 +170,7 @@ impl Navigator {
             self.cached_goal = None;
             // Conservative rasterization may exclude the current body position
             // even though a short physically clear route reaches a valid cell.
-            return map.nearby_nav_recovery(pos).unwrap_or(cur2);
+            return map.nearby_nav_recovery_with_radius(pos, body_radius).unwrap_or(cur2);
         }
 
         // Fast direct-line shortcut if completely clear!

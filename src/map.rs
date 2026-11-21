@@ -1437,8 +1437,16 @@ impl ArenaMap {
     /// collision model admits the entire short segment. This is separate from
     /// line_walkable: ordinary shortcuts must never accept blocked nav cells.
     pub fn nearby_nav_recovery(&self, pos: Vec3) -> Option<Vec2> {
+        self.nearby_nav_recovery_with_radius(pos, 2.5)
+    }
+
+    pub fn nearby_nav_recovery_with_radius(&self, pos: Vec3, body_radius: f64) -> Option<Vec2> {
+        if !body_radius.is_finite() || body_radius <= 0.0 || pos.iter().any(|v| !v.is_finite())
+            || self.is_blocked_at(pos[0], pos[1], pos[2], body_radius)
+        {
+            return None;
+        }
         let (sx, sy) = self.world_to_nav(pos[0], pos[1]);
-        let start_ground = self.terrain_z(pos[0] as f32, pos[1] as f32) as f64;
         let mut best: Option<(f64, Vec2)> = None;
         for dy in -2isize..=2 {
             for dx in -2isize..=2 {
@@ -1456,29 +1464,65 @@ impl ArenaMap {
                 if distance > 10.0 || best.is_some_and(|(d, _)| d <= distance) {
                     continue;
                 }
-                let steps = (distance / 0.5).ceil().max(1.0) as usize;
-                let mut previous_z = pos[2];
-                let mut clear = true;
-                for i in 0..=steps {
-                    let t = i as f64 / steps as f64;
-                    let px = pos[0] + (goal[0] - pos[0]) * t;
-                    let py = pos[1] + (goal[1] - pos[1]) * t;
-                    let z = pos[2] + self.terrain_z(px as f32, py as f32) as f64 - start_ground;
-                    let rise = z - previous_z;
-                    if (rise > distance / steps as f64 * 1.05 && rise > MECH_STEP_UP as f64)
-                        || self.is_blocked_at(px, py, z, MECH_CLEAR_RADIUS as f64)
-                    {
-                        clear = false;
-                        break;
-                    }
-                    previous_z = z;
-                }
-                if clear {
+                if self.nav_recovery_segment_clear(pos, goal, body_radius) {
                     best = Some((distance, goal));
                 }
             }
         }
         best.map(|(_, point)| point)
+    }
+
+    fn nav_recovery_segment_clear(&self, pos: Vec3, goal: Vec2, body_radius: f64) -> bool {
+        let distance = dist2d([pos[0], pos[1]], goal);
+        let steps = (distance / 0.5).ceil().max(1.0) as usize;
+        let start_ground = self.terrain_z(pos[0] as f32, pos[1] as f32) as f64;
+        // The nav raster adds 0.15 m to the stock 2.5 m body. A legal body
+        // already inside that margin must be allowed to move away from a wall,
+        // but must recover the full margin within its first 0.5 m of travel.
+        // Check the actual body too: a safety probe is not a collision radius.
+        let clear_radius = body_radius + 0.15;
+        let starts_with_margin = !self.is_blocked_at(pos[0], pos[1], pos[2], clear_radius);
+        let mut previous_z = pos[2];
+        let start_cell = self.world_to_nav(pos[0], pos[1]);
+        let mut previous_cell = start_cell;
+        let mut previous_point = [pos[0], pos[1]];
+        let mut entered_grid = self.can_traverse_nav_step(start_cell, start_cell);
+        for i in 0..=steps {
+            let t = i as f64 / steps as f64;
+            let travelled = distance * t;
+            let px = pos[0] + (goal[0] - pos[0]) * t;
+            let py = pos[1] + (goal[1] - pos[1]) * t;
+            let z = pos[2] + self.terrain_z(px as f32, py as f32) as f64 - start_ground;
+            let radius = if starts_with_margin || i == steps {
+                clear_radius
+            } else {
+                body_radius + 0.15 * (travelled / 0.5).min(1.0)
+            };
+            let rise = z - previous_z;
+            if !z.is_finite()
+                || (rise > distance / steps as f64 * 1.05 && rise > MECH_STEP_UP as f64)
+                || z - pos[2] > (travelled * 1.05).max(MECH_STEP_UP as f64)
+                || self.is_blocked_at(px, py, z, body_radius)
+                || self.is_blocked_at(px, py, z, radius)
+            {
+                return false;
+            }
+            let cell = self.world_to_nav(px, py);
+            // Only the initial conservative exclusion is exempt from raster
+            // checks. Once back on the grid, retain directed edges and corners.
+            // DDA must cover even briefly crossed side cells: endpoint-only
+            // sampling can hide an uphill cardinal edge near a diagonal corner.
+            if entered_grid && (!self.can_traverse_nav_step(previous_cell, cell)
+                || !self.line_walkable(previous_point, [px, py]))
+            {
+                return false;
+            }
+            entered_grid |= self.can_traverse_nav_step(cell, cell);
+            previous_cell = cell;
+            previous_point = [px, py];
+            previous_z = z;
+        }
+        true
     }
 
     /// Directed transition used by both A* and line-of-travel shortcuts.
@@ -1599,6 +1643,131 @@ mod navigation_tests {
         map.wall_dist = vec![10; nx * ny];
         map.nav_z = heights;
         map
+    }
+
+    fn recovery_map() -> ArenaMap {
+        let mut map = grid(8, 8, vec![0.0; 64]);
+        map.max_x = 32.0;
+        map.max_y = 32.0;
+        map.los_nx = 16;
+        map.los_ny = 16;
+        map.terrain_grid = vec![0.0; 256];
+        map.solid_top = vec![0.0; 256];
+        map.building_top = vec![f32::NEG_INFINITY; 256];
+        map.roof_top = vec![f32::NAN; 64];
+        map
+    }
+
+    fn wall_recovery_map() -> ArenaMap {
+        let mut map = recovery_map();
+        // A flat wall at x=16; the x=12..16 raster column is conservatively
+        // excluded even when the observed body fits at its left-hand edge.
+        map.building_top = (0..256)
+            .map(|i| if i % 16 >= 8 { 10.0 } else { f32::NEG_INFINITY })
+            .collect();
+        map.walkable = (0..64).map(|i| i % 8 < 3).collect();
+        map.wall_dist = (0..64).map(|i| if i % 8 < 3 { 1 } else { 0 }).collect();
+        map
+    }
+
+    #[test]
+    fn near_wall_recovery_restores_clearance_for_stock_and_larger_bodies() {
+        let map = wall_recovery_map();
+        for (start, radius) in [([13.45, 10.0, 0.0], 2.5), ([12.95, 10.0, 0.0], 3.0)] {
+            assert!(!map.is_blocked_at(start[0], start[1], start[2], radius));
+            assert!(map.is_blocked_at(start[0], start[1], start[2], radius + 0.15));
+            let mut nav = crate::nav::Navigator::new(&map);
+            let waypoint = nav.next_waypoint_with_radius(&map, 0, start, [10.0, 10.0], radius);
+            assert_eq!(waypoint, [10.0, 10.0]);
+            for i in 0..=100 {
+                let x = start[0] + (waypoint[0] - start[0]) * i as f64 / 100.0;
+                assert!(!map.is_blocked_at(x, 10.0, 0.0, radius));
+            }
+            // The recovery lands on the existing grid; subsequent movement
+            // again obeys normal directed traversal rather than the exception.
+            assert_eq!(nav.next_waypoint_with_radius(&map, 2, [10.0, 10.0, 0.0], [6.0, 10.0], radius), [6.0, 10.0]);
+        }
+    }
+
+    #[test]
+    fn recovery_cannot_shrink_a_blocked_body_or_keep_hugging_the_wall() {
+        let map = wall_recovery_map();
+        assert!(map.nearby_nav_recovery_with_radius([13.55, 10.0, 0.0], 2.5).is_none());
+        assert!(map.nearby_nav_recovery_with_radius([13.45, 10.0, 0.0], 3.0).is_none());
+        assert!(!map.nav_recovery_segment_clear([13.45, 10.0, 0.0], [13.45, 14.0], 2.5));
+        for radius in [0.0, -1.0, f64::NAN, f64::INFINITY] {
+            assert!(map.nearby_nav_recovery_with_radius([13.45, 10.0, 0.0], radius).is_none());
+        }
+    }
+
+    #[test]
+    fn recovery_cannot_cross_a_wall_to_reach_a_valid_cell() {
+        let mut map = recovery_map();
+        // Only the far side of a 2 m wall is a valid destination. Neither
+        // endpoint-only collision checks nor a relaxed starting margin may
+        // turn this into a route through the wall.
+        map.building_top = (0..256)
+            .map(|i| if i % 16 == 8 { 10.0 } else { f32::NEG_INFINITY })
+            .collect();
+        map.walkable = (0..64).map(|i| i % 8 >= 5).collect();
+        map.wall_dist = (0..64).map(|i| if i % 8 >= 5 { 1 } else { 0 }).collect();
+        assert!(!map.is_blocked_at(13.45, 10.0, 0.0, 2.5));
+        assert!(!map.is_blocked_at(22.0, 10.0, 0.0, 2.5));
+        assert!(map.nearby_nav_recovery_with_radius([13.45, 10.0, 0.0], 2.5).is_none());
+    }
+
+    #[test]
+    fn recovery_rejoins_directed_edges_and_corner_rules() {
+        let mut map = recovery_map();
+        map.walkable[1] = false;
+        map.wall_dist[1] = 0;
+        assert!(map.nav_recovery_segment_clear([7.0, 3.0, 0.0], [14.0, 10.0], 2.5));
+        // After entering (2,1), the diagonal to (3,2) cuts the blocked (3,1)
+        // corner. The initial invalid cell cannot exempt later raster edges.
+        map.walkable[11] = false;
+        map.wall_dist[11] = 0;
+        assert!(!map.nav_recovery_segment_clear([7.0, 3.0, 0.0], [14.0, 10.0], 2.5));
+
+        let mut map = recovery_map();
+        map.walkable[17] = false;
+        map.wall_dist[17] = 0;
+        assert!(map.nav_recovery_segment_clear([5.5, 10.0, 0.0], [14.0, 10.0], 2.5));
+        map.nav_z[19] = 6.0;
+        assert!(!map.nav_recovery_segment_clear([5.5, 10.0, 0.0], [14.0, 10.0], 2.5));
+    }
+
+    #[test]
+    fn recovery_does_not_skip_a_brief_uphill_cell_near_a_corner() {
+        let mut map = recovery_map();
+        map.walkable[1] = false;
+        map.wall_dist[1] = 0;
+        let start = [7.01, 3.0, 0.0];
+        let goal = [14.0, 10.0];
+        assert!(map.nav_recovery_segment_clear(start, goal, 2.5));
+        // The path briefly crosses (3,1) just before y=8. Half-metre samples
+        // see (2,1) -> (3,2), but DDA must retain the intervening uphill edge.
+        map.nav_z[11] = 6.0;
+        assert!(map.can_traverse_nav_step((2, 1), (3, 2)));
+        assert!(!map.can_traverse_nav_step((2, 1), (3, 1)));
+        assert!(!map.nav_recovery_segment_clear(start, goal, 2.5));
+    }
+
+    #[test]
+    fn recovery_preserves_physical_slope_limits_before_rejoining_grid() {
+        for (gradient, permitted) in [(0.5, true), (2.0, false)] {
+            let mut map = recovery_map();
+            map.t_min_x = 0.0;
+            map.t_min_y = 0.0;
+            map.t_step = 1.0;
+            map.t_nx = 33;
+            map.t_ny = 33;
+            map.terrain = (0..1089).map(|i| (i % 33) as f32 * gradient).collect();
+            map.terrain_grid = (0..256).map(|i| ((i % 16) * 2 + 1) as f32 * gradient).collect();
+            map.nav_z = (0..64).map(|i| ((i % 8) * 4 + 2) as f32 * gradient).collect();
+            map.walkable[17] = false;
+            map.wall_dist[17] = 0;
+            assert_eq!(map.nav_recovery_segment_clear([5.5, 10.0, 5.5 * gradient as f64], [10.0, 10.0], 2.5), permitted);
+        }
     }
 
     #[test]
