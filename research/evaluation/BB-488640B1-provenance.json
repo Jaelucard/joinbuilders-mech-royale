@@ -1,0 +1,28 @@
+{
+  "investigated_date_utc": "2026-11-21",
+  "submission_receipt": "BB-488640B1",
+  "reported_score": 4.65,
+  "score_source": "user report",
+  "user_source_description": "latest push from the github repo",
+  "verified_submitted_commit": null,
+  "verified_submission_scorer": null,
+  "remote_repository": "https://github.com/Jaelucard/joinbuilders-mech-royale",
+  "remote_default_branch": "master",
+  "remote_heads_at_check": {
+    "master": "5b783d19f138239033be32b527318f9247a9f9b8"
+  },
+  "provenance_evidence": [
+    "Fresh git fetch origin",
+    "git ls-remote --symref origin HEAD",
+    "git ls-remote --heads origin",
+    "https://api.github.com/repos/Jaelucard/joinbuilders-mech-royale/commits/master"
+  ],
+  "inferred_commit_if_latest_default_branch_was_used": "5b783d19f138239033be32b527318f9247a9f9b8",
+  "previous_official_baseline_user_reported": 4.81,
+  "previous_official_baseline_commit_verified": false,
+  "local_candidate_head_at_investigation_start": "9c1283c",
+  "local_candidate_production_commit": "7b2f1547e2e2a827fa3bbfb6085068ff73cf3b45",
+  "local_candidate_present_on_remote": false,
+  "official_candidate_score": null,
+  "conclusion": "Latest-push description points to published v4, not the local candidate. Actual official run metadata is unavailable; the numerical score difference remains unexplained."
+}

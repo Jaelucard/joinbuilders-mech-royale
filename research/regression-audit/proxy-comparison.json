@@ -1,0 +1,52 @@
+{
+  "kind": "approximate local simulator; not official scoring",
+  "official_user_reported_baseline": 4.81,
+  "official_candidate_score": null,
+  "baseline_label": "baseline-all",
+  "comparisons": [
+    {
+      "label": "candidate-all",
+      "mode": "practice",
+      "n": 48,
+      "baseline_mean": 5.395833333333333,
+      "candidate_mean": 5.395833333333333,
+      "mean_difference": 0.0,
+      "paired_bootstrap_95": [
+        -1.1458333333333333,
+        1.125
+      ],
+      "better": 12,
+      "equal": 21,
+      "worse": 15,
+      "baseline_survival_s": 140.31875,
+      "candidate_survival_s": 156.46458333333334,
+      "baseline_low_placement": 20,
+      "candidate_low_placement": 20
+    },
+    {
+      "label": "candidate-all",
+      "mode": "ffa",
+      "n": 48,
+      "baseline_mean": 13.333333333333334,
+      "candidate_mean": 13.791666666666666,
+      "mean_difference": 0.4583333333333333,
+      "paired_bootstrap_95": [
+        -0.125,
+        1.1875
+      ],
+      "better": 6,
+      "equal": 38,
+      "worse": 4,
+      "baseline_survival_s": 399.8833333333333,
+      "candidate_survival_s": 412.128125,
+      "baseline_low_placement": 2,
+      "candidate_low_placement": 2
+    }
+  ],
+  "limitations": [
+    "Uncalibrated opponent/physics model; shared production geometry.",
+    "HashMap tie ordering can vary across repeats despite identical match seeds.",
+    "Archived proxy survival_s assigns 480 seconds to every survivor, including early wins; these means are not actual elapsed survival measurements.",
+    "Intervals describe paired proxy outcomes, not official score uncertainty."
+  ]
+}

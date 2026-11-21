@@ -1,0 +1,15 @@
+{
+  "variant": "candidate",
+  "image": "mechbot:candidate-builder",
+  "image_id": "sha256:372e3775e8789ebd10b202dfb6b404a4f4b1148d3c1997dba354be576146fbda",
+  "checks": {
+    "navigation": {
+      "exit_code": 0,
+      "log": "navigation-candidate.log"
+    },
+    "combat": {
+      "exit_code": 0,
+      "log": "combat-candidate.log"
+    }
+  }
+}

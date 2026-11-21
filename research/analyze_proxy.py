@@ -23,6 +23,7 @@ def main():
               "official_candidate_score":None,"baseline_label":base["label"],"comparisons":[],
               "limitations":["Uncalibrated opponent/physics model; shared production geometry.",
                              "HashMap tie ordering can vary across repeats despite identical match seeds.",
+                             "Archived proxy survival_s assigns 480 seconds to every survivor, including early wins; these means are not actual elapsed survival measurements.",
                              "Intervals describe paired proxy outcomes, not official score uncertainty."]}
     for path in args.candidates:
         cand = json.loads(Path(path).read_text())

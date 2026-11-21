@@ -1,0 +1,39 @@
+Copied verbatim from successful tool output; both offline containers exit 0.
+mechbot:research-builder-5b783d1 exit 0
+d=100 decision=0 current_pitch=-0.024995 gun_cd=0.140 command_pitch=-0.024995 fire=[true, true]
+  two_tick_fires=[false, true] end_pitch=-0.024995
+d=100 decision=1 current_pitch=-0.024995 gun_cd=0.040 command_pitch=-0.024995 fire=[true, false]
+  two_tick_fires=[true, false] end_pitch=-0.024995
+d=100 decision=2 current_pitch=-0.024995 gun_cd=0.190 command_pitch=-0.024995 fire=[true, false]
+  two_tick_fires=[false, false] end_pitch=-0.024995
+d=130 decision=0 current_pitch=-0.019228 gun_cd=0.140 command_pitch=-0.019228 fire=[true, false]
+  two_tick_fires=[false, false] end_pitch=-0.019228
+d=130 decision=1 current_pitch=-0.019228 gun_cd=0.040 command_pitch=-0.019228 fire=[true, false]
+  two_tick_fires=[true, false] end_pitch=-0.019228
+d=130 decision=2 current_pitch=-0.019228 gun_cd=0.190 command_pitch=-0.019228 fire=[true, false]
+  two_tick_fires=[false, false] end_pitch=-0.019228
+d=160 decision=0 current_pitch=-0.015624 gun_cd=0.140 command_pitch=-0.015624 fire=[true, false]
+  two_tick_fires=[false, false] end_pitch=-0.015624
+d=160 decision=1 current_pitch=-0.015624 gun_cd=0.040 command_pitch=-0.015624 fire=[true, false]
+  two_tick_fires=[true, false] end_pitch=-0.015624
+d=160 decision=2 current_pitch=-0.015624 gun_cd=0.190 command_pitch=-0.015624 fire=[true, false]
+  two_tick_fires=[false, false] end_pitch=-0.015624
+mechbot:candidate-builder exit 0
+d=100 decision=0 current_pitch=-0.024995 gun_cd=0.140 command_pitch=0.124882 fire=[false, true]
+  two_tick_fires=[false, true] end_pitch=0.124882
+d=100 decision=1 current_pitch=0.124882 gun_cd=0.040 command_pitch=-0.024995 fire=[true, false]
+  two_tick_fires=[true, false] end_pitch=-0.024995
+d=100 decision=2 current_pitch=-0.024995 gun_cd=0.190 command_pitch=-0.024995 fire=[true, false]
+  two_tick_fires=[false, false] end_pitch=-0.024995
+d=130 decision=0 current_pitch=-0.019228 gun_cd=0.140 command_pitch=0.216517 fire=[false, false]
+  two_tick_fires=[false, false] end_pitch=0.216517
+d=130 decision=1 current_pitch=0.216517 gun_cd=0.040 command_pitch=-0.019228 fire=[false, false]
+  two_tick_fires=[false, false] end_pitch=-0.019228
+d=130 decision=2 current_pitch=-0.019228 gun_cd=0.000 command_pitch=-0.019228 fire=[true, false]
+  two_tick_fires=[true, false] end_pitch=-0.019228
+d=160 decision=0 current_pitch=-0.015624 gun_cd=0.140 command_pitch=0.307411 fire=[false, false]
+  two_tick_fires=[false, false] end_pitch=0.284376
+d=160 decision=1 current_pitch=0.284376 gun_cd=0.040 command_pitch=-0.015624 fire=[false, false]
+  two_tick_fires=[false, false] end_pitch=-0.015624
+d=160 decision=2 current_pitch=-0.015624 gun_cd=0.000 command_pitch=-0.015624 fire=[true, false]
+  two_tick_fires=[true, false] end_pitch=-0.015624

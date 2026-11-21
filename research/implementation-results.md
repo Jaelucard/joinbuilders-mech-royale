@@ -1,5 +1,7 @@
 # Scoring control candidate results
 
+**Follow-up investigation:** the user reported BB-488640B1 at 4.65 and said it used the latest GitHub push. A fresh remote check found only `master` at `5b783d1`; the candidate below was still local. The actual submission row has not been independently inspected, so 4.65 must not be recorded as a candidate result. See [regression investigation](regression-investigation.md) for provenance, additional candidate risks, and simulator limitations. Those findings supersede the earlier readiness recommendation below pending targeted follow-up.
+
 The requested control fixes are implemented on `fix/scoring-control`. The user's corrected official baseline is **4.81**; its exact submission commit is still unverified. The local baseline is preserved at `5b783d19f138239033be32b527318f9247a9f9b8` on `baseline/scoring-5b783d1`, with its original runtime and builder images.
 
 The candidate fixes reproducible defects and passes all validation. It has **no measured official score**. Across 48 matched seeds per mode, its approximate practice mean was unchanged and its approximate FFA mean was higher, with uncertainty still spanning no aggregate improvement. It is ready for an official evaluation as a correctness candidate, not a proven replacement for the best-scoring official submission.
@@ -33,6 +35,8 @@ The tests also check nonlethal laser ducking, lost-target releases, minimum-char
 ## Matched local simulation results
 
 These are **approximate local simulator results, not official scores or forecasts**. The simulator uses the same map code as the bot, approximate collision/weapon physics, and its own house-bot implementation. No opponent code or simulator physics was changed for these comparisons. The harness only selects seed indices and emits per-match records.
+
+The follow-up audit also found that the proxy reports 480 seconds for every surviving player, including early match finishes, and prints `WIN` for any survivor even if timeout HP ranking places it below first. Archived survival-time means are therefore not actual elapsed survival measurements. Placement points are computed separately; this reporting defect alone does not invalidate their arithmetic. Raw historical outputs are retained unchanged.
 
 Development seeds were `1000 + i × 7919` for i=0–23. A separate holdout used i=24–47. Each seed supplies the same scenario/slot generator to baseline and candidate. The candidate was revised using development results before the holdout was run; no changes were made in response to holdout outcomes.
 

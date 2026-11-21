@@ -1,0 +1,15 @@
+{
+  "variant": "baseline",
+  "image": "mechbot:research-builder-5b783d1",
+  "image_id": "sha256:8a59ac7675617eb381f444484ecd0d8aaa14b930b450afa438147786db369de3",
+  "checks": {
+    "navigation": {
+      "exit_code": 0,
+      "log": "navigation-baseline.log"
+    },
+    "combat": {
+      "exit_code": 0,
+      "log": "combat-baseline.log"
+    }
+  }
+}

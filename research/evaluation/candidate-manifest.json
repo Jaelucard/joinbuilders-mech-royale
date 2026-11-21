@@ -24,5 +24,10 @@
   "conformance_bad_lines": 0,
   "conformance_p99_ms": 7.7,
   "conformance_max_ms": 8.1,
-  "submission_state": "Local tested candidate, not pushed or submitted."
+  "submission_state": "Local tested candidate, not pushed or submitted; promotion deferred after regression audit.",
+  "regression_audit": "research/regression-investigation.md",
+  "new_reproduced_risks": [
+    "Conservative near-wall start clearance can stop an otherwise legal escape.",
+    "Gun-to-mortar aim transfer can delay gun fire without firing the mortar."
+  ]
 }
