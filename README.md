@@ -26,3 +26,11 @@ The user confirmed **4.81 on v3 `411af5f`** and **BB-488640B1 / 4.65 on v4 `5b78
 docker build -t mechbot .
 python3 kit/check/check.py --map-dir /arena -- docker run --rm -i --network none --cpus 1 --memory 512m --read-only --tmpfs /tmp:rw,size=64m --user 65534:65534 -v "$PWD/kit/arena:/arena:ro" mechbot
 ```
+
+## License & Credits
+
+This project is released under the [MIT License](LICENSE).
+
+Open-source dependencies and resources used:
+- [serde](https://github.com/serde-rs/serde) and [serde_json](https://github.com/serde-rs/json) (MIT / Apache-2.0)
+- Builders Buildathon Mech Royale (`mechfight/1`) protocol and starter kit ([joinbuilders.org](https://www.joinbuilders.org/buildathon/tracks/builders))
